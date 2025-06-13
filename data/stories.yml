@@ -1,0 +1,62 @@
+version: "3.1"
+
+stories:
+- story: direct crop cultivation query
+  steps:
+  - intent: ask_crop_cultivation
+  - action: action_provide_crop_info
+
+- story: direct soil management query
+  steps:
+  - intent: ask_soil_management
+  - action: action_provide_soil_info
+
+- story: direct pest control query
+  steps:
+  - intent: ask_pest_control
+  - action: action_provide_pest_info
+
+- story: direct weather query
+  steps:
+  - intent: ask_weather
+  - action: action_provide_weather_info
+
+- story: direct government schemes query
+  steps:
+  - intent: ask_government_schemes
+  - action: action_provide_scheme_info
+
+- story: direct market info query
+  steps:
+  - intent: ask_market_info
+  - action: action_provide_market_info
+
+- story: direct crop health query
+  steps:
+  - intent: ask_crop_health
+  - action: action_provide_crop_health_info
+
+- story: direct smart farming query
+  steps:
+  - intent: ask_smart_farming
+  - action: action_provide_smart_farming_info
+
+- story: direct education query
+  steps:
+  - intent: ask_education
+  - action: action_provide_education_info
+
+- story: out of scope handling
+  steps:
+  - intent: out_of_scope
+  - action: utter_out_of_scope
+
+- story: greeting path
+  steps:
+  - intent: greet
+  - action: utter_greet
+
+- story: goodbye path
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye 

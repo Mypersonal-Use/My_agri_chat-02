@@ -1,0 +1,4 @@
+question,answer
+"What is organic farming?","Organic farming is a method of crop and livestock production that involves much more than choosing not to use pesticides, fertilizers, genetically modified organisms, antibiotics, and growth hormones."
+"How to grow tomatoes?","Tomatoes need full sun, well-drained soil, and regular watering. Plant seeds indoors 6-8 weeks before last frost, transplant when seedlings are 6-8 inches tall, and provide support as they grow."
+"What is crop rotation?","Crop rotation is the practice of growing different types of crops in the same area across different seasons to improve soil health, optimize nutrients, and combat pest and weed pressure."
