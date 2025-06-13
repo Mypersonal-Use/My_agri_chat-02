@@ -56,7 +56,7 @@ self-explanatory class names, and the use of :class:`'+'<And>`,
 :class:`'|'<MatchFirst>`, :class:`'^'<Or>` and :class:`'&'<Each>` operators.
 
 The :class:`ParseResults` object returned from
-:class:`ParserElement.parseString` can be
+:class:`ParserElement.parse_string` can be
 accessed as a nested list, a dictionary, or an object with named
 attributes.
 
@@ -85,11 +85,11 @@ classes inherit from. Use the docstrings for examples of how to:
    and :class:`'&'<Each>` operators to combine simple expressions into
    more complex ones
  - associate names with your parsed results using
-   :class:`ParserElement.setResultsName`
+   :class:`ParserElement.set_results_name`
  - access the parsed data, which is returned as a :class:`ParseResults`
    object
- - find some helpful expression short-cuts like :class:`delimitedList`
-   and :class:`oneOf`
+ - find some helpful expression short-cuts like :class:`DelimitedList`
+   and :class:`one_of`
  - find more useful common expressions in the :class:`pyparsing_common`
    namespace class
 """
@@ -106,30 +106,22 @@ class version_info(NamedTuple):
     @property
     def __version__(self):
         return (
-            "{}.{}.{}".format(self.major, self.minor, self.micro)
+            f"{self.major}.{self.minor}.{self.micro}"
             + (
-                "{}{}{}".format(
-                    "r" if self.releaselevel[0] == "c" else "",
-                    self.releaselevel[0],
-                    self.serial,
-                ),
+                f"{'r' if self.releaselevel[0] == 'c' else ''}{self.releaselevel[0]}{self.serial}",
                 "",
             )[self.releaselevel == "final"]
         )
 
     def __str__(self):
-        return "{} {} / {}".format(__name__, self.__version__, __version_time__)
+        return f"{__name__} {self.__version__} / {__version_time__}"
 
     def __repr__(self):
-        return "{}.{}({})".format(
-            __name__,
-            type(self).__name__,
-            ", ".join("{}={!r}".format(*nv) for nv in zip(self._fields, self)),
-        )
+        return f"{__name__}.{type(self).__name__}({', '.join('{}={!r}'.format(*nv) for nv in zip(self._fields, self))})"
 
 
-__version_info__ = version_info(3, 0, 9, "final", 0)
-__version_time__ = "05 May 2022 07:02 UTC"
+__version_info__ = version_info(3, 2, 3, "final", 1)
+__version_time__ = "25 Mar 2025 01:38 UTC"
 __version__ = __version_info__.__version__
 __versionTime__ = __version_time__
 __author__ = "Paul McGuire <ptmcg.gm+pyparsing@gmail.com>"
@@ -151,9 +143,9 @@ from .common import (
     _builtin_exprs as common_builtin_exprs,
 )
 
-# define backward compat synonyms
+# Compatibility synonyms
 if "pyparsing_unicode" not in globals():
-    pyparsing_unicode = unicode
+    pyparsing_unicode = unicode  # type: ignore[misc]
 if "pyparsing_common" not in globals():
     pyparsing_common = common
 if "pyparsing_test" not in globals():
@@ -174,7 +166,9 @@ __all__ = [
     "CaselessKeyword",
     "CaselessLiteral",
     "CharsNotIn",
+    "CloseMatch",
     "Combine",
+    "DelimitedList",
     "Dict",
     "Each",
     "Empty",
@@ -214,6 +208,7 @@ __all__ = [
     "StringEnd",
     "StringStart",
     "Suppress",
+    "Tag",
     "Token",
     "TokenConverter",
     "White",
@@ -227,9 +222,11 @@ __all__ = [
     "alphas8bit",
     "any_close_tag",
     "any_open_tag",
+    "autoname_elements",
     "c_style_comment",
     "col",
     "common_html_entity",
+    "condition_as_parse_action",
     "counted_array",
     "cpp_style_comment",
     "dbl_quoted_string",
@@ -241,6 +238,7 @@ __all__ = [
     "html_comment",
     "identchars",
     "identbodychars",
+    "infix_notation",
     "java_style_comment",
     "line",
     "line_end",
@@ -255,8 +253,12 @@ __all__ = [
     "null_debug_action",
     "nums",
     "one_of",
+    "original_text_for",
     "printables",
     "punc8bit",
+    "pyparsing_common",
+    "pyparsing_test",
+    "pyparsing_unicode",
     "python_style_comment",
     "quoted_string",
     "remove_quotes",
@@ -267,28 +269,20 @@ __all__ = [
     "srange",
     "string_end",
     "string_start",
+    "token_map",
     "trace_parse_action",
+    "ungroup",
+    "unicode_set",
     "unicode_string",
     "with_attribute",
-    "indentedBlock",
-    "original_text_for",
-    "ungroup",
-    "infix_notation",
-    "locatedExpr",
     "with_class",
-    "CloseMatch",
-    "token_map",
-    "pyparsing_common",
-    "pyparsing_unicode",
-    "unicode_set",
-    "condition_as_parse_action",
-    "pyparsing_test",
     # pre-PEP8 compatibility names
     "__versionTime__",
     "anyCloseTag",
     "anyOpenTag",
     "cStyleComment",
     "commonHTMLEntity",
+    "conditionAsParseAction",
     "countedArray",
     "cppStyleComment",
     "dblQuotedString",
@@ -296,9 +290,12 @@ __all__ = [
     "delimitedList",
     "dictOf",
     "htmlComment",
+    "indentedBlock",
+    "infixNotation",
     "javaStyleComment",
     "lineEnd",
     "lineStart",
+    "locatedExpr",
     "makeHTMLTags",
     "makeXMLTags",
     "matchOnlyAtCol",
@@ -308,6 +305,7 @@ __all__ = [
     "nullDebugAction",
     "oneOf",
     "opAssoc",
+    "originalTextFor",
     "pythonStyleComment",
     "quotedString",
     "removeQuotes",
@@ -317,15 +315,12 @@ __all__ = [
     "sglQuotedString",
     "stringEnd",
     "stringStart",
+    "tokenMap",
     "traceParseAction",
     "unicodeString",
     "withAttribute",
-    "indentedBlock",
-    "originalTextFor",
-    "infixNotation",
-    "locatedExpr",
     "withClass",
-    "tokenMap",
-    "conditionAsParseAction",
-    "autoname_elements",
+    "common",
+    "unicode",
+    "testing",
 ]
