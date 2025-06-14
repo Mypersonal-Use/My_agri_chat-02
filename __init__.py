@@ -2,371 +2,94 @@
 
 from __future__ import annotations
 
-import os as _os
-import typing as _t
-from typing_extensions import override
-
-from . import types
-from ._types import NOT_GIVEN, Omit, NoneType, NotGiven, Transport, ProxiesTypes
-from ._utils import file_from_path
-from ._client import Client, OpenAI, Stream, Timeout, Transport, AsyncClient, AsyncOpenAI, AsyncStream, RequestOptions
-from ._models import BaseModel
-from ._version import __title__, __version__
-from ._response import APIResponse as APIResponse, AsyncAPIResponse as AsyncAPIResponse
-from ._constants import DEFAULT_TIMEOUT, DEFAULT_MAX_RETRIES, DEFAULT_CONNECTION_LIMITS
-from ._exceptions import (
-    APIError,
-    OpenAIError,
-    ConflictError,
-    NotFoundError,
-    APIStatusError,
-    RateLimitError,
-    APITimeoutError,
-    BadRequestError,
-    APIConnectionError,
-    AuthenticationError,
-    InternalServerError,
-    PermissionDeniedError,
-    LengthFinishReasonError,
-    UnprocessableEntityError,
-    APIResponseValidationError,
-    ContentFilterFinishReasonError,
+from .batch import Batch as Batch
+from .image import Image as Image
+from .model import Model as Model
+from .shared import (
+    Metadata as Metadata,
+    AllModels as AllModels,
+    ChatModel as ChatModel,
+    Reasoning as Reasoning,
+    ErrorObject as ErrorObject,
+    CompoundFilter as CompoundFilter,
+    ResponsesModel as ResponsesModel,
+    ReasoningEffort as ReasoningEffort,
+    ComparisonFilter as ComparisonFilter,
+    FunctionDefinition as FunctionDefinition,
+    FunctionParameters as FunctionParameters,
+    ResponseFormatText as ResponseFormatText,
+    ResponseFormatJSONObject as ResponseFormatJSONObject,
+    ResponseFormatJSONSchema as ResponseFormatJSONSchema,
 )
-from ._base_client import DefaultHttpxClient, DefaultAsyncHttpxClient
-from ._utils._logs import setup_logging as _setup_logging
-from ._legacy_response import HttpxBinaryResponseContent as HttpxBinaryResponseContent
-
-__all__ = [
-    "types",
-    "__version__",
-    "__title__",
-    "NoneType",
-    "Transport",
-    "ProxiesTypes",
-    "NotGiven",
-    "NOT_GIVEN",
-    "Omit",
-    "OpenAIError",
-    "APIError",
-    "APIStatusError",
-    "APITimeoutError",
-    "APIConnectionError",
-    "APIResponseValidationError",
-    "BadRequestError",
-    "AuthenticationError",
-    "PermissionDeniedError",
-    "NotFoundError",
-    "ConflictError",
-    "UnprocessableEntityError",
-    "RateLimitError",
-    "InternalServerError",
-    "LengthFinishReasonError",
-    "ContentFilterFinishReasonError",
-    "Timeout",
-    "RequestOptions",
-    "Client",
-    "AsyncClient",
-    "Stream",
-    "AsyncStream",
-    "OpenAI",
-    "AsyncOpenAI",
-    "file_from_path",
-    "BaseModel",
-    "DEFAULT_TIMEOUT",
-    "DEFAULT_MAX_RETRIES",
-    "DEFAULT_CONNECTION_LIMITS",
-    "DefaultHttpxClient",
-    "DefaultAsyncHttpxClient",
-]
-
-if not _t.TYPE_CHECKING:
-    from ._utils._resources_proxy import resources as resources
-
-from .lib import azure as _azure, pydantic_function_tool as pydantic_function_tool
-from .version import VERSION as VERSION
-from .lib.azure import AzureOpenAI as AzureOpenAI, AsyncAzureOpenAI as AsyncAzureOpenAI
-from .lib._old_api import *
-from .lib.streaming import (
-    AssistantEventHandler as AssistantEventHandler,
-    AsyncAssistantEventHandler as AsyncAssistantEventHandler,
+from .upload import Upload as Upload
+from .embedding import Embedding as Embedding
+from .chat_model import ChatModel as ChatModel
+from .completion import Completion as Completion
+from .moderation import Moderation as Moderation
+from .audio_model import AudioModel as AudioModel
+from .batch_error import BatchError as BatchError
+from .file_object import FileObject as FileObject
+from .image_model import ImageModel as ImageModel
+from .file_content import FileContent as FileContent
+from .file_deleted import FileDeleted as FileDeleted
+from .file_purpose import FilePurpose as FilePurpose
+from .vector_store import VectorStore as VectorStore
+from .model_deleted import ModelDeleted as ModelDeleted
+from .embedding_model import EmbeddingModel as EmbeddingModel
+from .images_response import ImagesResponse as ImagesResponse
+from .completion_usage import CompletionUsage as CompletionUsage
+from .eval_list_params import EvalListParams as EvalListParams
+from .file_list_params import FileListParams as FileListParams
+from .moderation_model import ModerationModel as ModerationModel
+from .batch_list_params import BatchListParams as BatchListParams
+from .completion_choice import CompletionChoice as CompletionChoice
+from .image_edit_params import ImageEditParams as ImageEditParams
+from .eval_create_params import EvalCreateParams as EvalCreateParams
+from .eval_list_response import EvalListResponse as EvalListResponse
+from .eval_update_params import EvalUpdateParams as EvalUpdateParams
+from .file_create_params import FileCreateParams as FileCreateParams
+from .batch_create_params import BatchCreateParams as BatchCreateParams
+from .batch_request_counts import BatchRequestCounts as BatchRequestCounts
+from .eval_create_response import EvalCreateResponse as EvalCreateResponse
+from .eval_delete_response import EvalDeleteResponse as EvalDeleteResponse
+from .eval_update_response import EvalUpdateResponse as EvalUpdateResponse
+from .upload_create_params import UploadCreateParams as UploadCreateParams
+from .vector_store_deleted import VectorStoreDeleted as VectorStoreDeleted
+from .audio_response_format import AudioResponseFormat as AudioResponseFormat
+from .container_list_params import ContainerListParams as ContainerListParams
+from .image_generate_params import ImageGenerateParams as ImageGenerateParams
+from .eval_retrieve_response import EvalRetrieveResponse as EvalRetrieveResponse
+from .file_chunking_strategy import FileChunkingStrategy as FileChunkingStrategy
+from .upload_complete_params import UploadCompleteParams as UploadCompleteParams
+from .container_create_params import ContainerCreateParams as ContainerCreateParams
+from .container_list_response import ContainerListResponse as ContainerListResponse
+from .embedding_create_params import EmbeddingCreateParams as EmbeddingCreateParams
+from .completion_create_params import CompletionCreateParams as CompletionCreateParams
+from .moderation_create_params import ModerationCreateParams as ModerationCreateParams
+from .vector_store_list_params import VectorStoreListParams as VectorStoreListParams
+from .container_create_response import ContainerCreateResponse as ContainerCreateResponse
+from .create_embedding_response import CreateEmbeddingResponse as CreateEmbeddingResponse
+from .moderation_create_response import ModerationCreateResponse as ModerationCreateResponse
+from .vector_store_create_params import VectorStoreCreateParams as VectorStoreCreateParams
+from .vector_store_search_params import VectorStoreSearchParams as VectorStoreSearchParams
+from .vector_store_update_params import VectorStoreUpdateParams as VectorStoreUpdateParams
+from .container_retrieve_response import ContainerRetrieveResponse as ContainerRetrieveResponse
+from .moderation_text_input_param import ModerationTextInputParam as ModerationTextInputParam
+from .file_chunking_strategy_param import FileChunkingStrategyParam as FileChunkingStrategyParam
+from .vector_store_search_response import VectorStoreSearchResponse as VectorStoreSearchResponse
+from .websocket_connection_options import WebsocketConnectionOptions as WebsocketConnectionOptions
+from .image_create_variation_params import ImageCreateVariationParams as ImageCreateVariationParams
+from .static_file_chunking_strategy import StaticFileChunkingStrategy as StaticFileChunkingStrategy
+from .eval_custom_data_source_config import EvalCustomDataSourceConfig as EvalCustomDataSourceConfig
+from .moderation_image_url_input_param import ModerationImageURLInputParam as ModerationImageURLInputParam
+from .auto_file_chunking_strategy_param import AutoFileChunkingStrategyParam as AutoFileChunkingStrategyParam
+from .moderation_multi_modal_input_param import ModerationMultiModalInputParam as ModerationMultiModalInputParam
+from .other_file_chunking_strategy_object import OtherFileChunkingStrategyObject as OtherFileChunkingStrategyObject
+from .static_file_chunking_strategy_param import StaticFileChunkingStrategyParam as StaticFileChunkingStrategyParam
+from .static_file_chunking_strategy_object import StaticFileChunkingStrategyObject as StaticFileChunkingStrategyObject
+from .eval_stored_completions_data_source_config import (
+    EvalStoredCompletionsDataSourceConfig as EvalStoredCompletionsDataSourceConfig,
 )
-
-_setup_logging()
-
-# Update the __module__ attribute for exported symbols so that
-# error messages point to this module instead of the module
-# it was originally defined in, e.g.
-# openai._exceptions.NotFoundError -> openai.NotFoundError
-__locals = locals()
-for __name in __all__:
-    if not __name.startswith("__"):
-        try:
-            __locals[__name].__module__ = "openai"
-        except (TypeError, AttributeError):
-            # Some of our exported symbols are builtins which we can't set attributes for.
-            pass
-
-# ------ Module level client ------
-import typing as _t
-import typing_extensions as _te
-
-import httpx as _httpx
-
-from ._base_client import DEFAULT_TIMEOUT, DEFAULT_MAX_RETRIES
-
-api_key: str | None = None
-
-organization: str | None = None
-
-project: str | None = None
-
-base_url: str | _httpx.URL | None = None
-
-timeout: float | Timeout | None = DEFAULT_TIMEOUT
-
-max_retries: int = DEFAULT_MAX_RETRIES
-
-default_headers: _t.Mapping[str, str] | None = None
-
-default_query: _t.Mapping[str, object] | None = None
-
-http_client: _httpx.Client | None = None
-
-_ApiType = _te.Literal["openai", "azure"]
-
-api_type: _ApiType | None = _t.cast(_ApiType, _os.environ.get("OPENAI_API_TYPE"))
-
-api_version: str | None = _os.environ.get("OPENAI_API_VERSION")
-
-azure_endpoint: str | None = _os.environ.get("AZURE_OPENAI_ENDPOINT")
-
-azure_ad_token: str | None = _os.environ.get("AZURE_OPENAI_AD_TOKEN")
-
-azure_ad_token_provider: _azure.AzureADTokenProvider | None = None
-
-
-class _ModuleClient(OpenAI):
-    # Note: we have to use type: ignores here as overriding class members
-    # with properties is technically unsafe but it is fine for our use case
-
-    @property  # type: ignore
-    @override
-    def api_key(self) -> str | None:
-        return api_key
-
-    @api_key.setter  # type: ignore
-    def api_key(self, value: str | None) -> None:  # type: ignore
-        global api_key
-
-        api_key = value
-
-    @property  # type: ignore
-    @override
-    def organization(self) -> str | None:
-        return organization
-
-    @organization.setter  # type: ignore
-    def organization(self, value: str | None) -> None:  # type: ignore
-        global organization
-
-        organization = value
-
-    @property  # type: ignore
-    @override
-    def project(self) -> str | None:
-        return project
-
-    @project.setter  # type: ignore
-    def project(self, value: str | None) -> None:  # type: ignore
-        global project
-
-        project = value
-
-    @property
-    @override
-    def base_url(self) -> _httpx.URL:
-        if base_url is not None:
-            return _httpx.URL(base_url)
-
-        return super().base_url
-
-    @base_url.setter
-    def base_url(self, url: _httpx.URL | str) -> None:
-        super().base_url = url  # type: ignore[misc]
-
-    @property  # type: ignore
-    @override
-    def timeout(self) -> float | Timeout | None:
-        return timeout
-
-    @timeout.setter  # type: ignore
-    def timeout(self, value: float | Timeout | None) -> None:  # type: ignore
-        global timeout
-
-        timeout = value
-
-    @property  # type: ignore
-    @override
-    def max_retries(self) -> int:
-        return max_retries
-
-    @max_retries.setter  # type: ignore
-    def max_retries(self, value: int) -> None:  # type: ignore
-        global max_retries
-
-        max_retries = value
-
-    @property  # type: ignore
-    @override
-    def _custom_headers(self) -> _t.Mapping[str, str] | None:
-        return default_headers
-
-    @_custom_headers.setter  # type: ignore
-    def _custom_headers(self, value: _t.Mapping[str, str] | None) -> None:  # type: ignore
-        global default_headers
-
-        default_headers = value
-
-    @property  # type: ignore
-    @override
-    def _custom_query(self) -> _t.Mapping[str, object] | None:
-        return default_query
-
-    @_custom_query.setter  # type: ignore
-    def _custom_query(self, value: _t.Mapping[str, object] | None) -> None:  # type: ignore
-        global default_query
-
-        default_query = value
-
-    @property  # type: ignore
-    @override
-    def _client(self) -> _httpx.Client:
-        return http_client or super()._client
-
-    @_client.setter  # type: ignore
-    def _client(self, value: _httpx.Client) -> None:  # type: ignore
-        global http_client
-
-        http_client = value
-
-
-class _AzureModuleClient(_ModuleClient, AzureOpenAI):  # type: ignore
-    ...
-
-
-class _AmbiguousModuleClientUsageError(OpenAIError):
-    def __init__(self) -> None:
-        super().__init__(
-            "Ambiguous use of module client; please set `openai.api_type` or the `OPENAI_API_TYPE` environment variable to `openai` or `azure`"
-        )
-
-
-def _has_openai_credentials() -> bool:
-    return _os.environ.get("OPENAI_API_KEY") is not None
-
-
-def _has_azure_credentials() -> bool:
-    return azure_endpoint is not None or _os.environ.get("AZURE_OPENAI_API_KEY") is not None
-
-
-def _has_azure_ad_credentials() -> bool:
-    return (
-        _os.environ.get("AZURE_OPENAI_AD_TOKEN") is not None
-        or azure_ad_token is not None
-        or azure_ad_token_provider is not None
-    )
-
-
-_client: OpenAI | None = None
-
-
-def _load_client() -> OpenAI:  # type: ignore[reportUnusedFunction]
-    global _client
-
-    if _client is None:
-        global api_type, azure_endpoint, azure_ad_token, api_version
-
-        if azure_endpoint is None:
-            azure_endpoint = _os.environ.get("AZURE_OPENAI_ENDPOINT")
-
-        if azure_ad_token is None:
-            azure_ad_token = _os.environ.get("AZURE_OPENAI_AD_TOKEN")
-
-        if api_version is None:
-            api_version = _os.environ.get("OPENAI_API_VERSION")
-
-        if api_type is None:
-            has_openai = _has_openai_credentials()
-            has_azure = _has_azure_credentials()
-            has_azure_ad = _has_azure_ad_credentials()
-
-            if has_openai and (has_azure or has_azure_ad):
-                raise _AmbiguousModuleClientUsageError()
-
-            if (azure_ad_token is not None or azure_ad_token_provider is not None) and _os.environ.get(
-                "AZURE_OPENAI_API_KEY"
-            ) is not None:
-                raise _AmbiguousModuleClientUsageError()
-
-            if has_azure or has_azure_ad:
-                api_type = "azure"
-            else:
-                api_type = "openai"
-
-        if api_type == "azure":
-            _client = _AzureModuleClient(  # type: ignore
-                api_version=api_version,
-                azure_endpoint=azure_endpoint,
-                api_key=api_key,
-                azure_ad_token=azure_ad_token,
-                azure_ad_token_provider=azure_ad_token_provider,
-                organization=organization,
-                base_url=base_url,
-                timeout=timeout,
-                max_retries=max_retries,
-                default_headers=default_headers,
-                default_query=default_query,
-                http_client=http_client,
-            )
-            return _client
-
-        _client = _ModuleClient(
-            api_key=api_key,
-            organization=organization,
-            project=project,
-            base_url=base_url,
-            timeout=timeout,
-            max_retries=max_retries,
-            default_headers=default_headers,
-            default_query=default_query,
-            http_client=http_client,
-        )
-        return _client
-
-    return _client
-
-
-def _reset_client() -> None:  # type: ignore[reportUnusedFunction]
-    global _client
-
-    _client = None
-
-
-from ._module_client import (
-    beta as beta,
-    chat as chat,
-    audio as audio,
-    evals as evals,
-    files as files,
-    images as images,
-    models as models,
-    batches as batches,
-    uploads as uploads,
-    responses as responses,
-    containers as containers,
-    embeddings as embeddings,
-    completions as completions,
-    fine_tuning as fine_tuning,
-    moderations as moderations,
-    vector_stores as vector_stores,
+from .static_file_chunking_strategy_object_param import (
+    StaticFileChunkingStrategyObjectParam as StaticFileChunkingStrategyObjectParam,
 )
