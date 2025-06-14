@@ -1,1405 +1,1962 @@
-from __future__ import annotations
+# Copyright 2014 Google Inc. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-import email.utils
-import re
-import typing as t
-import warnings
-from datetime import date
-from datetime import datetime
-from datetime import time
-from datetime import timedelta
-from datetime import timezone
-from enum import Enum
-from hashlib import sha1
-from time import mktime
-from time import struct_time
-from urllib.parse import quote
-from urllib.parse import unquote
-from urllib.request import parse_http_list as _parse_list_header
+"""Classes to encapsulate a single HTTP request.
 
-from ._internal import _dt_as_utc
-from ._internal import _plain_int
+The classes implement a command pattern, with every
+object supporting an execute() method that does the
+actual HTTP request.
+"""
+from __future__ import absolute_import
 
-if t.TYPE_CHECKING:
-    from _typeshed.wsgi import WSGIEnvironment
+__author__ = "jcgregorio@google.com (Joe Gregorio)"
 
-_token_chars = frozenset(
-    "!#$%&'*+-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz|~"
+import copy
+import http.client as http_client
+import io
+import json
+import logging
+import mimetypes
+import os
+import random
+import socket
+import time
+import urllib
+import uuid
+
+import httplib2
+
+# TODO(issue 221): Remove this conditional import jibbajabba.
+try:
+    import ssl
+except ImportError:
+    _ssl_SSLError = object()
+else:
+    _ssl_SSLError = ssl.SSLError
+
+from email.generator import Generator
+from email.mime.multipart import MIMEMultipart
+from email.mime.nonmultipart import MIMENonMultipart
+from email.parser import FeedParser
+
+from googleapiclient import _auth
+from googleapiclient import _helpers as util
+from googleapiclient.errors import (
+    BatchError,
+    HttpError,
+    InvalidChunkSizeError,
+    ResumableUploadError,
+    UnexpectedBodyError,
+    UnexpectedMethodError,
 )
-_etag_re = re.compile(r'([Ww]/)?(?:"(.*?)"|(.*?))(?:\s*,\s*|$)')
-_entity_headers = frozenset(
-    [
-        "allow",
-        "content-encoding",
-        "content-language",
-        "content-length",
-        "content-location",
-        "content-md5",
-        "content-range",
-        "content-type",
-        "expires",
-        "last-modified",
-    ]
-)
-_hop_by_hop_headers = frozenset(
-    [
-        "connection",
-        "keep-alive",
-        "proxy-authenticate",
-        "proxy-authorization",
-        "te",
-        "trailer",
-        "transfer-encoding",
-        "upgrade",
-    ]
-)
-HTTP_STATUS_CODES = {
-    100: "Continue",
-    101: "Switching Protocols",
-    102: "Processing",
-    103: "Early Hints",  # see RFC 8297
-    200: "OK",
-    201: "Created",
-    202: "Accepted",
-    203: "Non Authoritative Information",
-    204: "No Content",
-    205: "Reset Content",
-    206: "Partial Content",
-    207: "Multi Status",
-    208: "Already Reported",  # see RFC 5842
-    226: "IM Used",  # see RFC 3229
-    300: "Multiple Choices",
-    301: "Moved Permanently",
-    302: "Found",
-    303: "See Other",
-    304: "Not Modified",
-    305: "Use Proxy",
-    306: "Switch Proxy",  # unused
-    307: "Temporary Redirect",
-    308: "Permanent Redirect",
-    400: "Bad Request",
-    401: "Unauthorized",
-    402: "Payment Required",  # unused
-    403: "Forbidden",
-    404: "Not Found",
-    405: "Method Not Allowed",
-    406: "Not Acceptable",
-    407: "Proxy Authentication Required",
-    408: "Request Timeout",
-    409: "Conflict",
-    410: "Gone",
-    411: "Length Required",
-    412: "Precondition Failed",
-    413: "Request Entity Too Large",
-    414: "Request URI Too Long",
-    415: "Unsupported Media Type",
-    416: "Requested Range Not Satisfiable",
-    417: "Expectation Failed",
-    418: "I'm a teapot",  # see RFC 2324
-    421: "Misdirected Request",  # see RFC 7540
-    422: "Unprocessable Entity",
-    423: "Locked",
-    424: "Failed Dependency",
-    425: "Too Early",  # see RFC 8470
-    426: "Upgrade Required",
-    428: "Precondition Required",  # see RFC 6585
-    429: "Too Many Requests",
-    431: "Request Header Fields Too Large",
-    449: "Retry With",  # proprietary MS extension
-    451: "Unavailable For Legal Reasons",
-    500: "Internal Server Error",
-    501: "Not Implemented",
-    502: "Bad Gateway",
-    503: "Service Unavailable",
-    504: "Gateway Timeout",
-    505: "HTTP Version Not Supported",
-    506: "Variant Also Negotiates",  # see RFC 2295
-    507: "Insufficient Storage",
-    508: "Loop Detected",  # see RFC 5842
-    510: "Not Extended",
-    511: "Network Authentication Failed",
-}
+from googleapiclient.model import JsonModel
+
+LOGGER = logging.getLogger(__name__)
+
+DEFAULT_CHUNK_SIZE = 100 * 1024 * 1024
+
+MAX_URI_LENGTH = 2048
+
+MAX_BATCH_LIMIT = 1000
+
+_TOO_MANY_REQUESTS = 429
+
+DEFAULT_HTTP_TIMEOUT_SEC = 60
+
+_LEGACY_BATCH_URI = "https://www.googleapis.com/batch"
 
 
-class COEP(Enum):
-    """Cross Origin Embedder Policies"""
+def _should_retry_response(resp_status, content):
+    """Determines whether a response should be retried.
 
-    UNSAFE_NONE = "unsafe-none"
-    REQUIRE_CORP = "require-corp"
+    Args:
+      resp_status: The response status received.
+      content: The response content body.
 
-
-class COOP(Enum):
-    """Cross Origin Opener Policies"""
-
-    UNSAFE_NONE = "unsafe-none"
-    SAME_ORIGIN_ALLOW_POPUPS = "same-origin-allow-popups"
-    SAME_ORIGIN = "same-origin"
-
-
-def quote_header_value(value: t.Any, allow_token: bool = True) -> str:
-    """Add double quotes around a header value. If the header contains only ASCII token
-    characters, it will be returned unchanged. If the header contains ``"`` or ``\\``
-    characters, they will be escaped with an additional ``\\`` character.
-
-    This is the reverse of :func:`unquote_header_value`.
-
-    :param value: The value to quote. Will be converted to a string.
-    :param allow_token: Disable to quote the value even if it only has token characters.
-
-    .. versionchanged:: 3.0
-        Passing bytes is not supported.
-
-    .. versionchanged:: 3.0
-        The ``extra_chars`` parameter is removed.
-
-    .. versionchanged:: 2.3
-        The value is quoted if it is the empty string.
-
-    .. versionadded:: 0.5
+    Returns:
+      True if the response should be retried, otherwise False.
     """
-    value_str = str(value)
-
-    if not value_str:
-        return '""'
-
-    if allow_token:
-        token_chars = _token_chars
-
-        if token_chars.issuperset(value_str):
-            return value_str
-
-    value_str = value_str.replace("\\", "\\\\").replace('"', '\\"')
-    return f'"{value_str}"'
-
-
-def unquote_header_value(value: str) -> str:
-    """Remove double quotes and decode slash-escaped ``"`` and ``\\`` characters in a
-    header value.
-
-    This is the reverse of :func:`quote_header_value`.
-
-    :param value: The header value to unquote.
-
-    .. versionchanged:: 3.0
-        The ``is_filename`` parameter is removed.
-    """
-    if len(value) >= 2 and value[0] == value[-1] == '"':
-        value = value[1:-1]
-        return value.replace("\\\\", "\\").replace('\\"', '"')
-
-    return value
-
-
-def dump_options_header(header: str | None, options: t.Mapping[str, t.Any]) -> str:
-    """Produce a header value and ``key=value`` parameters separated by semicolons
-    ``;``. For example, the ``Content-Type`` header.
-
-    .. code-block:: python
-
-        dump_options_header("text/html", {"charset": "UTF-8"})
-        'text/html; charset=UTF-8'
-
-    This is the reverse of :func:`parse_options_header`.
-
-    If a value contains non-token characters, it will be quoted.
-
-    If a value is ``None``, the parameter is skipped.
-
-    In some keys for some headers, a UTF-8 value can be encoded using a special
-    ``key*=UTF-8''value`` form, where ``value`` is percent encoded. This function will
-    not produce that format automatically, but if a given key ends with an asterisk
-    ``*``, the value is assumed to have that form and will not be quoted further.
-
-    :param header: The primary header value.
-    :param options: Parameters to encode as ``key=value`` pairs.
-
-    .. versionchanged:: 2.3
-        Keys with ``None`` values are skipped rather than treated as a bare key.
-
-    .. versionchanged:: 2.2.3
-        If a key ends with ``*``, its value will not be quoted.
-    """
-    segments = []
-
-    if header is not None:
-        segments.append(header)
-
-    for key, value in options.items():
-        if value is None:
-            continue
-
-        if key[-1] == "*":
-            segments.append(f"{key}={value}")
-        else:
-            segments.append(f"{key}={quote_header_value(value)}")
-
-    return "; ".join(segments)
-
-
-def dump_header(iterable: dict[str, t.Any] | t.Iterable[t.Any]) -> str:
-    """Produce a header value from a list of items or ``key=value`` pairs, separated by
-    commas ``,``.
-
-    This is the reverse of :func:`parse_list_header`, :func:`parse_dict_header`, and
-    :func:`parse_set_header`.
-
-    If a value contains non-token characters, it will be quoted.
-
-    If a value is ``None``, the key is output alone.
-
-    In some keys for some headers, a UTF-8 value can be encoded using a special
-    ``key*=UTF-8''value`` form, where ``value`` is percent encoded. This function will
-    not produce that format automatically, but if a given key ends with an asterisk
-    ``*``, the value is assumed to have that form and will not be quoted further.
-
-    .. code-block:: python
-
-        dump_header(["foo", "bar baz"])
-        'foo, "bar baz"'
-
-        dump_header({"foo": "bar baz"})
-        'foo="bar baz"'
-
-    :param iterable: The items to create a header from.
-
-    .. versionchanged:: 3.0
-        The ``allow_token`` parameter is removed.
-
-    .. versionchanged:: 2.2.3
-        If a key ends with ``*``, its value will not be quoted.
-    """
-    if isinstance(iterable, dict):
-        items = []
-
-        for key, value in iterable.items():
-            if value is None:
-                items.append(key)
-            elif key[-1] == "*":
-                items.append(f"{key}={value}")
-            else:
-                items.append(f"{key}={quote_header_value(value)}")
-    else:
-        items = [quote_header_value(x) for x in iterable]
-
-    return ", ".join(items)
-
-
-def dump_csp_header(header: ds.ContentSecurityPolicy) -> str:
-    """Dump a Content Security Policy header.
-
-    These are structured into policies such as "default-src 'self';
-    script-src 'self'".
-
-    .. versionadded:: 1.0.0
-       Support for Content Security Policy headers was added.
-
-    """
-    return "; ".join(f"{key} {value}" for key, value in header.items())
-
-
-def parse_list_header(value: str) -> list[str]:
-    """Parse a header value that consists of a list of comma separated items according
-    to `RFC 9110 <https://httpwg.org/specs/rfc9110.html#abnf.extension>`__.
-
-    This extends :func:`urllib.request.parse_http_list` to remove surrounding quotes
-    from values.
-
-    .. code-block:: python
-
-        parse_list_header('token, "quoted value"')
-        ['token', 'quoted value']
-
-    This is the reverse of :func:`dump_header`.
-
-    :param value: The header value to parse.
-    """
-    result = []
-
-    for item in _parse_list_header(value):
-        if len(item) >= 2 and item[0] == item[-1] == '"':
-            item = item[1:-1]
-
-        result.append(item)
-
-    return result
-
-
-def parse_dict_header(value: str) -> dict[str, str | None]:
-    """Parse a list header using :func:`parse_list_header`, then parse each item as a
-    ``key=value`` pair.
-
-    .. code-block:: python
-
-        parse_dict_header('a=b, c="d, e", f')
-        {"a": "b", "c": "d, e", "f": None}
-
-    This is the reverse of :func:`dump_header`.
-
-    If a key does not have a value, it is ``None``.
-
-    This handles charsets for values as described in
-    `RFC 2231 <https://www.rfc-editor.org/rfc/rfc2231#section-3>`__. Only ASCII, UTF-8,
-    and ISO-8859-1 charsets are accepted, otherwise the value remains quoted.
-
-    :param value: The header value to parse.
-
-    .. versionchanged:: 3.0
-        Passing bytes is not supported.
-
-    .. versionchanged:: 3.0
-        The ``cls`` argument is removed.
-
-    .. versionchanged:: 2.3
-        Added support for ``key*=charset''value`` encoded items.
-
-    .. versionchanged:: 0.9
-       The ``cls`` argument was added.
-    """
-    result: dict[str, str | None] = {}
-
-    for item in parse_list_header(value):
-        key, has_value, value = item.partition("=")
-        key = key.strip()
-
-        if not key:
-            # =value is not valid
-            continue
-
-        if not has_value:
-            result[key] = None
-            continue
-
-        value = value.strip()
-        encoding: str | None = None
-
-        if key[-1] == "*":
-            # key*=charset''value becomes key=value, where value is percent encoded
-            # adapted from parse_options_header, without the continuation handling
-            key = key[:-1]
-            match = _charset_value_re.match(value)
-
-            if match:
-                # If there is a charset marker in the value, split it off.
-                encoding, value = match.groups()
-                encoding = encoding.lower()
-
-            # A safe list of encodings. Modern clients should only send ASCII or UTF-8.
-            # This list will not be extended further. An invalid encoding will leave the
-            # value quoted.
-            if encoding in {"ascii", "us-ascii", "utf-8", "iso-8859-1"}:
-                # invalid bytes are replaced during unquoting
-                value = unquote(value, encoding=encoding)
-
-        if len(value) >= 2 and value[0] == value[-1] == '"':
-            value = value[1:-1]
-
-        result[key] = value
-
-    return result
-
-
-# https://httpwg.org/specs/rfc9110.html#parameter
-_parameter_key_re = re.compile(r"([\w!#$%&'*+\-.^`|~]+)=", flags=re.ASCII)
-_parameter_token_value_re = re.compile(r"[\w!#$%&'*+\-.^`|~]+", flags=re.ASCII)
-# https://www.rfc-editor.org/rfc/rfc2231#section-4
-_charset_value_re = re.compile(
-    r"""
-    ([\w!#$%&*+\-.^`|~]*)'  # charset part, could be empty
-    [\w!#$%&*+\-.^`|~]*'  # don't care about language part, usually empty
-    ([\w!#$%&'*+\-.^`|~]+)  # one or more token chars with percent encoding
-    """,
-    re.ASCII | re.VERBOSE,
-)
-# https://www.rfc-editor.org/rfc/rfc2231#section-3
-_continuation_re = re.compile(r"\*(\d+)$", re.ASCII)
-
-
-def parse_options_header(value: str | None) -> tuple[str, dict[str, str]]:
-    """Parse a header that consists of a value with ``key=value`` parameters separated
-    by semicolons ``;``. For example, the ``Content-Type`` header.
-
-    .. code-block:: python
-
-        parse_options_header("text/html; charset=UTF-8")
-        ('text/html', {'charset': 'UTF-8'})
-
-        parse_options_header("")
-        ("", {})
-
-    This is the reverse of :func:`dump_options_header`.
-
-    This parses valid parameter parts as described in
-    `RFC 9110 <https://httpwg.org/specs/rfc9110.html#parameter>`__. Invalid parts are
-    skipped.
-
-    This handles continuations and charsets as described in
-    `RFC 2231 <https://www.rfc-editor.org/rfc/rfc2231#section-3>`__, although not as
-    strictly as the RFC. Only ASCII, UTF-8, and ISO-8859-1 charsets are accepted,
-    otherwise the value remains quoted.
-
-    Clients may not be consistent in how they handle a quote character within a quoted
-    value. The `HTML Standard <https://html.spec.whatwg.org/#multipart-form-data>`__
-    replaces it with ``%22`` in multipart form data.
-    `RFC 9110 <https://httpwg.org/specs/rfc9110.html#quoted.strings>`__ uses backslash
-    escapes in HTTP headers. Both are decoded to the ``"`` character.
-
-    Clients may not be consistent in how they handle non-ASCII characters. HTML
-    documents must declare ``<meta charset=UTF-8>``, otherwise browsers may replace with
-    HTML character references, which can be decoded using :func:`html.unescape`.
-
-    :param value: The header value to parse.
-    :return: ``(value, options)``, where ``options`` is a dict
-
-    .. versionchanged:: 2.3
-        Invalid parts, such as keys with no value, quoted keys, and incorrectly quoted
-        values, are discarded instead of treating as ``None``.
-
-    .. versionchanged:: 2.3
-        Only ASCII, UTF-8, and ISO-8859-1 are accepted for charset values.
-
-    .. versionchanged:: 2.3
-        Escaped quotes in quoted values, like ``%22`` and ``\\"``, are handled.
-
-    .. versionchanged:: 2.2
-        Option names are always converted to lowercase.
-
-    .. versionchanged:: 2.2
-        The ``multiple`` parameter was removed.
-
-    .. versionchanged:: 0.15
-        :rfc:`2231` parameter continuations are handled.
-
-    .. versionadded:: 0.5
-    """
-    if value is None:
-        return "", {}
-
-    value, _, rest = value.partition(";")
-    value = value.strip()
-    rest = rest.strip()
-
-    if not value or not rest:
-        # empty (invalid) value, or value without options
-        return value, {}
-
-    # Collect all valid key=value parts without processing the value.
-    parts: list[tuple[str, str]] = []
-
-    while True:
-        if (m := _parameter_key_re.match(rest)) is not None:
-            pk = m.group(1).lower()
-            rest = rest[m.end() :]
-
-            # Value may be a token.
-            if (m := _parameter_token_value_re.match(rest)) is not None:
-                parts.append((pk, m.group()))
-
-            # Value may be a quoted string, find the closing quote.
-            elif rest[:1] == '"':
-                pos = 1
-                length = len(rest)
-
-                while pos < length:
-                    if rest[pos : pos + 2] in {"\\\\", '\\"'}:
-                        # Consume escaped slashes and quotes.
-                        pos += 2
-                    elif rest[pos] == '"':
-                        # Stop at an unescaped quote.
-                        parts.append((pk, rest[: pos + 1]))
-                        rest = rest[pos + 1 :]
-                        break
-                    else:
-                        # Consume any other character.
-                        pos += 1
-
-        # Find the next section delimited by `;`, if any.
-        if (end := rest.find(";")) == -1:
-            break
-
-        rest = rest[end + 1 :].lstrip()
-
-    options: dict[str, str] = {}
-    encoding: str | None = None
-    continued_encoding: str | None = None
-
-    # For each collected part, process optional charset and continuation,
-    # unquote quoted values.
-    for pk, pv in parts:
-        if pk[-1] == "*":
-            # key*=charset''value becomes key=value, where value is percent encoded
-            pk = pk[:-1]
-            match = _charset_value_re.match(pv)
-
-            if match:
-                # If there is a valid charset marker in the value, split it off.
-                encoding, pv = match.groups()
-                # This might be the empty string, handled next.
-                encoding = encoding.lower()
-
-            # No charset marker, or marker with empty charset value.
-            if not encoding:
-                encoding = continued_encoding
-
-            # A safe list of encodings. Modern clients should only send ASCII or UTF-8.
-            # This list will not be extended further. An invalid encoding will leave the
-            # value quoted.
-            if encoding in {"ascii", "us-ascii", "utf-8", "iso-8859-1"}:
-                # Continuation parts don't require their own charset marker. This is
-                # looser than the RFC, it will persist across different keys and allows
-                # changing the charset during a continuation. But this implementation is
-                # much simpler than tracking the full state.
-                continued_encoding = encoding
-                # invalid bytes are replaced during unquoting
-                pv = unquote(pv, encoding=encoding)
-
-        # Remove quotes. At this point the value cannot be empty or a single quote.
-        if pv[0] == pv[-1] == '"':
-            # HTTP headers use slash, multipart form data uses percent
-            pv = pv[1:-1].replace("\\\\", "\\").replace('\\"', '"').replace("%22", '"')
-
-        match = _continuation_re.search(pk)
-
-        if match:
-            # key*0=a; key*1=b becomes key=ab
-            pk = pk[: match.start()]
-            options[pk] = options.get(pk, "") + pv
-        else:
-            options[pk] = pv
-
-    return value, options
-
-
-_q_value_re = re.compile(r"-?\d+(\.\d+)?", re.ASCII)
-_TAnyAccept = t.TypeVar("_TAnyAccept", bound="ds.Accept")
-
-
-@t.overload
-def parse_accept_header(value: str | None) -> ds.Accept: ...
-
-
-@t.overload
-def parse_accept_header(value: str | None, cls: type[_TAnyAccept]) -> _TAnyAccept: ...
-
-
-def parse_accept_header(
-    value: str | None, cls: type[_TAnyAccept] | None = None
-) -> _TAnyAccept:
-    """Parse an ``Accept`` header according to
-    `RFC 9110 <https://httpwg.org/specs/rfc9110.html#field.accept>`__.
-
-    Returns an :class:`.Accept` instance, which can sort and inspect items based on
-    their quality parameter. When parsing ``Accept-Charset``, ``Accept-Encoding``, or
-    ``Accept-Language``, pass the appropriate :class:`.Accept` subclass.
-
-    :param value: The header value to parse.
-    :param cls: The :class:`.Accept` class to wrap the result in.
-    :return: An instance of ``cls``.
-
-    .. versionchanged:: 2.3
-        Parse according to RFC 9110. Items with invalid ``q`` values are skipped.
-    """
-    if cls is None:
-        cls = t.cast(type[_TAnyAccept], ds.Accept)
-
-    if not value:
-        return cls(None)
-
-    result = []
-
-    for item in parse_list_header(value):
-        item, options = parse_options_header(item)
-
-        if "q" in options:
-            # pop q, remaining options are reconstructed
-            q_str = options.pop("q").strip()
-
-            if _q_value_re.fullmatch(q_str) is None:
-                # ignore an invalid q
-                continue
-
-            q = float(q_str)
-
-            if q < 0 or q > 1:
-                # ignore an invalid q
-                continue
-        else:
-            q = 1
-
-        if options:
-            # reconstruct the media type with any options
-            item = dump_options_header(item, options)
-
-        result.append((item, q))
-
-    return cls(result)
-
-
-_TAnyCC = t.TypeVar("_TAnyCC", bound="ds.cache_control._CacheControl")
-
-
-@t.overload
-def parse_cache_control_header(
-    value: str | None,
-    on_update: t.Callable[[ds.cache_control._CacheControl], None] | None = None,
-) -> ds.RequestCacheControl: ...
-
-
-@t.overload
-def parse_cache_control_header(
-    value: str | None,
-    on_update: t.Callable[[ds.cache_control._CacheControl], None] | None = None,
-    cls: type[_TAnyCC] = ...,
-) -> _TAnyCC: ...
-
-
-def parse_cache_control_header(
-    value: str | None,
-    on_update: t.Callable[[ds.cache_control._CacheControl], None] | None = None,
-    cls: type[_TAnyCC] | None = None,
-) -> _TAnyCC:
-    """Parse a cache control header.  The RFC differs between response and
-    request cache control, this method does not.  It's your responsibility
-    to not use the wrong control statements.
-
-    .. versionadded:: 0.5
-       The `cls` was added.  If not specified an immutable
-       :class:`~werkzeug.datastructures.RequestCacheControl` is returned.
-
-    :param value: a cache control header to be parsed.
-    :param on_update: an optional callable that is called every time a value
-                      on the :class:`~werkzeug.datastructures.CacheControl`
-                      object is changed.
-    :param cls: the class for the returned object.  By default
-                :class:`~werkzeug.datastructures.RequestCacheControl` is used.
-    :return: a `cls` object.
-    """
-    if cls is None:
-        cls = t.cast("type[_TAnyCC]", ds.RequestCacheControl)
-
-    if not value:
-        return cls((), on_update)
-
-    return cls(parse_dict_header(value), on_update)
-
-
-_TAnyCSP = t.TypeVar("_TAnyCSP", bound="ds.ContentSecurityPolicy")
-
-
-@t.overload
-def parse_csp_header(
-    value: str | None,
-    on_update: t.Callable[[ds.ContentSecurityPolicy], None] | None = None,
-) -> ds.ContentSecurityPolicy: ...
-
-
-@t.overload
-def parse_csp_header(
-    value: str | None,
-    on_update: t.Callable[[ds.ContentSecurityPolicy], None] | None = None,
-    cls: type[_TAnyCSP] = ...,
-) -> _TAnyCSP: ...
-
-
-def parse_csp_header(
-    value: str | None,
-    on_update: t.Callable[[ds.ContentSecurityPolicy], None] | None = None,
-    cls: type[_TAnyCSP] | None = None,
-) -> _TAnyCSP:
-    """Parse a Content Security Policy header.
-
-    .. versionadded:: 1.0.0
-       Support for Content Security Policy headers was added.
-
-    :param value: a csp header to be parsed.
-    :param on_update: an optional callable that is called every time a value
-                      on the object is changed.
-    :param cls: the class for the returned object.  By default
-                :class:`~werkzeug.datastructures.ContentSecurityPolicy` is used.
-    :return: a `cls` object.
-    """
-    if cls is None:
-        cls = t.cast("type[_TAnyCSP]", ds.ContentSecurityPolicy)
-
-    if value is None:
-        return cls((), on_update)
-
-    items = []
-
-    for policy in value.split(";"):
-        policy = policy.strip()
-
-        # Ignore badly formatted policies (no space)
-        if " " in policy:
-            directive, value = policy.strip().split(" ", 1)
-            items.append((directive.strip(), value.strip()))
-
-    return cls(items, on_update)
-
-
-def parse_set_header(
-    value: str | None,
-    on_update: t.Callable[[ds.HeaderSet], None] | None = None,
-) -> ds.HeaderSet:
-    """Parse a set-like header and return a
-    :class:`~werkzeug.datastructures.HeaderSet` object:
-
-    >>> hs = parse_set_header('token, "quoted value"')
-
-    The return value is an object that treats the items case-insensitively
-    and keeps the order of the items:
-
-    >>> 'TOKEN' in hs
-    True
-    >>> hs.index('quoted value')
-    1
-    >>> hs
-    HeaderSet(['token', 'quoted value'])
-
-    To create a header from the :class:`HeaderSet` again, use the
-    :func:`dump_header` function.
-
-    :param value: a set header to be parsed.
-    :param on_update: an optional callable that is called every time a
-                      value on the :class:`~werkzeug.datastructures.HeaderSet`
-                      object is changed.
-    :return: a :class:`~werkzeug.datastructures.HeaderSet`
-    """
-    if not value:
-        return ds.HeaderSet(None, on_update)
-    return ds.HeaderSet(parse_list_header(value), on_update)
-
-
-def parse_if_range_header(value: str | None) -> ds.IfRange:
-    """Parses an if-range header which can be an etag or a date.  Returns
-    a :class:`~werkzeug.datastructures.IfRange` object.
-
-    .. versionchanged:: 2.0
-        If the value represents a datetime, it is timezone-aware.
-
-    .. versionadded:: 0.7
-    """
-    if not value:
-        return ds.IfRange()
-    date = parse_date(value)
-    if date is not None:
-        return ds.IfRange(date=date)
-    # drop weakness information
-    return ds.IfRange(unquote_etag(value)[0])
-
-
-def parse_range_header(
-    value: str | None, make_inclusive: bool = True
-) -> ds.Range | None:
-    """Parses a range header into a :class:`~werkzeug.datastructures.Range`
-    object.  If the header is missing or malformed `None` is returned.
-    `ranges` is a list of ``(start, stop)`` tuples where the ranges are
-    non-inclusive.
-
-    .. versionadded:: 0.7
-    """
-    if not value or "=" not in value:
-        return None
-
-    ranges = []
-    last_end = 0
-    units, rng = value.split("=", 1)
-    units = units.strip().lower()
-
-    for item in rng.split(","):
-        item = item.strip()
-        if "-" not in item:
-            return None
-        if item.startswith("-"):
-            if last_end < 0:
-                return None
-            try:
-                begin = _plain_int(item)
-            except ValueError:
-                return None
-            end = None
-            last_end = -1
-        elif "-" in item:
-            begin_str, end_str = item.split("-", 1)
-            begin_str = begin_str.strip()
-            end_str = end_str.strip()
-
-            try:
-                begin = _plain_int(begin_str)
-            except ValueError:
-                return None
-
-            if begin < last_end or last_end < 0:
-                return None
-            if end_str:
-                try:
-                    end = _plain_int(end_str) + 1
-                except ValueError:
-                    return None
-
-                if begin >= end:
-                    return None
-            else:
-                end = None
-            last_end = end if end is not None else -1
-        ranges.append((begin, end))
-
-    return ds.Range(units, ranges)
-
-
-def parse_content_range_header(
-    value: str | None,
-    on_update: t.Callable[[ds.ContentRange], None] | None = None,
-) -> ds.ContentRange | None:
-    """Parses a range header into a
-    :class:`~werkzeug.datastructures.ContentRange` object or `None` if
-    parsing is not possible.
-
-    .. versionadded:: 0.7
-
-    :param value: a content range header to be parsed.
-    :param on_update: an optional callable that is called every time a value
-                      on the :class:`~werkzeug.datastructures.ContentRange`
-                      object is changed.
-    """
-    if value is None:
-        return None
-    try:
-        units, rangedef = (value or "").strip().split(None, 1)
-    except ValueError:
-        return None
-
-    if "/" not in rangedef:
-        return None
-    rng, length_str = rangedef.split("/", 1)
-    if length_str == "*":
-        length = None
-    else:
+    reason = None
+
+    # Retry on 5xx errors.
+    if resp_status >= 500:
+        return True
+
+    # Retry on 429 errors.
+    if resp_status == _TOO_MANY_REQUESTS:
+        return True
+
+    # For 403 errors, we have to check for the `reason` in the response to
+    # determine if we should retry.
+    if resp_status == http_client.FORBIDDEN:
+        # If there's no details about the 403 type, don't retry.
+        if not content:
+            return False
+
+        # Content is in JSON format.
         try:
-            length = _plain_int(length_str)
-        except ValueError:
-            return None
+            data = json.loads(content.decode("utf-8"))
+            if isinstance(data, dict):
+                # There are many variations of the error json so we need
+                # to determine the keyword which has the error detail. Make sure
+                # that the order of the keywords below isn't changed as it can
+                # break user code. If the "errors" key exists, we must use that
+                # first.
+                # See Issue #1243
+                # https://github.com/googleapis/google-api-python-client/issues/1243
+                error_detail_keyword = next(
+                    (
+                        kw
+                        for kw in ["errors", "status", "message"]
+                        if kw in data["error"]
+                    ),
+                    "",
+                )
 
-    if rng == "*":
-        if not is_byte_range_valid(None, None, length):
-            return None
+                if error_detail_keyword:
+                    reason = data["error"][error_detail_keyword]
 
-        return ds.ContentRange(units, None, None, length, on_update=on_update)
-    elif "-" not in rng:
-        return None
+                    if isinstance(reason, list) and len(reason) > 0:
+                        reason = reason[0]
+                        if "reason" in reason:
+                            reason = reason["reason"]
+            else:
+                reason = data[0]["error"]["errors"]["reason"]
+        except (UnicodeDecodeError, ValueError, KeyError):
+            LOGGER.warning("Invalid JSON content from response: %s", content)
+            return False
 
-    start_str, stop_str = rng.split("-", 1)
-    try:
-        start = _plain_int(start_str)
-        stop = _plain_int(stop_str) + 1
-    except ValueError:
-        return None
+        LOGGER.warning('Encountered 403 Forbidden with reason "%s"', reason)
 
-    if is_byte_range_valid(start, stop, length):
-        return ds.ContentRange(units, start, stop, length, on_update=on_update)
+        # Only retry on rate limit related failures.
+        if reason in ("userRateLimitExceeded", "rateLimitExceeded"):
+            return True
 
-    return None
+    # Everything else is a success or non-retriable so break.
+    return False
 
 
-def quote_etag(etag: str, weak: bool = False) -> str:
-    """Quote an etag.
+def _retry_request(
+    http, num_retries, req_type, sleep, rand, uri, method, *args, **kwargs
+):
+    """Retries an HTTP request multiple times while handling errors.
 
-    :param etag: the etag to quote.
-    :param weak: set to `True` to tag it "weak".
+    If after all retries the request still fails, last error is either returned as
+    return value (for HTTP 5xx errors) or thrown (for ssl.SSLError).
+
+    Args:
+      http: Http object to be used to execute request.
+      num_retries: Maximum number of retries.
+      req_type: Type of the request (used for logging retries).
+      sleep, rand: Functions to sleep for random time between retries.
+      uri: URI to be requested.
+      method: HTTP method to be used.
+      args, kwargs: Additional arguments passed to http.request.
+
+    Returns:
+      resp, content - Response from the http request (may be HTTP 5xx).
     """
-    if '"' in etag:
-        raise ValueError("invalid etag")
-    etag = f'"{etag}"'
-    if weak:
-        etag = f"W/{etag}"
-    return etag
+    resp = None
+    content = None
+    exception = None
+    for retry_num in range(num_retries + 1):
+        if retry_num > 0:
+            # Sleep before retrying.
+            sleep_time = rand() * 2**retry_num
+            LOGGER.warning(
+                "Sleeping %.2f seconds before retry %d of %d for %s: %s %s, after %s",
+                sleep_time,
+                retry_num,
+                num_retries,
+                req_type,
+                method,
+                uri,
+                resp.status if resp else exception,
+            )
+            sleep(sleep_time)
 
+        try:
+            exception = None
+            resp, content = http.request(uri, method, *args, **kwargs)
+        # Retry on SSL errors and socket timeout errors.
+        except _ssl_SSLError as ssl_error:
+            exception = ssl_error
+        except socket.timeout as socket_timeout:
+            # Needs to be before socket.error as it's a subclass of OSError
+            # socket.timeout has no errorcode
+            exception = socket_timeout
+        except ConnectionError as connection_error:
+            # Needs to be before socket.error as it's a subclass of OSError
+            exception = connection_error
+        except OSError as socket_error:
+            # errno's contents differ by platform, so we have to match by name.
+            # Some of these same errors may have been caught above, e.g. ECONNRESET *should* be
+            # raised as a ConnectionError, but some libraries will raise it as a socket.error
+            # with an errno corresponding to ECONNRESET
+            if socket.errno.errorcode.get(socket_error.errno) not in {
+                "WSAETIMEDOUT",
+                "ETIMEDOUT",
+                "EPIPE",
+                "ECONNABORTED",
+                "ECONNREFUSED",
+                "ECONNRESET",
+            }:
+                raise
+            exception = socket_error
+        except httplib2.ServerNotFoundError as server_not_found_error:
+            exception = server_not_found_error
 
-@t.overload
-def unquote_etag(etag: str) -> tuple[str, bool]: ...
-@t.overload
-def unquote_etag(etag: None) -> tuple[None, None]: ...
-def unquote_etag(
-    etag: str | None,
-) -> tuple[str, bool] | tuple[None, None]:
-    """Unquote a single etag:
+        if exception:
+            if retry_num == num_retries:
+                raise exception
+            else:
+                continue
 
-    >>> unquote_etag('W/"bar"')
-    ('bar', True)
-    >>> unquote_etag('"bar"')
-    ('bar', False)
-
-    :param etag: the etag identifier to unquote.
-    :return: a ``(etag, weak)`` tuple.
-    """
-    if not etag:
-        return None, None
-    etag = etag.strip()
-    weak = False
-    if etag.startswith(("W/", "w/")):
-        weak = True
-        etag = etag[2:]
-    if etag[:1] == etag[-1:] == '"':
-        etag = etag[1:-1]
-    return etag, weak
-
-
-def parse_etags(value: str | None) -> ds.ETags:
-    """Parse an etag header.
-
-    :param value: the tag header to parse
-    :return: an :class:`~werkzeug.datastructures.ETags` object.
-    """
-    if not value:
-        return ds.ETags()
-    strong = []
-    weak = []
-    end = len(value)
-    pos = 0
-    while pos < end:
-        match = _etag_re.match(value, pos)
-        if match is None:
+        if not _should_retry_response(resp.status, content):
             break
-        is_weak, quoted, raw = match.groups()
-        if raw == "*":
-            return ds.ETags(star_tag=True)
-        elif quoted:
-            raw = quoted
-        if is_weak:
-            weak.append(raw)
+
+    return resp, content
+
+
+class MediaUploadProgress(object):
+    """Status of a resumable upload."""
+
+    def __init__(self, resumable_progress, total_size):
+        """Constructor.
+
+        Args:
+          resumable_progress: int, bytes sent so far.
+          total_size: int, total bytes in complete upload, or None if the total
+            upload size isn't known ahead of time.
+        """
+        self.resumable_progress = resumable_progress
+        self.total_size = total_size
+
+    def progress(self):
+        """Percent of upload completed, as a float.
+
+        Returns:
+          the percentage complete as a float, returning 0.0 if the total size of
+          the upload is unknown.
+        """
+        if self.total_size is not None and self.total_size != 0:
+            return float(self.resumable_progress) / float(self.total_size)
         else:
-            strong.append(raw)
-        pos = match.end()
-    return ds.ETags(strong, weak)
+            return 0.0
 
 
-def generate_etag(data: bytes) -> str:
-    """Generate an etag for some data.
+class MediaDownloadProgress(object):
+    """Status of a resumable download."""
 
-    .. versionchanged:: 2.0
-        Use SHA-1. MD5 may not be available in some environments.
-    """
-    return sha1(data).hexdigest()
+    def __init__(self, resumable_progress, total_size):
+        """Constructor.
 
+        Args:
+          resumable_progress: int, bytes received so far.
+          total_size: int, total bytes in complete download.
+        """
+        self.resumable_progress = resumable_progress
+        self.total_size = total_size
 
-def parse_date(value: str | None) -> datetime | None:
-    """Parse an :rfc:`2822` date into a timezone-aware
-    :class:`datetime.datetime` object, or ``None`` if parsing fails.
+    def progress(self):
+        """Percent of download completed, as a float.
 
-    This is a wrapper for :func:`email.utils.parsedate_to_datetime`. It
-    returns ``None`` if parsing fails instead of raising an exception,
-    and always returns a timezone-aware datetime object. If the string
-    doesn't have timezone information, it is assumed to be UTC.
-
-    :param value: A string with a supported date format.
-
-    .. versionchanged:: 2.0
-        Return a timezone-aware datetime object. Use
-        ``email.utils.parsedate_to_datetime``.
-    """
-    if value is None:
-        return None
-
-    try:
-        dt = email.utils.parsedate_to_datetime(value)
-    except (TypeError, ValueError):
-        return None
-
-    if dt.tzinfo is None:
-        return dt.replace(tzinfo=timezone.utc)
-
-    return dt
-
-
-def http_date(
-    timestamp: datetime | date | int | float | struct_time | None = None,
-) -> str:
-    """Format a datetime object or timestamp into an :rfc:`2822` date
-    string.
-
-    This is a wrapper for :func:`email.utils.format_datetime`. It
-    assumes naive datetime objects are in UTC instead of raising an
-    exception.
-
-    :param timestamp: The datetime or timestamp to format. Defaults to
-        the current time.
-
-    .. versionchanged:: 2.0
-        Use ``email.utils.format_datetime``. Accept ``date`` objects.
-    """
-    if isinstance(timestamp, date):
-        if not isinstance(timestamp, datetime):
-            # Assume plain date is midnight UTC.
-            timestamp = datetime.combine(timestamp, time(), tzinfo=timezone.utc)
+        Returns:
+          the percentage complete as a float, returning 0.0 if the total size of
+          the download is unknown.
+        """
+        if self.total_size is not None and self.total_size != 0:
+            return float(self.resumable_progress) / float(self.total_size)
         else:
-            # Ensure datetime is timezone-aware.
-            timestamp = _dt_as_utc(timestamp)
-
-        return email.utils.format_datetime(timestamp, usegmt=True)
-
-    if isinstance(timestamp, struct_time):
-        timestamp = mktime(timestamp)
-
-    return email.utils.formatdate(timestamp, usegmt=True)
+            return 0.0
 
 
-def parse_age(value: str | None = None) -> timedelta | None:
-    """Parses a base-10 integer count of seconds into a timedelta.
+class MediaUpload(object):
+    """Describes a media object to upload.
 
-    If parsing fails, the return value is `None`.
+    Base class that defines the interface of MediaUpload subclasses.
 
-    :param value: a string consisting of an integer represented in base-10
-    :return: a :class:`datetime.timedelta` object or `None`.
+    Note that subclasses of MediaUpload may allow you to control the chunksize
+    when uploading a media object. It is important to keep the size of the chunk
+    as large as possible to keep the upload efficient. Other factors may influence
+    the size of the chunk you use, particularly if you are working in an
+    environment where individual HTTP requests may have a hardcoded time limit,
+    such as under certain classes of requests under Google App Engine.
+
+    Streams are io.Base compatible objects that support seek(). Some MediaUpload
+    subclasses support using streams directly to upload data. Support for
+    streaming may be indicated by a MediaUpload sub-class and if appropriate for a
+    platform that stream will be used for uploading the media object. The support
+    for streaming is indicated by has_stream() returning True. The stream() method
+    should return an io.Base object that supports seek(). On platforms where the
+    underlying httplib module supports streaming, for example Python 2.6 and
+    later, the stream will be passed into the http library which will result in
+    less memory being used and possibly faster uploads.
+
+    If you need to upload media that can't be uploaded using any of the existing
+    MediaUpload sub-class then you can sub-class MediaUpload for your particular
+    needs.
     """
-    if not value:
+
+    def chunksize(self):
+        """Chunk size for resumable uploads.
+
+        Returns:
+          Chunk size in bytes.
+        """
+        raise NotImplementedError()
+
+    def mimetype(self):
+        """Mime type of the body.
+
+        Returns:
+          Mime type.
+        """
+        return "application/octet-stream"
+
+    def size(self):
+        """Size of upload.
+
+        Returns:
+          Size of the body, or None of the size is unknown.
+        """
         return None
-    try:
-        seconds = int(value)
-    except ValueError:
-        return None
-    if seconds < 0:
-        return None
-    try:
-        return timedelta(seconds=seconds)
-    except OverflowError:
-        return None
+
+    def resumable(self):
+        """Whether this upload is resumable.
+
+        Returns:
+          True if resumable upload or False.
+        """
+        return False
+
+    def getbytes(self, begin, end):
+        """Get bytes from the media.
+
+        Args:
+          begin: int, offset from beginning of file.
+          length: int, number of bytes to read, starting at begin.
+
+        Returns:
+          A string of bytes read. May be shorter than length if EOF was reached
+          first.
+        """
+        raise NotImplementedError()
+
+    def has_stream(self):
+        """Does the underlying upload support a streaming interface.
+
+        Streaming means it is an io.IOBase subclass that supports seek, i.e.
+        seekable() returns True.
+
+        Returns:
+          True if the call to stream() will return an instance of a seekable io.Base
+          subclass.
+        """
+        return False
+
+    def stream(self):
+        """A stream interface to the data being uploaded.
+
+        Returns:
+          The returned value is an io.IOBase subclass that supports seek, i.e.
+          seekable() returns True.
+        """
+        raise NotImplementedError()
+
+    @util.positional(1)
+    def _to_json(self, strip=None):
+        """Utility function for creating a JSON representation of a MediaUpload.
+
+        Args:
+          strip: array, An array of names of members to not include in the JSON.
+
+        Returns:
+           string, a JSON representation of this instance, suitable to pass to
+           from_json().
+        """
+        t = type(self)
+        d = copy.copy(self.__dict__)
+        if strip is not None:
+            for member in strip:
+                del d[member]
+        d["_class"] = t.__name__
+        d["_module"] = t.__module__
+        return json.dumps(d)
+
+    def to_json(self):
+        """Create a JSON representation of an instance of MediaUpload.
+
+        Returns:
+           string, a JSON representation of this instance, suitable to pass to
+           from_json().
+        """
+        return self._to_json()
+
+    @classmethod
+    def new_from_json(cls, s):
+        """Utility class method to instantiate a MediaUpload subclass from a JSON
+        representation produced by to_json().
+
+        Args:
+          s: string, JSON from to_json().
+
+        Returns:
+          An instance of the subclass of MediaUpload that was serialized with
+          to_json().
+        """
+        data = json.loads(s)
+        # Find and call the right classmethod from_json() to restore the object.
+        module = data["_module"]
+        m = __import__(module, fromlist=module.split(".")[:-1])
+        kls = getattr(m, data["_class"])
+        from_json = getattr(kls, "from_json")
+        return from_json(s)
 
 
-def dump_age(age: timedelta | int | None = None) -> str | None:
-    """Formats the duration as a base-10 integer.
+class MediaIoBaseUpload(MediaUpload):
+    """A MediaUpload for a io.Base objects.
 
-    :param age: should be an integer number of seconds,
-                a :class:`datetime.timedelta` object, or,
-                if the age is unknown, `None` (default).
+    Note that the Python file object is compatible with io.Base and can be used
+    with this class also.
+
+      fh = BytesIO('...Some data to upload...')
+      media = MediaIoBaseUpload(fh, mimetype='image/png',
+        chunksize=1024*1024, resumable=True)
+      farm.animals().insert(
+          id='cow',
+          name='cow.png',
+          media_body=media).execute()
+
+    Depending on the platform you are working on, you may pass -1 as the
+    chunksize, which indicates that the entire file should be uploaded in a single
+    request. If the underlying platform supports streams, such as Python 2.6 or
+    later, then this can be very efficient as it avoids multiple connections, and
+    also avoids loading the entire file into memory before sending it. Note that
+    Google App Engine has a 5MB limit on request size, so you should never set
+    your chunksize larger than 5MB, or to -1.
     """
-    if age is None:
-        return None
-    if isinstance(age, timedelta):
-        age = int(age.total_seconds())
-    else:
-        age = int(age)
 
-    if age < 0:
-        raise ValueError("age cannot be negative")
+    @util.positional(3)
+    def __init__(self, fd, mimetype, chunksize=DEFAULT_CHUNK_SIZE, resumable=False):
+        """Constructor.
 
-    return str(age)
+        Args:
+          fd: io.Base or file object, The source of the bytes to upload. MUST be
+            opened in blocking mode, do not use streams opened in non-blocking mode.
+            The given stream must be seekable, that is, it must be able to call
+            seek() on fd.
+          mimetype: string, Mime-type of the file.
+          chunksize: int, File will be uploaded in chunks of this many bytes. Only
+            used if resumable=True. Pass in a value of -1 if the file is to be
+            uploaded as a single chunk. Note that Google App Engine has a 5MB limit
+            on request size, so you should never set your chunksize larger than 5MB,
+            or to -1.
+          resumable: bool, True if this is a resumable upload. False means upload
+            in a single request.
+        """
+        super(MediaIoBaseUpload, self).__init__()
+        self._fd = fd
+        self._mimetype = mimetype
+        if not (chunksize == -1 or chunksize > 0):
+            raise InvalidChunkSizeError()
+        self._chunksize = chunksize
+        self._resumable = resumable
+
+        self._fd.seek(0, os.SEEK_END)
+        self._size = self._fd.tell()
+
+    def chunksize(self):
+        """Chunk size for resumable uploads.
+
+        Returns:
+          Chunk size in bytes.
+        """
+        return self._chunksize
+
+    def mimetype(self):
+        """Mime type of the body.
+
+        Returns:
+          Mime type.
+        """
+        return self._mimetype
+
+    def size(self):
+        """Size of upload.
+
+        Returns:
+          Size of the body, or None of the size is unknown.
+        """
+        return self._size
+
+    def resumable(self):
+        """Whether this upload is resumable.
+
+        Returns:
+          True if resumable upload or False.
+        """
+        return self._resumable
+
+    def getbytes(self, begin, length):
+        """Get bytes from the media.
+
+        Args:
+          begin: int, offset from beginning of file.
+          length: int, number of bytes to read, starting at begin.
+
+        Returns:
+          A string of bytes read. May be shorted than length if EOF was reached
+          first.
+        """
+        self._fd.seek(begin)
+        return self._fd.read(length)
+
+    def has_stream(self):
+        """Does the underlying upload support a streaming interface.
+
+        Streaming means it is an io.IOBase subclass that supports seek, i.e.
+        seekable() returns True.
+
+        Returns:
+          True if the call to stream() will return an instance of a seekable io.Base
+          subclass.
+        """
+        return True
+
+    def stream(self):
+        """A stream interface to the data being uploaded.
+
+        Returns:
+          The returned value is an io.IOBase subclass that supports seek, i.e.
+          seekable() returns True.
+        """
+        return self._fd
+
+    def to_json(self):
+        """This upload type is not serializable."""
+        raise NotImplementedError("MediaIoBaseUpload is not serializable.")
 
 
-def is_resource_modified(
-    environ: WSGIEnvironment,
-    etag: str | None = None,
-    data: bytes | None = None,
-    last_modified: datetime | str | None = None,
-    ignore_if_range: bool = True,
-) -> bool:
-    """Convenience method for conditional requests.
+class MediaFileUpload(MediaIoBaseUpload):
+    """A MediaUpload for a file.
 
-    :param environ: the WSGI environment of the request to be checked.
-    :param etag: the etag for the response for comparison.
-    :param data: or alternatively the data of the response to automatically
-                 generate an etag using :func:`generate_etag`.
-    :param last_modified: an optional date of the last modification.
-    :param ignore_if_range: If `False`, `If-Range` header will be taken into
-                            account.
-    :return: `True` if the resource was modified, otherwise `False`.
+    Construct a MediaFileUpload and pass as the media_body parameter of the
+    method. For example, if we had a service that allowed uploading images:
 
-    .. versionchanged:: 2.0
-        SHA-1 is used to generate an etag value for the data. MD5 may
-        not be available in some environments.
+      media = MediaFileUpload('cow.png', mimetype='image/png',
+        chunksize=1024*1024, resumable=True)
+      farm.animals().insert(
+          id='cow',
+          name='cow.png',
+          media_body=media).execute()
 
-    .. versionchanged:: 1.0.0
-        The check is run for methods other than ``GET`` and ``HEAD``.
+    Depending on the platform you are working on, you may pass -1 as the
+    chunksize, which indicates that the entire file should be uploaded in a single
+    request. If the underlying platform supports streams, such as Python 2.6 or
+    later, then this can be very efficient as it avoids multiple connections, and
+    also avoids loading the entire file into memory before sending it. Note that
+    Google App Engine has a 5MB limit on request size, so you should never set
+    your chunksize larger than 5MB, or to -1.
     """
-    return _sansio_http.is_resource_modified(
-        http_range=environ.get("HTTP_RANGE"),
-        http_if_range=environ.get("HTTP_IF_RANGE"),
-        http_if_modified_since=environ.get("HTTP_IF_MODIFIED_SINCE"),
-        http_if_none_match=environ.get("HTTP_IF_NONE_MATCH"),
-        http_if_match=environ.get("HTTP_IF_MATCH"),
-        etag=etag,
-        data=data,
-        last_modified=last_modified,
-        ignore_if_range=ignore_if_range,
-    )
 
-
-def remove_entity_headers(
-    headers: ds.Headers | list[tuple[str, str]],
-    allowed: t.Iterable[str] = ("expires", "content-location"),
-) -> None:
-    """Remove all entity headers from a list or :class:`Headers` object.  This
-    operation works in-place.  `Expires` and `Content-Location` headers are
-    by default not removed.  The reason for this is :rfc:`2616` section
-    10.3.5 which specifies some entity headers that should be sent.
-
-    .. versionchanged:: 0.5
-       added `allowed` parameter.
-
-    :param headers: a list or :class:`Headers` object.
-    :param allowed: a list of headers that should still be allowed even though
-                    they are entity headers.
-    """
-    allowed = {x.lower() for x in allowed}
-    headers[:] = [
-        (key, value)
-        for key, value in headers
-        if not is_entity_header(key) or key.lower() in allowed
-    ]
-
-
-def remove_hop_by_hop_headers(headers: ds.Headers | list[tuple[str, str]]) -> None:
-    """Remove all HTTP/1.1 "Hop-by-Hop" headers from a list or
-    :class:`Headers` object.  This operation works in-place.
-
-    .. versionadded:: 0.5
-
-    :param headers: a list or :class:`Headers` object.
-    """
-    headers[:] = [
-        (key, value) for key, value in headers if not is_hop_by_hop_header(key)
-    ]
-
-
-def is_entity_header(header: str) -> bool:
-    """Check if a header is an entity header.
-
-    .. versionadded:: 0.5
-
-    :param header: the header to test.
-    :return: `True` if it's an entity header, `False` otherwise.
-    """
-    return header.lower() in _entity_headers
-
-
-def is_hop_by_hop_header(header: str) -> bool:
-    """Check if a header is an HTTP/1.1 "Hop-by-Hop" header.
-
-    .. versionadded:: 0.5
-
-    :param header: the header to test.
-    :return: `True` if it's an HTTP/1.1 "Hop-by-Hop" header, `False` otherwise.
-    """
-    return header.lower() in _hop_by_hop_headers
-
-
-def parse_cookie(
-    header: WSGIEnvironment | str | None,
-    cls: type[ds.MultiDict[str, str]] | None = None,
-) -> ds.MultiDict[str, str]:
-    """Parse a cookie from a string or WSGI environ.
-
-    The same key can be provided multiple times, the values are stored
-    in-order. The default :class:`MultiDict` will have the first value
-    first, and all values can be retrieved with
-    :meth:`MultiDict.getlist`.
-
-    :param header: The cookie header as a string, or a WSGI environ dict
-        with a ``HTTP_COOKIE`` key.
-    :param cls: A dict-like class to store the parsed cookies in.
-        Defaults to :class:`MultiDict`.
-
-    .. versionchanged:: 3.0
-        Passing bytes, and the ``charset`` and ``errors`` parameters, were removed.
-
-    .. versionchanged:: 1.0
-        Returns a :class:`MultiDict` instead of a ``TypeConversionDict``.
-
-    .. versionchanged:: 0.5
-        Returns a :class:`TypeConversionDict` instead of a regular dict. The ``cls``
-        parameter was added.
-    """
-    if isinstance(header, dict):
-        cookie = header.get("HTTP_COOKIE")
-    else:
-        cookie = header
-
-    if cookie:
-        cookie = cookie.encode("latin1").decode()
-
-    return _sansio_http.parse_cookie(cookie=cookie, cls=cls)
-
-
-_cookie_no_quote_re = re.compile(r"[\w!#$%&'()*+\-./:<=>?@\[\]^`{|}~]*", re.A)
-_cookie_slash_re = re.compile(rb"[\x00-\x19\",;\\\x7f-\xff]", re.A)
-_cookie_slash_map = {b'"': b'\\"', b"\\": b"\\\\"}
-_cookie_slash_map.update(
-    (v.to_bytes(1, "big"), b"\\%03o" % v)
-    for v in [*range(0x20), *b",;", *range(0x7F, 256)]
-)
-
-
-def dump_cookie(
-    key: str,
-    value: str = "",
-    max_age: timedelta | int | None = None,
-    expires: str | datetime | int | float | None = None,
-    path: str | None = "/",
-    domain: str | None = None,
-    secure: bool = False,
-    httponly: bool = False,
-    sync_expires: bool = True,
-    max_size: int = 4093,
-    samesite: str | None = None,
-    partitioned: bool = False,
-) -> str:
-    """Create a Set-Cookie header without the ``Set-Cookie`` prefix.
-
-    The return value is usually restricted to ascii as the vast majority
-    of values are properly escaped, but that is no guarantee. It's
-    tunneled through latin1 as required by :pep:`3333`.
-
-    The return value is not ASCII safe if the key contains unicode
-    characters.  This is technically against the specification but
-    happens in the wild.  It's strongly recommended to not use
-    non-ASCII values for the keys.
-
-    :param max_age: should be a number of seconds, or `None` (default) if
-                    the cookie should last only as long as the client's
-                    browser session.  Additionally `timedelta` objects
-                    are accepted, too.
-    :param expires: should be a `datetime` object or unix timestamp.
-    :param path: limits the cookie to a given path, per default it will
-                 span the whole domain.
-    :param domain: Use this if you want to set a cross-domain cookie. For
-                   example, ``domain="example.com"`` will set a cookie
-                   that is readable by the domain ``www.example.com``,
-                   ``foo.example.com`` etc. Otherwise, a cookie will only
-                   be readable by the domain that set it.
-    :param secure: The cookie will only be available via HTTPS
-    :param httponly: disallow JavaScript to access the cookie.  This is an
-                     extension to the cookie standard and probably not
-                     supported by all browsers.
-    :param charset: the encoding for string values.
-    :param sync_expires: automatically set expires if max_age is defined
-                         but expires not.
-    :param max_size: Warn if the final header value exceeds this size. The
-        default, 4093, should be safely `supported by most browsers
-        <cookie_>`_. Set to 0 to disable this check.
-    :param samesite: Limits the scope of the cookie such that it will
-        only be attached to requests if those requests are same-site.
-    :param partitioned: Opts the cookie into partitioned storage. This
-        will also set secure to True
-
-    .. _`cookie`: http://browsercookielimits.squawky.net/
-
-    .. versionchanged:: 3.1
-        The ``partitioned`` parameter was added.
-
-    .. versionchanged:: 3.0
-        Passing bytes, and the ``charset`` parameter, were removed.
-
-    .. versionchanged:: 2.3.3
-        The ``path`` parameter is ``/`` by default.
-
-    .. versionchanged:: 2.3.1
-        The value allows more characters without quoting.
-
-    .. versionchanged:: 2.3
-        ``localhost`` and other names without a dot are allowed for the domain. A
-        leading dot is ignored.
-
-    .. versionchanged:: 2.3
-        The ``path`` parameter is ``None`` by default.
-
-    .. versionchanged:: 1.0.0
-        The string ``'None'`` is accepted for ``samesite``.
-    """
-    if path is not None:
-        # safe = https://url.spec.whatwg.org/#url-path-segment-string
-        # as well as percent for things that are already quoted
-        # excluding semicolon since it's part of the header syntax
-        path = quote(path, safe="%!$&'()*+,/:=@")
-
-    if domain:
-        domain = domain.partition(":")[0].lstrip(".").encode("idna").decode("ascii")
-
-    if isinstance(max_age, timedelta):
-        max_age = int(max_age.total_seconds())
-
-    if expires is not None:
-        if not isinstance(expires, str):
-            expires = http_date(expires)
-    elif max_age is not None and sync_expires:
-        expires = http_date(datetime.now(tz=timezone.utc).timestamp() + max_age)
-
-    if samesite is not None:
-        samesite = samesite.title()
-
-        if samesite not in {"Strict", "Lax", "None"}:
-            raise ValueError("SameSite must be 'Strict', 'Lax', or 'None'.")
-
-    if partitioned:
-        secure = True
-
-    # Quote value if it contains characters not allowed by RFC 6265. Slash-escape with
-    # three octal digits, which matches http.cookies, although the RFC suggests base64.
-    if not _cookie_no_quote_re.fullmatch(value):
-        # Work with bytes here, since a UTF-8 character could be multiple bytes.
-        value = _cookie_slash_re.sub(
-            lambda m: _cookie_slash_map[m.group()], value.encode()
-        ).decode("ascii")
-        value = f'"{value}"'
-
-    # Send a non-ASCII key as mojibake. Everything else should already be ASCII.
-    # TODO Remove encoding dance, it seems like clients accept UTF-8 keys
-    buf = [f"{key.encode().decode('latin1')}={value}"]
-
-    for k, v in (
-        ("Domain", domain),
-        ("Expires", expires),
-        ("Max-Age", max_age),
-        ("Secure", secure),
-        ("HttpOnly", httponly),
-        ("Path", path),
-        ("SameSite", samesite),
-        ("Partitioned", partitioned),
+    @util.positional(2)
+    def __init__(
+        self, filename, mimetype=None, chunksize=DEFAULT_CHUNK_SIZE, resumable=False
     ):
-        if v is None or v is False:
-            continue
+        """Constructor.
 
-        if v is True:
-            buf.append(k)
-            continue
-
-        buf.append(f"{k}={v}")
-
-    rv = "; ".join(buf)
-
-    # Warn if the final value of the cookie is larger than the limit. If the cookie is
-    # too large, then it may be silently ignored by the browser, which can be quite hard
-    # to debug.
-    cookie_size = len(rv)
-
-    if max_size and cookie_size > max_size:
-        value_size = len(value)
-        warnings.warn(
-            f"The '{key}' cookie is too large: the value was {value_size} bytes but the"
-            f" header required {cookie_size - value_size} extra bytes. The final size"
-            f" was {cookie_size} bytes but the limit is {max_size} bytes. Browsers may"
-            " silently ignore cookies larger than this.",
-            stacklevel=2,
+        Args:
+          filename: string, Name of the file.
+          mimetype: string, Mime-type of the file. If None then a mime-type will be
+            guessed from the file extension.
+          chunksize: int, File will be uploaded in chunks of this many bytes. Only
+            used if resumable=True. Pass in a value of -1 if the file is to be
+            uploaded in a single chunk. Note that Google App Engine has a 5MB limit
+            on request size, so you should never set your chunksize larger than 5MB,
+            or to -1.
+          resumable: bool, True if this is a resumable upload. False means upload
+            in a single request.
+        """
+        self._fd = None
+        self._filename = filename
+        self._fd = open(self._filename, "rb")
+        if mimetype is None:
+            # No mimetype provided, make a guess.
+            mimetype, _ = mimetypes.guess_type(filename)
+            if mimetype is None:
+                # Guess failed, use octet-stream.
+                mimetype = "application/octet-stream"
+        super(MediaFileUpload, self).__init__(
+            self._fd, mimetype, chunksize=chunksize, resumable=resumable
         )
 
-    return rv
+    def __del__(self):
+        if self._fd:
+            self._fd.close()
+
+    def to_json(self):
+        """Creating a JSON representation of an instance of MediaFileUpload.
+
+        Returns:
+           string, a JSON representation of this instance, suitable to pass to
+           from_json().
+        """
+        return self._to_json(strip=["_fd"])
+
+    @staticmethod
+    def from_json(s):
+        d = json.loads(s)
+        return MediaFileUpload(
+            d["_filename"],
+            mimetype=d["_mimetype"],
+            chunksize=d["_chunksize"],
+            resumable=d["_resumable"],
+        )
 
 
-def is_byte_range_valid(
-    start: int | None, stop: int | None, length: int | None
-) -> bool:
-    """Checks if a given byte content range is valid for the given length.
+class MediaInMemoryUpload(MediaIoBaseUpload):
+    """MediaUpload for a chunk of bytes.
 
-    .. versionadded:: 0.7
+    DEPRECATED: Use MediaIoBaseUpload with either io.TextIOBase or io.StringIO for
+    the stream.
     """
-    if (start is None) != (stop is None):
-        return False
-    elif start is None:
-        return length is None or length >= 0
-    elif length is None:
-        return 0 <= start < stop  # type: ignore
-    elif start >= stop:  # type: ignore
-        return False
-    return 0 <= start < length
+
+    @util.positional(2)
+    def __init__(
+        self,
+        body,
+        mimetype="application/octet-stream",
+        chunksize=DEFAULT_CHUNK_SIZE,
+        resumable=False,
+    ):
+        """Create a new MediaInMemoryUpload.
+
+        DEPRECATED: Use MediaIoBaseUpload with either io.TextIOBase or io.StringIO for
+        the stream.
+
+        Args:
+          body: string, Bytes of body content.
+          mimetype: string, Mime-type of the file or default of
+            'application/octet-stream'.
+          chunksize: int, File will be uploaded in chunks of this many bytes. Only
+            used if resumable=True.
+          resumable: bool, True if this is a resumable upload. False means upload
+            in a single request.
+        """
+        fd = io.BytesIO(body)
+        super(MediaInMemoryUpload, self).__init__(
+            fd, mimetype, chunksize=chunksize, resumable=resumable
+        )
 
 
-# circular dependencies
-from . import datastructures as ds
-from .sansio import http as _sansio_http
+class MediaIoBaseDownload(object):
+    """ "Download media resources.
+
+    Note that the Python file object is compatible with io.Base and can be used
+    with this class also.
+
+
+    Example:
+      request = farms.animals().get_media(id='cow')
+      fh = io.FileIO('cow.png', mode='wb')
+      downloader = MediaIoBaseDownload(fh, request, chunksize=1024*1024)
+
+      done = False
+      while done is False:
+        status, done = downloader.next_chunk()
+        if status:
+          print "Download %d%%." % int(status.progress() * 100)
+      print "Download Complete!"
+    """
+
+    @util.positional(3)
+    def __init__(self, fd, request, chunksize=DEFAULT_CHUNK_SIZE):
+        """Constructor.
+
+        Args:
+          fd: io.Base or file object, The stream in which to write the downloaded
+            bytes.
+          request: googleapiclient.http.HttpRequest, the media request to perform in
+            chunks.
+          chunksize: int, File will be downloaded in chunks of this many bytes.
+        """
+        self._fd = fd
+        self._request = request
+        self._uri = request.uri
+        self._chunksize = chunksize
+        self._progress = 0
+        self._total_size = None
+        self._done = False
+
+        # Stubs for testing.
+        self._sleep = time.sleep
+        self._rand = random.random
+
+        self._headers = {}
+        for k, v in request.headers.items():
+            # allow users to supply custom headers by setting them on the request
+            # but strip out the ones that are set by default on requests generated by
+            # API methods like Drive's files().get(fileId=...)
+            if not k.lower() in ("accept", "accept-encoding", "user-agent"):
+                self._headers[k] = v
+
+    @util.positional(1)
+    def next_chunk(self, num_retries=0):
+        """Get the next chunk of the download.
+
+        Args:
+          num_retries: Integer, number of times to retry with randomized
+                exponential backoff. If all retries fail, the raised HttpError
+                represents the last request. If zero (default), we attempt the
+                request only once.
+
+        Returns:
+          (status, done): (MediaDownloadProgress, boolean)
+             The value of 'done' will be True when the media has been fully
+             downloaded or the total size of the media is unknown.
+
+        Raises:
+          googleapiclient.errors.HttpError if the response was not a 2xx.
+          httplib2.HttpLib2Error if a transport error has occurred.
+        """
+        headers = self._headers.copy()
+        headers["range"] = "bytes=%d-%d" % (
+            self._progress,
+            self._progress + self._chunksize - 1,
+        )
+        http = self._request.http
+
+        resp, content = _retry_request(
+            http,
+            num_retries,
+            "media download",
+            self._sleep,
+            self._rand,
+            self._uri,
+            "GET",
+            headers=headers,
+        )
+
+        if resp.status in [200, 206]:
+            if "content-location" in resp and resp["content-location"] != self._uri:
+                self._uri = resp["content-location"]
+            self._progress += len(content)
+            self._fd.write(content)
+
+            if "content-range" in resp:
+                content_range = resp["content-range"]
+                length = content_range.rsplit("/", 1)[1]
+                self._total_size = int(length)
+            elif "content-length" in resp:
+                self._total_size = int(resp["content-length"])
+
+            if self._total_size is None or self._progress == self._total_size:
+                self._done = True
+            return MediaDownloadProgress(self._progress, self._total_size), self._done
+        elif resp.status == 416:
+            # 416 is Range Not Satisfiable
+            # This typically occurs with a zero byte file
+            content_range = resp["content-range"]
+            length = content_range.rsplit("/", 1)[1]
+            self._total_size = int(length)
+            if self._total_size == 0:
+                self._done = True
+                return (
+                    MediaDownloadProgress(self._progress, self._total_size),
+                    self._done,
+                )
+        raise HttpError(resp, content, uri=self._uri)
+
+
+class _StreamSlice(object):
+    """Truncated stream.
+
+    Takes a stream and presents a stream that is a slice of the original stream.
+    This is used when uploading media in chunks. In later versions of Python a
+    stream can be passed to httplib in place of the string of data to send. The
+    problem is that httplib just blindly reads to the end of the stream. This
+    wrapper presents a virtual stream that only reads to the end of the chunk.
+    """
+
+    def __init__(self, stream, begin, chunksize):
+        """Constructor.
+
+        Args:
+          stream: (io.Base, file object), the stream to wrap.
+          begin: int, the seek position the chunk begins at.
+          chunksize: int, the size of the chunk.
+        """
+        self._stream = stream
+        self._begin = begin
+        self._chunksize = chunksize
+        self._stream.seek(begin)
+
+    def read(self, n=-1):
+        """Read n bytes.
+
+        Args:
+          n, int, the number of bytes to read.
+
+        Returns:
+          A string of length 'n', or less if EOF is reached.
+        """
+        # The data left available to read sits in [cur, end)
+        cur = self._stream.tell()
+        end = self._begin + self._chunksize
+        if n == -1 or cur + n > end:
+            n = end - cur
+        return self._stream.read(n)
+
+
+class HttpRequest(object):
+    """Encapsulates a single HTTP request."""
+
+    @util.positional(4)
+    def __init__(
+        self,
+        http,
+        postproc,
+        uri,
+        method="GET",
+        body=None,
+        headers=None,
+        methodId=None,
+        resumable=None,
+    ):
+        """Constructor for an HttpRequest.
+
+        Args:
+          http: httplib2.Http, the transport object to use to make a request
+          postproc: callable, called on the HTTP response and content to transform
+                    it into a data object before returning, or raising an exception
+                    on an error.
+          uri: string, the absolute URI to send the request to
+          method: string, the HTTP method to use
+          body: string, the request body of the HTTP request,
+          headers: dict, the HTTP request headers
+          methodId: string, a unique identifier for the API method being called.
+          resumable: MediaUpload, None if this is not a resumbale request.
+        """
+        self.uri = uri
+        self.method = method
+        self.body = body
+        self.headers = headers or {}
+        self.methodId = methodId
+        self.http = http
+        self.postproc = postproc
+        self.resumable = resumable
+        self.response_callbacks = []
+        self._in_error_state = False
+
+        # The size of the non-media part of the request.
+        self.body_size = len(self.body or "")
+
+        # The resumable URI to send chunks to.
+        self.resumable_uri = None
+
+        # The bytes that have been uploaded.
+        self.resumable_progress = 0
+
+        # Stubs for testing.
+        self._rand = random.random
+        self._sleep = time.sleep
+
+    @util.positional(1)
+    def execute(self, http=None, num_retries=0):
+        """Execute the request.
+
+        Args:
+          http: httplib2.Http, an http object to be used in place of the
+                one the HttpRequest request object was constructed with.
+          num_retries: Integer, number of times to retry with randomized
+                exponential backoff. If all retries fail, the raised HttpError
+                represents the last request. If zero (default), we attempt the
+                request only once.
+
+        Returns:
+          A deserialized object model of the response body as determined
+          by the postproc.
+
+        Raises:
+          googleapiclient.errors.HttpError if the response was not a 2xx.
+          httplib2.HttpLib2Error if a transport error has occurred.
+        """
+        if http is None:
+            http = self.http
+
+        if self.resumable:
+            body = None
+            while body is None:
+                _, body = self.next_chunk(http=http, num_retries=num_retries)
+            return body
+
+        # Non-resumable case.
+
+        if "content-length" not in self.headers:
+            self.headers["content-length"] = str(self.body_size)
+        # If the request URI is too long then turn it into a POST request.
+        # Assume that a GET request never contains a request body.
+        if len(self.uri) > MAX_URI_LENGTH and self.method == "GET":
+            self.method = "POST"
+            self.headers["x-http-method-override"] = "GET"
+            self.headers["content-type"] = "application/x-www-form-urlencoded"
+            parsed = urllib.parse.urlparse(self.uri)
+            self.uri = urllib.parse.urlunparse(
+                (parsed.scheme, parsed.netloc, parsed.path, parsed.params, None, None)
+            )
+            self.body = parsed.query
+            self.headers["content-length"] = str(len(self.body))
+
+        # Handle retries for server-side errors.
+        resp, content = _retry_request(
+            http,
+            num_retries,
+            "request",
+            self._sleep,
+            self._rand,
+            str(self.uri),
+            method=str(self.method),
+            body=self.body,
+            headers=self.headers,
+        )
+
+        for callback in self.response_callbacks:
+            callback(resp)
+        if resp.status >= 300:
+            raise HttpError(resp, content, uri=self.uri)
+        return self.postproc(resp, content)
+
+    @util.positional(2)
+    def add_response_callback(self, cb):
+        """add_response_headers_callback
+
+        Args:
+          cb: Callback to be called on receiving the response headers, of signature:
+
+          def cb(resp):
+            # Where resp is an instance of httplib2.Response
+        """
+        self.response_callbacks.append(cb)
+
+    @util.positional(1)
+    def next_chunk(self, http=None, num_retries=0):
+        """Execute the next step of a resumable upload.
+
+        Can only be used if the method being executed supports media uploads and
+        the MediaUpload object passed in was flagged as using resumable upload.
+
+        Example:
+
+          media = MediaFileUpload('cow.png', mimetype='image/png',
+                                  chunksize=1000, resumable=True)
+          request = farm.animals().insert(
+              id='cow',
+              name='cow.png',
+              media_body=media)
+
+          response = None
+          while response is None:
+            status, response = request.next_chunk()
+            if status:
+              print "Upload %d%% complete." % int(status.progress() * 100)
+
+
+        Args:
+          http: httplib2.Http, an http object to be used in place of the
+                one the HttpRequest request object was constructed with.
+          num_retries: Integer, number of times to retry with randomized
+                exponential backoff. If all retries fail, the raised HttpError
+                represents the last request. If zero (default), we attempt the
+                request only once.
+
+        Returns:
+          (status, body): (ResumableMediaStatus, object)
+             The body will be None until the resumable media is fully uploaded.
+
+        Raises:
+          googleapiclient.errors.HttpError if the response was not a 2xx.
+          httplib2.HttpLib2Error if a transport error has occurred.
+        """
+        if http is None:
+            http = self.http
+
+        if self.resumable.size() is None:
+            size = "*"
+        else:
+            size = str(self.resumable.size())
+
+        if self.resumable_uri is None:
+            start_headers = copy.copy(self.headers)
+            start_headers["X-Upload-Content-Type"] = self.resumable.mimetype()
+            if size != "*":
+                start_headers["X-Upload-Content-Length"] = size
+            start_headers["content-length"] = str(self.body_size)
+
+            resp, content = _retry_request(
+                http,
+                num_retries,
+                "resumable URI request",
+                self._sleep,
+                self._rand,
+                self.uri,
+                method=self.method,
+                body=self.body,
+                headers=start_headers,
+            )
+
+            if resp.status == 200 and "location" in resp:
+                self.resumable_uri = resp["location"]
+            else:
+                raise ResumableUploadError(resp, content)
+        elif self._in_error_state:
+            # If we are in an error state then query the server for current state of
+            # the upload by sending an empty PUT and reading the 'range' header in
+            # the response.
+            headers = {"Content-Range": "bytes */%s" % size, "content-length": "0"}
+            resp, content = http.request(self.resumable_uri, "PUT", headers=headers)
+            status, body = self._process_response(resp, content)
+            if body:
+                # The upload was complete.
+                return (status, body)
+
+        if self.resumable.has_stream():
+            data = self.resumable.stream()
+            if self.resumable.chunksize() == -1:
+                data.seek(self.resumable_progress)
+                chunk_end = self.resumable.size() - self.resumable_progress - 1
+            else:
+                # Doing chunking with a stream, so wrap a slice of the stream.
+                data = _StreamSlice(
+                    data, self.resumable_progress, self.resumable.chunksize()
+                )
+                chunk_end = min(
+                    self.resumable_progress + self.resumable.chunksize() - 1,
+                    self.resumable.size() - 1,
+                )
+        else:
+            data = self.resumable.getbytes(
+                self.resumable_progress, self.resumable.chunksize()
+            )
+
+            # A short read implies that we are at EOF, so finish the upload.
+            if len(data) < self.resumable.chunksize():
+                size = str(self.resumable_progress + len(data))
+
+            chunk_end = self.resumable_progress + len(data) - 1
+
+        headers = {
+            # Must set the content-length header here because httplib can't
+            # calculate the size when working with _StreamSlice.
+            "Content-Length": str(chunk_end - self.resumable_progress + 1),
+        }
+
+        # An empty file results in chunk_end = -1 and size = 0
+        # sending "bytes 0--1/0" results in an invalid request
+        # Only add header "Content-Range" if chunk_end != -1
+        if chunk_end != -1:
+            headers["Content-Range"] = "bytes %d-%d/%s" % (
+                self.resumable_progress,
+                chunk_end,
+                size,
+            )
+
+        for retry_num in range(num_retries + 1):
+            if retry_num > 0:
+                self._sleep(self._rand() * 2**retry_num)
+                LOGGER.warning(
+                    "Retry #%d for media upload: %s %s, following status: %d"
+                    % (retry_num, self.method, self.uri, resp.status)
+                )
+
+            try:
+                resp, content = http.request(
+                    self.resumable_uri, method="PUT", body=data, headers=headers
+                )
+            except:
+                self._in_error_state = True
+                raise
+            if not _should_retry_response(resp.status, content):
+                break
+
+        return self._process_response(resp, content)
+
+    def _process_response(self, resp, content):
+        """Process the response from a single chunk upload.
+
+        Args:
+          resp: httplib2.Response, the response object.
+          content: string, the content of the response.
+
+        Returns:
+          (status, body): (ResumableMediaStatus, object)
+             The body will be None until the resumable media is fully uploaded.
+
+        Raises:
+          googleapiclient.errors.HttpError if the response was not a 2xx or a 308.
+        """
+        if resp.status in [200, 201]:
+            self._in_error_state = False
+            return None, self.postproc(resp, content)
+        elif resp.status == 308:
+            self._in_error_state = False
+            # A "308 Resume Incomplete" indicates we are not done.
+            try:
+                self.resumable_progress = int(resp["range"].split("-")[1]) + 1
+            except KeyError:
+                # If resp doesn't contain range header, resumable progress is 0
+                self.resumable_progress = 0
+            if "location" in resp:
+                self.resumable_uri = resp["location"]
+        else:
+            self._in_error_state = True
+            raise HttpError(resp, content, uri=self.uri)
+
+        return (
+            MediaUploadProgress(self.resumable_progress, self.resumable.size()),
+            None,
+        )
+
+    def to_json(self):
+        """Returns a JSON representation of the HttpRequest."""
+        d = copy.copy(self.__dict__)
+        if d["resumable"] is not None:
+            d["resumable"] = self.resumable.to_json()
+        del d["http"]
+        del d["postproc"]
+        del d["_sleep"]
+        del d["_rand"]
+
+        return json.dumps(d)
+
+    @staticmethod
+    def from_json(s, http, postproc):
+        """Returns an HttpRequest populated with info from a JSON object."""
+        d = json.loads(s)
+        if d["resumable"] is not None:
+            d["resumable"] = MediaUpload.new_from_json(d["resumable"])
+        return HttpRequest(
+            http,
+            postproc,
+            uri=d["uri"],
+            method=d["method"],
+            body=d["body"],
+            headers=d["headers"],
+            methodId=d["methodId"],
+            resumable=d["resumable"],
+        )
+
+    @staticmethod
+    def null_postproc(resp, contents):
+        return resp, contents
+
+
+class BatchHttpRequest(object):
+    """Batches multiple HttpRequest objects into a single HTTP request.
+
+    Example:
+      from googleapiclient.http import BatchHttpRequest
+
+      def list_animals(request_id, response, exception):
+        \"\"\"Do something with the animals list response.\"\"\"
+        if exception is not None:
+          # Do something with the exception.
+          pass
+        else:
+          # Do something with the response.
+          pass
+
+      def list_farmers(request_id, response, exception):
+        \"\"\"Do something with the farmers list response.\"\"\"
+        if exception is not None:
+          # Do something with the exception.
+          pass
+        else:
+          # Do something with the response.
+          pass
+
+      service = build('farm', 'v2')
+
+      batch = BatchHttpRequest()
+
+      batch.add(service.animals().list(), list_animals)
+      batch.add(service.farmers().list(), list_farmers)
+      batch.execute(http=http)
+    """
+
+    @util.positional(1)
+    def __init__(self, callback=None, batch_uri=None):
+        """Constructor for a BatchHttpRequest.
+
+        Args:
+          callback: callable, A callback to be called for each response, of the
+            form callback(id, response, exception). The first parameter is the
+            request id, and the second is the deserialized response object. The
+            third is an googleapiclient.errors.HttpError exception object if an HTTP error
+            occurred while processing the request, or None if no error occurred.
+          batch_uri: string, URI to send batch requests to.
+        """
+        if batch_uri is None:
+            batch_uri = _LEGACY_BATCH_URI
+
+        if batch_uri == _LEGACY_BATCH_URI:
+            LOGGER.warning(
+                "You have constructed a BatchHttpRequest using the legacy batch "
+                "endpoint %s. This endpoint will be turned down on August 12, 2020. "
+                "Please provide the API-specific endpoint or use "
+                "service.new_batch_http_request(). For more details see "
+                "https://developers.googleblog.com/2018/03/discontinuing-support-for-json-rpc-and.html"
+                "and https://developers.google.com/api-client-library/python/guide/batch.",
+                _LEGACY_BATCH_URI,
+            )
+        self._batch_uri = batch_uri
+
+        # Global callback to be called for each individual response in the batch.
+        self._callback = callback
+
+        # A map from id to request.
+        self._requests = {}
+
+        # A map from id to callback.
+        self._callbacks = {}
+
+        # List of request ids, in the order in which they were added.
+        self._order = []
+
+        # The last auto generated id.
+        self._last_auto_id = 0
+
+        # Unique ID on which to base the Content-ID headers.
+        self._base_id = None
+
+        # A map from request id to (httplib2.Response, content) response pairs
+        self._responses = {}
+
+        # A map of id(Credentials) that have been refreshed.
+        self._refreshed_credentials = {}
+
+    def _refresh_and_apply_credentials(self, request, http):
+        """Refresh the credentials and apply to the request.
+
+        Args:
+          request: HttpRequest, the request.
+          http: httplib2.Http, the global http object for the batch.
+        """
+        # For the credentials to refresh, but only once per refresh_token
+        # If there is no http per the request then refresh the http passed in
+        # via execute()
+        creds = None
+        request_credentials = False
+
+        if request.http is not None:
+            creds = _auth.get_credentials_from_http(request.http)
+            request_credentials = True
+
+        if creds is None and http is not None:
+            creds = _auth.get_credentials_from_http(http)
+
+        if creds is not None:
+            if id(creds) not in self._refreshed_credentials:
+                _auth.refresh_credentials(creds)
+                self._refreshed_credentials[id(creds)] = 1
+
+        # Only apply the credentials if we are using the http object passed in,
+        # otherwise apply() will get called during _serialize_request().
+        if request.http is None or not request_credentials:
+            _auth.apply_credentials(creds, request.headers)
+
+    def _id_to_header(self, id_):
+        """Convert an id to a Content-ID header value.
+
+        Args:
+          id_: string, identifier of individual request.
+
+        Returns:
+          A Content-ID header with the id_ encoded into it. A UUID is prepended to
+          the value because Content-ID headers are supposed to be universally
+          unique.
+        """
+        if self._base_id is None:
+            self._base_id = uuid.uuid4()
+
+        # NB: we intentionally leave whitespace between base/id and '+', so RFC2822
+        # line folding works properly on Python 3; see
+        # https://github.com/googleapis/google-api-python-client/issues/164
+        return "<%s + %s>" % (self._base_id, urllib.parse.quote(id_))
+
+    def _header_to_id(self, header):
+        """Convert a Content-ID header value to an id.
+
+        Presumes the Content-ID header conforms to the format that _id_to_header()
+        returns.
+
+        Args:
+          header: string, Content-ID header value.
+
+        Returns:
+          The extracted id value.
+
+        Raises:
+          BatchError if the header is not in the expected format.
+        """
+        if header[0] != "<" or header[-1] != ">":
+            raise BatchError("Invalid value for Content-ID: %s" % header)
+        if "+" not in header:
+            raise BatchError("Invalid value for Content-ID: %s" % header)
+        base, id_ = header[1:-1].split(" + ", 1)
+
+        return urllib.parse.unquote(id_)
+
+    def _serialize_request(self, request):
+        """Convert an HttpRequest object into a string.
+
+        Args:
+          request: HttpRequest, the request to serialize.
+
+        Returns:
+          The request as a string in application/http format.
+        """
+        # Construct status line
+        parsed = urllib.parse.urlparse(request.uri)
+        request_line = urllib.parse.urlunparse(
+            ("", "", parsed.path, parsed.params, parsed.query, "")
+        )
+        status_line = request.method + " " + request_line + " HTTP/1.1\n"
+        major, minor = request.headers.get("content-type", "application/json").split(
+            "/"
+        )
+        msg = MIMENonMultipart(major, minor)
+        headers = request.headers.copy()
+
+        if request.http is not None:
+            credentials = _auth.get_credentials_from_http(request.http)
+            if credentials is not None:
+                _auth.apply_credentials(credentials, headers)
+
+        # MIMENonMultipart adds its own Content-Type header.
+        if "content-type" in headers:
+            del headers["content-type"]
+
+        for key, value in headers.items():
+            msg[key] = value
+        msg["Host"] = parsed.netloc
+        msg.set_unixfrom(None)
+
+        if request.body is not None:
+            msg.set_payload(request.body)
+            msg["content-length"] = str(len(request.body))
+
+        # Serialize the mime message.
+        fp = io.StringIO()
+        # maxheaderlen=0 means don't line wrap headers.
+        g = Generator(fp, maxheaderlen=0)
+        g.flatten(msg, unixfrom=False)
+        body = fp.getvalue()
+
+        return status_line + body
+
+    def _deserialize_response(self, payload):
+        """Convert string into httplib2 response and content.
+
+        Args:
+          payload: string, headers and body as a string.
+
+        Returns:
+          A pair (resp, content), such as would be returned from httplib2.request.
+        """
+        # Strip off the status line
+        status_line, payload = payload.split("\n", 1)
+        protocol, status, reason = status_line.split(" ", 2)
+
+        # Parse the rest of the response
+        parser = FeedParser()
+        parser.feed(payload)
+        msg = parser.close()
+        msg["status"] = status
+
+        # Create httplib2.Response from the parsed headers.
+        resp = httplib2.Response(msg)
+        resp.reason = reason
+        resp.version = int(protocol.split("/", 1)[1].replace(".", ""))
+
+        content = payload.split("\r\n\r\n", 1)[1]
+
+        return resp, content
+
+    def _new_id(self):
+        """Create a new id.
+
+        Auto incrementing number that avoids conflicts with ids already used.
+
+        Returns:
+           string, a new unique id.
+        """
+        self._last_auto_id += 1
+        while str(self._last_auto_id) in self._requests:
+            self._last_auto_id += 1
+        return str(self._last_auto_id)
+
+    @util.positional(2)
+    def add(self, request, callback=None, request_id=None):
+        """Add a new request.
+
+        Every callback added will be paired with a unique id, the request_id. That
+        unique id will be passed back to the callback when the response comes back
+        from the server. The default behavior is to have the library generate it's
+        own unique id. If the caller passes in a request_id then they must ensure
+        uniqueness for each request_id, and if they are not an exception is
+        raised. Callers should either supply all request_ids or never supply a
+        request id, to avoid such an error.
+
+        Args:
+          request: HttpRequest, Request to add to the batch.
+          callback: callable, A callback to be called for this response, of the
+            form callback(id, response, exception). The first parameter is the
+            request id, and the second is the deserialized response object. The
+            third is an googleapiclient.errors.HttpError exception object if an HTTP error
+            occurred while processing the request, or None if no errors occurred.
+          request_id: string, A unique id for the request. The id will be passed
+            to the callback with the response.
+
+        Returns:
+          None
+
+        Raises:
+          BatchError if a media request is added to a batch.
+          KeyError is the request_id is not unique.
+        """
+
+        if len(self._order) >= MAX_BATCH_LIMIT:
+            raise BatchError(
+                "Exceeded the maximum calls(%d) in a single batch request."
+                % MAX_BATCH_LIMIT
+            )
+        if request_id is None:
+            request_id = self._new_id()
+        if request.resumable is not None:
+            raise BatchError("Media requests cannot be used in a batch request.")
+        if request_id in self._requests:
+            raise KeyError("A request with this ID already exists: %s" % request_id)
+        self._requests[request_id] = request
+        self._callbacks[request_id] = callback
+        self._order.append(request_id)
+
+    def _execute(self, http, order, requests):
+        """Serialize batch request, send to server, process response.
+
+        Args:
+          http: httplib2.Http, an http object to be used to make the request with.
+          order: list, list of request ids in the order they were added to the
+            batch.
+          requests: list, list of request objects to send.
+
+        Raises:
+          httplib2.HttpLib2Error if a transport error has occurred.
+          googleapiclient.errors.BatchError if the response is the wrong format.
+        """
+        message = MIMEMultipart("mixed")
+        # Message should not write out it's own headers.
+        setattr(message, "_write_headers", lambda self: None)
+
+        # Add all the individual requests.
+        for request_id in order:
+            request = requests[request_id]
+
+            msg = MIMENonMultipart("application", "http")
+            msg["Content-Transfer-Encoding"] = "binary"
+            msg["Content-ID"] = self._id_to_header(request_id)
+
+            body = self._serialize_request(request)
+            msg.set_payload(body)
+            message.attach(msg)
+
+        # encode the body: note that we can't use `as_string`, because
+        # it plays games with `From ` lines.
+        fp = io.StringIO()
+        g = Generator(fp, mangle_from_=False)
+        g.flatten(message, unixfrom=False)
+        body = fp.getvalue()
+
+        headers = {}
+        headers["content-type"] = (
+            "multipart/mixed; " 'boundary="%s"'
+        ) % message.get_boundary()
+
+        resp, content = http.request(
+            self._batch_uri, method="POST", body=body, headers=headers
+        )
+
+        if resp.status >= 300:
+            raise HttpError(resp, content, uri=self._batch_uri)
+
+        # Prepend with a content-type header so FeedParser can handle it.
+        header = "content-type: %s\r\n\r\n" % resp["content-type"]
+        # PY3's FeedParser only accepts unicode. So we should decode content
+        # here, and encode each payload again.
+        content = content.decode("utf-8")
+        for_parser = header + content
+
+        parser = FeedParser()
+        parser.feed(for_parser)
+        mime_response = parser.close()
+
+        if not mime_response.is_multipart():
+            raise BatchError(
+                "Response not in multipart/mixed format.", resp=resp, content=content
+            )
+
+        for part in mime_response.get_payload():
+            request_id = self._header_to_id(part["Content-ID"])
+            response, content = self._deserialize_response(part.get_payload())
+            # We encode content here to emulate normal http response.
+            if isinstance(content, str):
+                content = content.encode("utf-8")
+            self._responses[request_id] = (response, content)
+
+    @util.positional(1)
+    def execute(self, http=None):
+        """Execute all the requests as a single batched HTTP request.
+
+        Args:
+          http: httplib2.Http, an http object to be used in place of the one the
+            HttpRequest request object was constructed with. If one isn't supplied
+            then use a http object from the requests in this batch.
+
+        Returns:
+          None
+
+        Raises:
+          httplib2.HttpLib2Error if a transport error has occurred.
+          googleapiclient.errors.BatchError if the response is the wrong format.
+        """
+        # If we have no requests return
+        if len(self._order) == 0:
+            return None
+
+        # If http is not supplied use the first valid one given in the requests.
+        if http is None:
+            for request_id in self._order:
+                request = self._requests[request_id]
+                if request is not None:
+                    http = request.http
+                    break
+
+        if http is None:
+            raise ValueError("Missing a valid http object.")
+
+        # Special case for OAuth2Credentials-style objects which have not yet been
+        # refreshed with an initial access_token.
+        creds = _auth.get_credentials_from_http(http)
+        if creds is not None:
+            if not _auth.is_valid(creds):
+                LOGGER.info("Attempting refresh to obtain initial access_token")
+                _auth.refresh_credentials(creds)
+
+        self._execute(http, self._order, self._requests)
+
+        # Loop over all the requests and check for 401s. For each 401 request the
+        # credentials should be refreshed and then sent again in a separate batch.
+        redo_requests = {}
+        redo_order = []
+
+        for request_id in self._order:
+            resp, content = self._responses[request_id]
+            if resp["status"] == "401":
+                redo_order.append(request_id)
+                request = self._requests[request_id]
+                self._refresh_and_apply_credentials(request, http)
+                redo_requests[request_id] = request
+
+        if redo_requests:
+            self._execute(http, redo_order, redo_requests)
+
+        # Now process all callbacks that are erroring, and raise an exception for
+        # ones that return a non-2xx response? Or add extra parameter to callback
+        # that contains an HttpError?
+
+        for request_id in self._order:
+            resp, content = self._responses[request_id]
+
+            request = self._requests[request_id]
+            callback = self._callbacks[request_id]
+
+            response = None
+            exception = None
+            try:
+                if resp.status >= 300:
+                    raise HttpError(resp, content, uri=request.uri)
+                response = request.postproc(resp, content)
+            except HttpError as e:
+                exception = e
+
+            if callback is not None:
+                callback(request_id, response, exception)
+            if self._callback is not None:
+                self._callback(request_id, response, exception)
+
+
+class HttpRequestMock(object):
+    """Mock of HttpRequest.
+
+    Do not construct directly, instead use RequestMockBuilder.
+    """
+
+    def __init__(self, resp, content, postproc):
+        """Constructor for HttpRequestMock
+
+        Args:
+          resp: httplib2.Response, the response to emulate coming from the request
+          content: string, the response body
+          postproc: callable, the post processing function usually supplied by
+                    the model class. See model.JsonModel.response() as an example.
+        """
+        self.resp = resp
+        self.content = content
+        self.postproc = postproc
+        if resp is None:
+            self.resp = httplib2.Response({"status": 200, "reason": "OK"})
+        if "reason" in self.resp:
+            self.resp.reason = self.resp["reason"]
+
+    def execute(self, http=None):
+        """Execute the request.
+
+        Same behavior as HttpRequest.execute(), but the response is
+        mocked and not really from an HTTP request/response.
+        """
+        return self.postproc(self.resp, self.content)
+
+
+class RequestMockBuilder(object):
+    """A simple mock of HttpRequest
+
+    Pass in a dictionary to the constructor that maps request methodIds to
+    tuples of (httplib2.Response, content, opt_expected_body) that should be
+    returned when that method is called. None may also be passed in for the
+    httplib2.Response, in which case a 200 OK response will be generated.
+    If an opt_expected_body (str or dict) is provided, it will be compared to
+    the body and UnexpectedBodyError will be raised on inequality.
+
+    Example:
+      response = '{"data": {"id": "tag:google.c...'
+      requestBuilder = RequestMockBuilder(
+        {
+          'plus.activities.get': (None, response),
+        }
+      )
+      googleapiclient.discovery.build("plus", "v1", requestBuilder=requestBuilder)
+
+    Methods that you do not supply a response for will return a
+    200 OK with an empty string as the response content or raise an excpetion
+    if check_unexpected is set to True. The methodId is taken from the rpcName
+    in the discovery document.
+
+    For more details see the project wiki.
+    """
+
+    def __init__(self, responses, check_unexpected=False):
+        """Constructor for RequestMockBuilder
+
+        The constructed object should be a callable object
+        that can replace the class HttpResponse.
+
+        responses - A dictionary that maps methodIds into tuples
+                    of (httplib2.Response, content). The methodId
+                    comes from the 'rpcName' field in the discovery
+                    document.
+        check_unexpected - A boolean setting whether or not UnexpectedMethodError
+                           should be raised on unsupplied method.
+        """
+        self.responses = responses
+        self.check_unexpected = check_unexpected
+
+    def __call__(
+        self,
+        http,
+        postproc,
+        uri,
+        method="GET",
+        body=None,
+        headers=None,
+        methodId=None,
+        resumable=None,
+    ):
+        """Implements the callable interface that discovery.build() expects
+        of requestBuilder, which is to build an object compatible with
+        HttpRequest.execute(). See that method for the description of the
+        parameters and the expected response.
+        """
+        if methodId in self.responses:
+            response = self.responses[methodId]
+            resp, content = response[:2]
+            if len(response) > 2:
+                # Test the body against the supplied expected_body.
+                expected_body = response[2]
+                if bool(expected_body) != bool(body):
+                    # Not expecting a body and provided one
+                    # or expecting a body and not provided one.
+                    raise UnexpectedBodyError(expected_body, body)
+                if isinstance(expected_body, str):
+                    expected_body = json.loads(expected_body)
+                body = json.loads(body)
+                if body != expected_body:
+                    raise UnexpectedBodyError(expected_body, body)
+            return HttpRequestMock(resp, content, postproc)
+        elif self.check_unexpected:
+            raise UnexpectedMethodError(methodId=methodId)
+        else:
+            model = JsonModel(False)
+            return HttpRequestMock(None, "{}", model.response)
+
+
+class HttpMock(object):
+    """Mock of httplib2.Http"""
+
+    def __init__(self, filename=None, headers=None):
+        """
+        Args:
+          filename: string, absolute filename to read response from
+          headers: dict, header to return with response
+        """
+        if headers is None:
+            headers = {"status": "200"}
+        if filename:
+            with open(filename, "rb") as f:
+                self.data = f.read()
+        else:
+            self.data = None
+        self.response_headers = headers
+        self.headers = None
+        self.uri = None
+        self.method = None
+        self.body = None
+        self.headers = None
+
+    def request(
+        self,
+        uri,
+        method="GET",
+        body=None,
+        headers=None,
+        redirections=1,
+        connection_type=None,
+    ):
+        self.uri = uri
+        self.method = method
+        self.body = body
+        self.headers = headers
+        return httplib2.Response(self.response_headers), self.data
+
+    def close(self):
+        return None
+
+
+class HttpMockSequence(object):
+    """Mock of httplib2.Http
+
+    Mocks a sequence of calls to request returning different responses for each
+    call. Create an instance initialized with the desired response headers
+    and content and then use as if an httplib2.Http instance.
+
+      http = HttpMockSequence([
+        ({'status': '401'}, ''),
+        ({'status': '200'}, '{"access_token":"1/3w","expires_in":3600}'),
+        ({'status': '200'}, 'echo_request_headers'),
+        ])
+      resp, content = http.request("http://examples.com")
+
+    There are special values you can pass in for content to trigger
+    behavours that are helpful in testing.
+
+    'echo_request_headers' means return the request headers in the response body
+    'echo_request_headers_as_json' means return the request headers in
+       the response body
+    'echo_request_body' means return the request body in the response body
+    'echo_request_uri' means return the request uri in the response body
+    """
+
+    def __init__(self, iterable):
+        """
+        Args:
+          iterable: iterable, a sequence of pairs of (headers, body)
+        """
+        self._iterable = iterable
+        self.follow_redirects = True
+        self.request_sequence = list()
+
+    def request(
+        self,
+        uri,
+        method="GET",
+        body=None,
+        headers=None,
+        redirections=1,
+        connection_type=None,
+    ):
+        # Remember the request so after the fact this mock can be examined
+        self.request_sequence.append((uri, method, body, headers))
+        resp, content = self._iterable.pop(0)
+        if isinstance(content, str):
+            content = content.encode("utf-8")
+
+        if content == b"echo_request_headers":
+            content = headers
+        elif content == b"echo_request_headers_as_json":
+            content = json.dumps(headers)
+        elif content == b"echo_request_body":
+            if hasattr(body, "read"):
+                content = body.read()
+            else:
+                content = body
+        elif content == b"echo_request_uri":
+            content = uri
+        if isinstance(content, str):
+            content = content.encode("utf-8")
+        return httplib2.Response(resp), content
+
+
+def set_user_agent(http, user_agent):
+    """Set the user-agent on every request.
+
+    Args:
+       http - An instance of httplib2.Http
+           or something that acts like it.
+       user_agent: string, the value for the user-agent header.
+
+    Returns:
+       A modified instance of http that was passed in.
+
+    Example:
+
+      h = httplib2.Http()
+      h = set_user_agent(h, "my-app-name/6.0")
+
+    Most of the time the user-agent will be set doing auth, this is for the rare
+    cases where you are accessing an unauthenticated endpoint.
+    """
+    request_orig = http.request
+
+    # The closure that will replace 'httplib2.Http.request'.
+    def new_request(
+        uri,
+        method="GET",
+        body=None,
+        headers=None,
+        redirections=httplib2.DEFAULT_MAX_REDIRECTS,
+        connection_type=None,
+    ):
+        """Modify the request headers to add the user-agent."""
+        if headers is None:
+            headers = {}
+        if "user-agent" in headers:
+            headers["user-agent"] = user_agent + " " + headers["user-agent"]
+        else:
+            headers["user-agent"] = user_agent
+        resp, content = request_orig(
+            uri,
+            method=method,
+            body=body,
+            headers=headers,
+            redirections=redirections,
+            connection_type=connection_type,
+        )
+        return resp, content
+
+    http.request = new_request
+    return http
+
+
+def tunnel_patch(http):
+    """Tunnel PATCH requests over POST.
+    Args:
+       http - An instance of httplib2.Http
+           or something that acts like it.
+
+    Returns:
+       A modified instance of http that was passed in.
+
+    Example:
+
+      h = httplib2.Http()
+      h = tunnel_patch(h, "my-app-name/6.0")
+
+    Useful if you are running on a platform that doesn't support PATCH.
+    Apply this last if you are using OAuth 1.0, as changing the method
+    will result in a different signature.
+    """
+    request_orig = http.request
+
+    # The closure that will replace 'httplib2.Http.request'.
+    def new_request(
+        uri,
+        method="GET",
+        body=None,
+        headers=None,
+        redirections=httplib2.DEFAULT_MAX_REDIRECTS,
+        connection_type=None,
+    ):
+        """Modify the request headers to add the user-agent."""
+        if headers is None:
+            headers = {}
+        if method == "PATCH":
+            if "oauth_token" in headers.get("authorization", ""):
+                LOGGER.warning(
+                    "OAuth 1.0 request made with Credentials after tunnel_patch."
+                )
+            headers["x-http-method-override"] = "PATCH"
+            method = "POST"
+        resp, content = request_orig(
+            uri,
+            method=method,
+            body=body,
+            headers=headers,
+            redirections=redirections,
+            connection_type=connection_type,
+        )
+        return resp, content
+
+    http.request = new_request
+    return http
+
+
+def build_http():
+    """Builds httplib2.Http object
+
+    Returns:
+    A httplib2.Http object, which is used to make http requests, and which has timeout set by default.
+    To override default timeout call
+
+      socket.setdefaulttimeout(timeout_in_sec)
+
+    before interacting with this method.
+    """
+    if socket.getdefaulttimeout() is not None:
+        http_timeout = socket.getdefaulttimeout()
+    else:
+        http_timeout = DEFAULT_HTTP_TIMEOUT_SEC
+    http = httplib2.Http(timeout=http_timeout)
+    # 308's are used by several Google APIs (Drive, YouTube)
+    # for Resumable Uploads rather than Permanent Redirects.
+    # This asks httplib2 to exclude 308s from the status codes
+    # it treats as redirects
+    try:
+        http.redirect_codes = http.redirect_codes - {308}
+    except AttributeError:
+        # Apache Beam tests depend on this library and cannot
+        # currently upgrade their httplib2 version
+        # http.redirect_codes does not exist in previous versions
+        # of httplib2, so pass
+        pass
+
+    return http
