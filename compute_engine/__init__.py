@@ -1,4 +1,4 @@
-# Copyright 2024 Google LLC
+# Copyright 2016 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,14 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Google Auth AIO Library for Python."""
+"""Google Compute Engine authentication."""
 
-import logging
+from google.auth.compute_engine._metadata import detect_gce_residency_linux
+from google.auth.compute_engine.credentials import Credentials
+from google.auth.compute_engine.credentials import IDTokenCredentials
 
-from google.auth import version as google_auth_version
 
-
-__version__ = google_auth_version.__version__
-
-# Set default logging handler to avoid "No handler found" warnings.
-logging.getLogger(__name__).addHandler(logging.NullHandler())
+__all__ = ["Credentials", "IDTokenCredentials", "detect_gce_residency_linux"]
