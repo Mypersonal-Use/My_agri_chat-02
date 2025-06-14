@@ -11,3 +11,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""Defines an enum for classifying RPC methods by control flow semantics."""
+
+import enum
+
+
+@enum.unique
+class Service(enum.Enum):
+    """Describes the control flow style of RPC method implementation."""
+
+    INLINE = "inline"
+    EVENT = "event"

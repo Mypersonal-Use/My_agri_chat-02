@@ -11,3 +11,16 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""Defines an enum for classifying RPC methods by streaming semantics."""
+
+import enum
+
+
+@enum.unique
+class Cardinality(enum.Enum):
+    """Describes the streaming semantics of an RPC method."""
+
+    UNARY_UNARY = "request-unary/response-unary"
+    UNARY_STREAM = "request-unary/response-streaming"
+    STREAM_UNARY = "request-streaming/response-unary"
+    STREAM_STREAM = "request-streaming/response-streaming"
