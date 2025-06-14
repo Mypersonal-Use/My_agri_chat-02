@@ -1,6 +1,33 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from __future__ import annotations
+from .parts import (
+    Parts,
+    AsyncParts,
+    PartsWithRawResponse,
+    AsyncPartsWithRawResponse,
+    PartsWithStreamingResponse,
+    AsyncPartsWithStreamingResponse,
+)
+from .uploads import (
+    Uploads,
+    AsyncUploads,
+    UploadsWithRawResponse,
+    AsyncUploadsWithRawResponse,
+    UploadsWithStreamingResponse,
+    AsyncUploadsWithStreamingResponse,
+)
 
-from .upload_part import UploadPart as UploadPart
-from .part_create_params import PartCreateParams as PartCreateParams
+__all__ = [
+    "Parts",
+    "AsyncParts",
+    "PartsWithRawResponse",
+    "AsyncPartsWithRawResponse",
+    "PartsWithStreamingResponse",
+    "AsyncPartsWithStreamingResponse",
+    "Uploads",
+    "AsyncUploads",
+    "UploadsWithRawResponse",
+    "AsyncUploadsWithRawResponse",
+    "UploadsWithStreamingResponse",
+    "AsyncUploadsWithStreamingResponse",
+]
