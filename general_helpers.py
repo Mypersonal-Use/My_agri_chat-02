@@ -12,11 +12,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Google API Core.
-
-This package contains common code and utilities used by Google client libraries.
-"""
-
-from google.api_core import version as api_core_version
-
-__version__ = api_core_version.__version__
+# This import for backward compatibility only.
+from functools import wraps  # noqa: F401 pragma: NO COVER
