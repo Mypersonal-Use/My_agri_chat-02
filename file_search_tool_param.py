@@ -2,44 +2,53 @@
 
 from __future__ import annotations
 
-from typing import List, Union, Optional
-from typing_extensions import Literal, Required, TypeAlias, TypedDict
+from typing_extensions import Literal, Required, TypedDict
 
-from ..shared_params.compound_filter import CompoundFilter
-from ..shared_params.comparison_filter import ComparisonFilter
-
-__all__ = ["FileSearchToolParam", "Filters", "RankingOptions"]
-
-Filters: TypeAlias = Union[ComparisonFilter, CompoundFilter]
+__all__ = ["FileSearchToolParam", "FileSearch", "FileSearchRankingOptions"]
 
 
-class RankingOptions(TypedDict, total=False):
-    ranker: Literal["auto", "default-2024-11-15"]
-    """The ranker to use for the file search."""
+class FileSearchRankingOptions(TypedDict, total=False):
+    score_threshold: Required[float]
+    """The score threshold for the file search.
 
-    score_threshold: float
-    """The score threshold for the file search, a number between 0 and 1.
+    All values must be a floating point number between 0 and 1.
+    """
 
-    Numbers closer to 1 will attempt to return only the most relevant results, but
-    may return fewer results.
+    ranker: Literal["auto", "default_2024_08_21"]
+    """The ranker to use for the file search.
+
+    If not specified will use the `auto` ranker.
+    """
+
+
+class FileSearch(TypedDict, total=False):
+    max_num_results: int
+    """The maximum number of results the file search tool should output.
+
+    The default is 20 for `gpt-4*` models and 5 for `gpt-3.5-turbo`. This number
+    should be between 1 and 50 inclusive.
+
+    Note that the file search tool may output fewer than `max_num_results` results.
+    See the
+    [file search tool documentation](https://platform.openai.com/docs/assistants/tools/file-search#customizing-file-search-settings)
+    for more information.
+    """
+
+    ranking_options: FileSearchRankingOptions
+    """The ranking options for the file search.
+
+    If not specified, the file search tool will use the `auto` ranker and a
+    score_threshold of 0.
+
+    See the
+    [file search tool documentation](https://platform.openai.com/docs/assistants/tools/file-search#customizing-file-search-settings)
+    for more information.
     """
 
 
 class FileSearchToolParam(TypedDict, total=False):
     type: Required[Literal["file_search"]]
-    """The type of the file search tool. Always `file_search`."""
+    """The type of tool being defined: `file_search`"""
 
-    vector_store_ids: Required[List[str]]
-    """The IDs of the vector stores to search."""
-
-    filters: Optional[Filters]
-    """A filter to apply."""
-
-    max_num_results: int
-    """The maximum number of results to return.
-
-    This number should be between 1 and 50 inclusive.
-    """
-
-    ranking_options: RankingOptions
-    """Ranking options for search."""
+    file_search: FileSearch
+    """Overrides for the file search tool."""
