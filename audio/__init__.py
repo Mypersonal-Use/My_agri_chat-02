@@ -1,20 +1,61 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from __future__ import annotations
+from .audio import (
+    Audio,
+    AsyncAudio,
+    AudioWithRawResponse,
+    AsyncAudioWithRawResponse,
+    AudioWithStreamingResponse,
+    AsyncAudioWithStreamingResponse,
+)
+from .speech import (
+    Speech,
+    AsyncSpeech,
+    SpeechWithRawResponse,
+    AsyncSpeechWithRawResponse,
+    SpeechWithStreamingResponse,
+    AsyncSpeechWithStreamingResponse,
+)
+from .translations import (
+    Translations,
+    AsyncTranslations,
+    TranslationsWithRawResponse,
+    AsyncTranslationsWithRawResponse,
+    TranslationsWithStreamingResponse,
+    AsyncTranslationsWithStreamingResponse,
+)
+from .transcriptions import (
+    Transcriptions,
+    AsyncTranscriptions,
+    TranscriptionsWithRawResponse,
+    AsyncTranscriptionsWithRawResponse,
+    TranscriptionsWithStreamingResponse,
+    AsyncTranscriptionsWithStreamingResponse,
+)
 
-from .translation import Translation as Translation
-from .speech_model import SpeechModel as SpeechModel
-from .transcription import Transcription as Transcription
-from .transcription_word import TranscriptionWord as TranscriptionWord
-from .translation_verbose import TranslationVerbose as TranslationVerbose
-from .speech_create_params import SpeechCreateParams as SpeechCreateParams
-from .transcription_include import TranscriptionInclude as TranscriptionInclude
-from .transcription_segment import TranscriptionSegment as TranscriptionSegment
-from .transcription_verbose import TranscriptionVerbose as TranscriptionVerbose
-from .translation_create_params import TranslationCreateParams as TranslationCreateParams
-from .transcription_stream_event import TranscriptionStreamEvent as TranscriptionStreamEvent
-from .transcription_create_params import TranscriptionCreateParams as TranscriptionCreateParams
-from .translation_create_response import TranslationCreateResponse as TranslationCreateResponse
-from .transcription_create_response import TranscriptionCreateResponse as TranscriptionCreateResponse
-from .transcription_text_done_event import TranscriptionTextDoneEvent as TranscriptionTextDoneEvent
-from .transcription_text_delta_event import TranscriptionTextDeltaEvent as TranscriptionTextDeltaEvent
+__all__ = [
+    "Transcriptions",
+    "AsyncTranscriptions",
+    "TranscriptionsWithRawResponse",
+    "AsyncTranscriptionsWithRawResponse",
+    "TranscriptionsWithStreamingResponse",
+    "AsyncTranscriptionsWithStreamingResponse",
+    "Translations",
+    "AsyncTranslations",
+    "TranslationsWithRawResponse",
+    "AsyncTranslationsWithRawResponse",
+    "TranslationsWithStreamingResponse",
+    "AsyncTranslationsWithStreamingResponse",
+    "Speech",
+    "AsyncSpeech",
+    "SpeechWithRawResponse",
+    "AsyncSpeechWithRawResponse",
+    "SpeechWithStreamingResponse",
+    "AsyncSpeechWithStreamingResponse",
+    "Audio",
+    "AsyncAudio",
+    "AudioWithRawResponse",
+    "AsyncAudioWithRawResponse",
+    "AudioWithStreamingResponse",
+    "AsyncAudioWithStreamingResponse",
+]
