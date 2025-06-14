@@ -2,26 +2,29 @@
 
 from typing_extensions import Literal
 
-from ..._models import BaseModel
+from ...._models import BaseModel
 
 __all__ = ["ResponseTextDoneEvent"]
 
 
 class ResponseTextDoneEvent(BaseModel):
     content_index: int
-    """The index of the content part that the text content is finalized."""
+    """The index of the content part in the item's content array."""
+
+    event_id: str
+    """The unique ID of the server event."""
 
     item_id: str
-    """The ID of the output item that the text content is finalized."""
+    """The ID of the item."""
 
     output_index: int
-    """The index of the output item that the text content is finalized."""
+    """The index of the output item in the response."""
 
-    sequence_number: int
-    """The sequence number for this event."""
+    response_id: str
+    """The ID of the response."""
 
     text: str
-    """The text content that is finalized."""
+    """The final text content."""
 
-    type: Literal["response.output_text.done"]
-    """The type of the event. Always `response.output_text.done`."""
+    type: Literal["response.text.done"]
+    """The event type, must be `response.text.done`."""

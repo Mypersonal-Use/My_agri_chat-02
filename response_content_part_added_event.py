@@ -1,33 +1,45 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Union
-from typing_extensions import Literal, Annotated, TypeAlias
+from typing import Optional
+from typing_extensions import Literal
 
-from ..._utils import PropertyInfo
-from ..._models import BaseModel
-from .response_output_text import ResponseOutputText
-from .response_output_refusal import ResponseOutputRefusal
+from ...._models import BaseModel
 
 __all__ = ["ResponseContentPartAddedEvent", "Part"]
 
-Part: TypeAlias = Annotated[Union[ResponseOutputText, ResponseOutputRefusal], PropertyInfo(discriminator="type")]
+
+class Part(BaseModel):
+    audio: Optional[str] = None
+    """Base64-encoded audio data (if type is "audio")."""
+
+    text: Optional[str] = None
+    """The text content (if type is "text")."""
+
+    transcript: Optional[str] = None
+    """The transcript of the audio (if type is "audio")."""
+
+    type: Optional[Literal["text", "audio"]] = None
+    """The content type ("text", "audio")."""
 
 
 class ResponseContentPartAddedEvent(BaseModel):
     content_index: int
-    """The index of the content part that was added."""
+    """The index of the content part in the item's content array."""
+
+    event_id: str
+    """The unique ID of the server event."""
 
     item_id: str
-    """The ID of the output item that the content part was added to."""
+    """The ID of the item to which the content part was added."""
 
     output_index: int
-    """The index of the output item that the content part was added to."""
+    """The index of the output item in the response."""
 
     part: Part
     """The content part that was added."""
 
-    sequence_number: int
-    """The sequence number of this event."""
+    response_id: str
+    """The ID of the response."""
 
     type: Literal["response.content_part.added"]
-    """The type of the event. Always `response.content_part.added`."""
+    """The event type, must be `response.content_part.added`."""

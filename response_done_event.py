@@ -5,15 +5,15 @@ from typing_extensions import Literal
 from ...._models import BaseModel
 from .realtime_response import RealtimeResponse
 
-__all__ = ["ResponseCreatedEvent"]
+__all__ = ["ResponseDoneEvent"]
 
 
-class ResponseCreatedEvent(BaseModel):
+class ResponseDoneEvent(BaseModel):
     event_id: str
     """The unique ID of the server event."""
 
     response: RealtimeResponse
     """The response resource."""
 
-    type: Literal["response.created"]
-    """The event type, must be `response.created`."""
+    type: Literal["response.done"]
+    """The event type, must be `response.done`."""

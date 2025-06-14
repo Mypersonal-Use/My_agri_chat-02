@@ -2,17 +2,29 @@
 
 from typing_extensions import Literal
 
-from ..._models import BaseModel
+from ...._models import BaseModel
 
 __all__ = ["ResponseAudioDeltaEvent"]
 
 
 class ResponseAudioDeltaEvent(BaseModel):
-    delta: str
-    """A chunk of Base64 encoded response audio bytes."""
+    content_index: int
+    """The index of the content part in the item's content array."""
 
-    sequence_number: int
-    """A sequence number for this chunk of the stream response."""
+    delta: str
+    """Base64-encoded audio data delta."""
+
+    event_id: str
+    """The unique ID of the server event."""
+
+    item_id: str
+    """The ID of the item."""
+
+    output_index: int
+    """The index of the output item in the response."""
+
+    response_id: str
+    """The ID of the response."""
 
     type: Literal["response.audio.delta"]
-    """The type of the event. Always `response.audio.delta`."""
+    """The event type, must be `response.audio.delta`."""

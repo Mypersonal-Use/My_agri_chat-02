@@ -2,26 +2,29 @@
 
 from typing_extensions import Literal
 
-from ..._models import BaseModel
+from ...._models import BaseModel
 
 __all__ = ["ResponseTextDeltaEvent"]
 
 
 class ResponseTextDeltaEvent(BaseModel):
     content_index: int
-    """The index of the content part that the text delta was added to."""
+    """The index of the content part in the item's content array."""
 
     delta: str
-    """The text delta that was added."""
+    """The text delta."""
+
+    event_id: str
+    """The unique ID of the server event."""
 
     item_id: str
-    """The ID of the output item that the text delta was added to."""
+    """The ID of the item."""
 
     output_index: int
-    """The index of the output item that the text delta was added to."""
+    """The index of the output item in the response."""
 
-    sequence_number: int
-    """The sequence number for this event."""
+    response_id: str
+    """The ID of the response."""
 
-    type: Literal["response.output_text.delta"]
-    """The type of the event. Always `response.output_text.delta`."""
+    type: Literal["response.text.delta"]
+    """The event type, must be `response.text.delta`."""

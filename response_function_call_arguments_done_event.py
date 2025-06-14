@@ -2,22 +2,29 @@
 
 from typing_extensions import Literal
 
-from ..._models import BaseModel
+from ...._models import BaseModel
 
 __all__ = ["ResponseFunctionCallArgumentsDoneEvent"]
 
 
 class ResponseFunctionCallArgumentsDoneEvent(BaseModel):
     arguments: str
-    """The function-call arguments."""
+    """The final arguments as a JSON string."""
+
+    call_id: str
+    """The ID of the function call."""
+
+    event_id: str
+    """The unique ID of the server event."""
 
     item_id: str
-    """The ID of the item."""
+    """The ID of the function call item."""
 
     output_index: int
-    """The index of the output item."""
+    """The index of the output item in the response."""
 
-    sequence_number: int
-    """The sequence number of this event."""
+    response_id: str
+    """The ID of the response."""
 
     type: Literal["response.function_call_arguments.done"]
+    """The event type, must be `response.function_call_arguments.done`."""
