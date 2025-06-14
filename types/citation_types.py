@@ -13,5 +13,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from __future__ import annotations
+from typing import List
 
-__version__ = "0.8.5"
+from typing_extensions import TypedDict
+
+from google.generativeai import protos
+from google.generativeai import string_utils
+
+
+__all__ = [
+    "CitationMetadataDict",
+    "CitationSourceDict",
+]
+
+
+class CitationSourceDict(TypedDict):
+    start_index: int | None
+    end_index: int | None
+    uri: str | None
+    license: str | None
+
+    __doc__ = string_utils.strip_oneof(protos.CitationSource.__doc__)
+
+
+class CitationMetadataDict(TypedDict):
+    citation_sources: List[CitationSourceDict | None]
+
+    __doc__ = string_utils.strip_oneof(protos.CitationMetadata.__doc__)
