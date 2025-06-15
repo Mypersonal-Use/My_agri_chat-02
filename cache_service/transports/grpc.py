@@ -30,11 +30,11 @@ import google.protobuf.message
 import grpc  # type: ignore
 import proto  # type: ignore
 
-from google.ai.generativelanguage_v1beta.types import (
+from google.ai.generativelanguage_v1alpha.types import (
     cached_content as gag_cached_content,
 )
-from google.ai.generativelanguage_v1beta.types import cache_service
-from google.ai.generativelanguage_v1beta.types import cached_content
+from google.ai.generativelanguage_v1alpha.types import cache_service
+from google.ai.generativelanguage_v1alpha.types import cached_content
 
 from .base import DEFAULT_CLIENT_INFO, CacheServiceTransport
 
@@ -74,7 +74,7 @@ class _LoggingClientInterceptor(grpc.UnaryUnaryClientInterceptor):  # pragma: NO
             _LOGGER.debug(
                 f"Sending request for {client_call_details.method}",
                 extra={
-                    "serviceName": "google.ai.generativelanguage.v1beta.CacheService",
+                    "serviceName": "google.ai.generativelanguage.v1alpha.CacheService",
                     "rpcName": client_call_details.method,
                     "request": grpc_request,
                     "metadata": grpc_request["metadata"],
@@ -105,7 +105,7 @@ class _LoggingClientInterceptor(grpc.UnaryUnaryClientInterceptor):  # pragma: NO
             _LOGGER.debug(
                 f"Received response for {client_call_details.method}.",
                 extra={
-                    "serviceName": "google.ai.generativelanguage.v1beta.CacheService",
+                    "serviceName": "google.ai.generativelanguage.v1alpha.CacheService",
                     "rpcName": client_call_details.method,
                     "response": grpc_response,
                     "metadata": grpc_response["metadata"],
@@ -353,7 +353,7 @@ class CacheServiceGrpcTransport(CacheServiceTransport):
         # to pass in the functions for each.
         if "list_cached_contents" not in self._stubs:
             self._stubs["list_cached_contents"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.CacheService/ListCachedContents",
+                "/google.ai.generativelanguage.v1alpha.CacheService/ListCachedContents",
                 request_serializer=cache_service.ListCachedContentsRequest.serialize,
                 response_deserializer=cache_service.ListCachedContentsResponse.deserialize,
             )
@@ -381,7 +381,7 @@ class CacheServiceGrpcTransport(CacheServiceTransport):
         # to pass in the functions for each.
         if "create_cached_content" not in self._stubs:
             self._stubs["create_cached_content"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.CacheService/CreateCachedContent",
+                "/google.ai.generativelanguage.v1alpha.CacheService/CreateCachedContent",
                 request_serializer=cache_service.CreateCachedContentRequest.serialize,
                 response_deserializer=gag_cached_content.CachedContent.deserialize,
             )
@@ -409,7 +409,7 @@ class CacheServiceGrpcTransport(CacheServiceTransport):
         # to pass in the functions for each.
         if "get_cached_content" not in self._stubs:
             self._stubs["get_cached_content"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.CacheService/GetCachedContent",
+                "/google.ai.generativelanguage.v1alpha.CacheService/GetCachedContent",
                 request_serializer=cache_service.GetCachedContentRequest.serialize,
                 response_deserializer=cached_content.CachedContent.deserialize,
             )
@@ -438,7 +438,7 @@ class CacheServiceGrpcTransport(CacheServiceTransport):
         # to pass in the functions for each.
         if "update_cached_content" not in self._stubs:
             self._stubs["update_cached_content"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.CacheService/UpdateCachedContent",
+                "/google.ai.generativelanguage.v1alpha.CacheService/UpdateCachedContent",
                 request_serializer=cache_service.UpdateCachedContentRequest.serialize,
                 response_deserializer=gag_cached_content.CachedContent.deserialize,
             )
@@ -464,7 +464,7 @@ class CacheServiceGrpcTransport(CacheServiceTransport):
         # to pass in the functions for each.
         if "delete_cached_content" not in self._stubs:
             self._stubs["delete_cached_content"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.CacheService/DeleteCachedContent",
+                "/google.ai.generativelanguage.v1alpha.CacheService/DeleteCachedContent",
                 request_serializer=cache_service.DeleteCachedContentRequest.serialize,
                 response_deserializer=empty_pb2.Empty.FromString,
             )

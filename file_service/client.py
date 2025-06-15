@@ -42,7 +42,7 @@ from google.auth.transport import mtls  # type: ignore
 from google.auth.transport.grpc import SslCredentials  # type: ignore
 from google.oauth2 import service_account  # type: ignore
 
-from google.ai.generativelanguage_v1beta import gapic_version as package_version
+from google.ai.generativelanguage_v1alpha import gapic_version as package_version
 
 try:
     OptionalRetry = Union[retries.Retry, gapic_v1.method._MethodDefault, None]
@@ -62,8 +62,8 @@ from google.longrunning import operations_pb2  # type: ignore
 from google.protobuf import timestamp_pb2  # type: ignore
 from google.rpc import status_pb2  # type: ignore
 
-from google.ai.generativelanguage_v1beta.services.file_service import pagers
-from google.ai.generativelanguage_v1beta.types import file, file_service
+from google.ai.generativelanguage_v1alpha.services.file_service import pagers
+from google.ai.generativelanguage_v1alpha.types import file, file_service
 
 from .transports.base import DEFAULT_CLIENT_INFO, FileServiceTransport
 from .transports.grpc import FileServiceGrpcTransport
@@ -654,9 +654,9 @@ class FileServiceClient(metaclass=FileServiceClientMeta):
                 std_logging.DEBUG
             ):  # pragma: NO COVER
                 _LOGGER.debug(
-                    "Created client `google.ai.generativelanguage_v1beta.FileServiceClient`.",
+                    "Created client `google.ai.generativelanguage_v1alpha.FileServiceClient`.",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.FileService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.FileService",
                         "universeDomain": getattr(
                             self._transport._credentials, "universe_domain", ""
                         ),
@@ -667,7 +667,7 @@ class FileServiceClient(metaclass=FileServiceClientMeta):
                     }
                     if hasattr(self._transport, "_credentials")
                     else {
-                        "serviceName": "google.ai.generativelanguage.v1beta.FileService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.FileService",
                         "credentialsType": None,
                     },
                 )
@@ -691,14 +691,14 @@ class FileServiceClient(metaclass=FileServiceClientMeta):
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             def sample_create_file():
                 # Create a client
-                client = generativelanguage_v1beta.FileServiceClient()
+                client = generativelanguage_v1alpha.FileServiceClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.CreateFileRequest(
+                request = generativelanguage_v1alpha.CreateFileRequest(
                 )
 
                 # Make the request
@@ -708,7 +708,7 @@ class FileServiceClient(metaclass=FileServiceClientMeta):
                 print(response)
 
         Args:
-            request (Union[google.ai.generativelanguage_v1beta.types.CreateFileRequest, dict]):
+            request (Union[google.ai.generativelanguage_v1alpha.types.CreateFileRequest, dict]):
                 The request object. Request for ``CreateFile``.
             retry (google.api_core.retry.Retry): Designation of what errors, if any,
                 should be retried.
@@ -719,7 +719,7 @@ class FileServiceClient(metaclass=FileServiceClientMeta):
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.types.CreateFileResponse:
+            google.ai.generativelanguage_v1alpha.types.CreateFileResponse:
                 Response for CreateFile.
         """
         # Create or coerce a protobuf request object.
@@ -766,14 +766,14 @@ class FileServiceClient(metaclass=FileServiceClientMeta):
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             def sample_list_files():
                 # Create a client
-                client = generativelanguage_v1beta.FileServiceClient()
+                client = generativelanguage_v1alpha.FileServiceClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.ListFilesRequest(
+                request = generativelanguage_v1alpha.ListFilesRequest(
                 )
 
                 # Make the request
@@ -784,7 +784,7 @@ class FileServiceClient(metaclass=FileServiceClientMeta):
                     print(response)
 
         Args:
-            request (Union[google.ai.generativelanguage_v1beta.types.ListFilesRequest, dict]):
+            request (Union[google.ai.generativelanguage_v1alpha.types.ListFilesRequest, dict]):
                 The request object. Request for ``ListFiles``.
             retry (google.api_core.retry.Retry): Designation of what errors, if any,
                 should be retried.
@@ -795,7 +795,7 @@ class FileServiceClient(metaclass=FileServiceClientMeta):
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.services.file_service.pagers.ListFilesPager:
+            google.ai.generativelanguage_v1alpha.services.file_service.pagers.ListFilesPager:
                 Response for ListFiles.
 
                 Iterating over this object will yield results and
@@ -857,14 +857,14 @@ class FileServiceClient(metaclass=FileServiceClientMeta):
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             def sample_get_file():
                 # Create a client
-                client = generativelanguage_v1beta.FileServiceClient()
+                client = generativelanguage_v1alpha.FileServiceClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.GetFileRequest(
+                request = generativelanguage_v1alpha.GetFileRequest(
                     name="name_value",
                 )
 
@@ -875,7 +875,7 @@ class FileServiceClient(metaclass=FileServiceClientMeta):
                 print(response)
 
         Args:
-            request (Union[google.ai.generativelanguage_v1beta.types.GetFileRequest, dict]):
+            request (Union[google.ai.generativelanguage_v1alpha.types.GetFileRequest, dict]):
                 The request object. Request for ``GetFile``.
             name (str):
                 Required. The name of the ``File`` to get. Example:
@@ -893,7 +893,7 @@ class FileServiceClient(metaclass=FileServiceClientMeta):
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.types.File:
+            google.ai.generativelanguage_v1alpha.types.File:
                 A file uploaded to the API.
                 Next ID: 15
 
@@ -961,14 +961,14 @@ class FileServiceClient(metaclass=FileServiceClientMeta):
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             def sample_delete_file():
                 # Create a client
-                client = generativelanguage_v1beta.FileServiceClient()
+                client = generativelanguage_v1alpha.FileServiceClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.DeleteFileRequest(
+                request = generativelanguage_v1alpha.DeleteFileRequest(
                     name="name_value",
                 )
 
@@ -976,7 +976,7 @@ class FileServiceClient(metaclass=FileServiceClientMeta):
                 client.delete_file(request=request)
 
         Args:
-            request (Union[google.ai.generativelanguage_v1beta.types.DeleteFileRequest, dict]):
+            request (Union[google.ai.generativelanguage_v1alpha.types.DeleteFileRequest, dict]):
                 The request object. Request for ``DeleteFile``.
             name (str):
                 Required. The name of the ``File`` to delete. Example:

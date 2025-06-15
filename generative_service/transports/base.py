@@ -25,8 +25,8 @@ from google.auth import credentials as ga_credentials  # type: ignore
 from google.longrunning import operations_pb2  # type: ignore
 from google.oauth2 import service_account  # type: ignore
 
-from google.ai.generativelanguage_v1beta import gapic_version as package_version
-from google.ai.generativelanguage_v1beta.types import generative_service
+from google.ai.generativelanguage_v1alpha import gapic_version as package_version
+from google.ai.generativelanguage_v1alpha.types import generative_service
 
 DEFAULT_CLIENT_INFO = gapic_v1.client_info.ClientInfo(
     gapic_version=package_version.__version__
@@ -131,86 +131,37 @@ class GenerativeServiceTransport(abc.ABC):
         self._wrapped_methods = {
             self.generate_content: gapic_v1.method.wrap_method(
                 self.generate_content,
-                default_retry=retries.Retry(
-                    initial=1.0,
-                    maximum=10.0,
-                    multiplier=1.3,
-                    predicate=retries.if_exception_type(
-                        core_exceptions.ServiceUnavailable,
-                    ),
-                    deadline=600.0,
-                ),
-                default_timeout=600.0,
+                default_timeout=None,
                 client_info=client_info,
             ),
             self.generate_answer: gapic_v1.method.wrap_method(
                 self.generate_answer,
-                default_retry=retries.Retry(
-                    initial=1.0,
-                    maximum=10.0,
-                    multiplier=1.3,
-                    predicate=retries.if_exception_type(
-                        core_exceptions.ServiceUnavailable,
-                    ),
-                    deadline=60.0,
-                ),
-                default_timeout=60.0,
+                default_timeout=None,
                 client_info=client_info,
             ),
             self.stream_generate_content: gapic_v1.method.wrap_method(
                 self.stream_generate_content,
-                default_retry=retries.Retry(
-                    initial=1.0,
-                    maximum=10.0,
-                    multiplier=1.3,
-                    predicate=retries.if_exception_type(
-                        core_exceptions.ServiceUnavailable,
-                    ),
-                    deadline=600.0,
-                ),
-                default_timeout=600.0,
+                default_timeout=None,
                 client_info=client_info,
             ),
             self.embed_content: gapic_v1.method.wrap_method(
                 self.embed_content,
-                default_retry=retries.Retry(
-                    initial=1.0,
-                    maximum=10.0,
-                    multiplier=1.3,
-                    predicate=retries.if_exception_type(
-                        core_exceptions.ServiceUnavailable,
-                    ),
-                    deadline=60.0,
-                ),
-                default_timeout=60.0,
+                default_timeout=None,
                 client_info=client_info,
             ),
             self.batch_embed_contents: gapic_v1.method.wrap_method(
                 self.batch_embed_contents,
-                default_retry=retries.Retry(
-                    initial=1.0,
-                    maximum=10.0,
-                    multiplier=1.3,
-                    predicate=retries.if_exception_type(
-                        core_exceptions.ServiceUnavailable,
-                    ),
-                    deadline=60.0,
-                ),
-                default_timeout=60.0,
+                default_timeout=None,
                 client_info=client_info,
             ),
             self.count_tokens: gapic_v1.method.wrap_method(
                 self.count_tokens,
-                default_retry=retries.Retry(
-                    initial=1.0,
-                    maximum=10.0,
-                    multiplier=1.3,
-                    predicate=retries.if_exception_type(
-                        core_exceptions.ServiceUnavailable,
-                    ),
-                    deadline=60.0,
-                ),
-                default_timeout=60.0,
+                default_timeout=None,
+                client_info=client_info,
+            ),
+            self.bidi_generate_content: gapic_v1.method.wrap_method(
+                self.bidi_generate_content,
+                default_timeout=None,
                 client_info=client_info,
             ),
             self.get_operation: gapic_v1.method.wrap_method(
@@ -302,6 +253,18 @@ class GenerativeServiceTransport(abc.ABC):
         Union[
             generative_service.CountTokensResponse,
             Awaitable[generative_service.CountTokensResponse],
+        ],
+    ]:
+        raise NotImplementedError()
+
+    @property
+    def bidi_generate_content(
+        self,
+    ) -> Callable[
+        [generative_service.BidiGenerateContentClientMessage],
+        Union[
+            generative_service.BidiGenerateContentServerMessage,
+            Awaitable[generative_service.BidiGenerateContentServerMessage],
         ],
     ]:
         raise NotImplementedError()

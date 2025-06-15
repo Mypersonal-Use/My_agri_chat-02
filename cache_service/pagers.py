@@ -38,14 +38,14 @@ except AttributeError:  # pragma: NO COVER
     OptionalRetry = Union[retries.Retry, object, None]  # type: ignore
     OptionalAsyncRetry = Union[retries_async.AsyncRetry, object, None]  # type: ignore
 
-from google.ai.generativelanguage_v1beta.types import cache_service, cached_content
+from google.ai.generativelanguage_v1alpha.types import cache_service, cached_content
 
 
 class ListCachedContentsPager:
     """A pager for iterating through ``list_cached_contents`` requests.
 
     This class thinly wraps an initial
-    :class:`google.ai.generativelanguage_v1beta.types.ListCachedContentsResponse` object, and
+    :class:`google.ai.generativelanguage_v1alpha.types.ListCachedContentsResponse` object, and
     provides an ``__iter__`` method to iterate through its
     ``cached_contents`` field.
 
@@ -54,7 +54,7 @@ class ListCachedContentsPager:
     through the ``cached_contents`` field on the
     corresponding responses.
 
-    All the usual :class:`google.ai.generativelanguage_v1beta.types.ListCachedContentsResponse`
+    All the usual :class:`google.ai.generativelanguage_v1alpha.types.ListCachedContentsResponse`
     attributes are available on the pager. If multiple requests are made, only
     the most recent response is retained, and thus used for attribute lookup.
     """
@@ -74,9 +74,9 @@ class ListCachedContentsPager:
         Args:
             method (Callable): The method that was originally called, and
                 which instantiated this pager.
-            request (google.ai.generativelanguage_v1beta.types.ListCachedContentsRequest):
+            request (google.ai.generativelanguage_v1alpha.types.ListCachedContentsRequest):
                 The initial request object.
-            response (google.ai.generativelanguage_v1beta.types.ListCachedContentsResponse):
+            response (google.ai.generativelanguage_v1alpha.types.ListCachedContentsResponse):
                 The initial response object.
             retry (google.api_core.retry.Retry): Designation of what errors,
                 if any, should be retried.
@@ -121,7 +121,7 @@ class ListCachedContentsAsyncPager:
     """A pager for iterating through ``list_cached_contents`` requests.
 
     This class thinly wraps an initial
-    :class:`google.ai.generativelanguage_v1beta.types.ListCachedContentsResponse` object, and
+    :class:`google.ai.generativelanguage_v1alpha.types.ListCachedContentsResponse` object, and
     provides an ``__aiter__`` method to iterate through its
     ``cached_contents`` field.
 
@@ -130,7 +130,7 @@ class ListCachedContentsAsyncPager:
     through the ``cached_contents`` field on the
     corresponding responses.
 
-    All the usual :class:`google.ai.generativelanguage_v1beta.types.ListCachedContentsResponse`
+    All the usual :class:`google.ai.generativelanguage_v1alpha.types.ListCachedContentsResponse`
     attributes are available on the pager. If multiple requests are made, only
     the most recent response is retained, and thus used for attribute lookup.
     """
@@ -150,9 +150,9 @@ class ListCachedContentsAsyncPager:
         Args:
             method (Callable): The method that was originally called, and
                 which instantiated this pager.
-            request (google.ai.generativelanguage_v1beta.types.ListCachedContentsRequest):
+            request (google.ai.generativelanguage_v1alpha.types.ListCachedContentsRequest):
                 The initial request object.
-            response (google.ai.generativelanguage_v1beta.types.ListCachedContentsResponse):
+            response (google.ai.generativelanguage_v1alpha.types.ListCachedContentsResponse):
                 The initial response object.
             retry (google.api_core.retry.AsyncRetry): Designation of what errors,
                 if any, should be retried.

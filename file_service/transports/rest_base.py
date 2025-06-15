@@ -22,7 +22,7 @@ from google.longrunning import operations_pb2  # type: ignore
 from google.protobuf import empty_pb2  # type: ignore
 from google.protobuf import json_format
 
-from google.ai.generativelanguage_v1beta.types import file, file_service
+from google.ai.generativelanguage_v1alpha.types import file, file_service
 
 from .base import DEFAULT_CLIENT_INFO, FileServiceTransport
 
@@ -98,7 +98,7 @@ class _BaseFileServiceRestTransport(FileServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "post",
-                    "uri": "/v1beta/files",
+                    "uri": "/v1alpha/files",
                     "body": "*",
                 },
             ]
@@ -150,7 +150,7 @@ class _BaseFileServiceRestTransport(FileServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "delete",
-                    "uri": "/v1beta/{name=files/*}",
+                    "uri": "/v1alpha/{name=files/*}",
                 },
             ]
             return http_options
@@ -197,7 +197,7 @@ class _BaseFileServiceRestTransport(FileServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=files/*}",
+                    "uri": "/v1alpha/{name=files/*}",
                 },
             ]
             return http_options
@@ -234,7 +234,7 @@ class _BaseFileServiceRestTransport(FileServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "get",
-                    "uri": "/v1beta/files",
+                    "uri": "/v1alpha/files",
                 },
             ]
             return http_options
@@ -266,15 +266,15 @@ class _BaseFileServiceRestTransport(FileServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=tunedModels/*/operations/*}",
+                    "uri": "/v1alpha/{name=tunedModels/*/operations/*}",
                 },
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=generatedFiles/*/operations/*}",
+                    "uri": "/v1alpha/{name=generatedFiles/*/operations/*}",
                 },
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=models/*/operations/*}",
+                    "uri": "/v1alpha/{name=models/*/operations/*}",
                 },
             ]
             return http_options
@@ -299,11 +299,11 @@ class _BaseFileServiceRestTransport(FileServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=tunedModels/*}/operations",
+                    "uri": "/v1alpha/{name=tunedModels/*}/operations",
                 },
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=models/*}/operations",
+                    "uri": "/v1alpha/{name=models/*}/operations",
                 },
             ]
             return http_options

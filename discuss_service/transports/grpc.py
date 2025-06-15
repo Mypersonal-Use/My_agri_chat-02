@@ -29,7 +29,7 @@ import google.protobuf.message
 import grpc  # type: ignore
 import proto  # type: ignore
 
-from google.ai.generativelanguage_v1beta.types import discuss_service
+from google.ai.generativelanguage_v1alpha.types import discuss_service
 
 from .base import DEFAULT_CLIENT_INFO, DiscussServiceTransport
 
@@ -69,7 +69,7 @@ class _LoggingClientInterceptor(grpc.UnaryUnaryClientInterceptor):  # pragma: NO
             _LOGGER.debug(
                 f"Sending request for {client_call_details.method}",
                 extra={
-                    "serviceName": "google.ai.generativelanguage.v1beta.DiscussService",
+                    "serviceName": "google.ai.generativelanguage.v1alpha.DiscussService",
                     "rpcName": client_call_details.method,
                     "request": grpc_request,
                     "metadata": grpc_request["metadata"],
@@ -100,7 +100,7 @@ class _LoggingClientInterceptor(grpc.UnaryUnaryClientInterceptor):  # pragma: NO
             _LOGGER.debug(
                 f"Received response for {client_call_details.method}.",
                 extra={
-                    "serviceName": "google.ai.generativelanguage.v1beta.DiscussService",
+                    "serviceName": "google.ai.generativelanguage.v1alpha.DiscussService",
                     "rpcName": client_call_details.method,
                     "response": grpc_response,
                     "metadata": grpc_response["metadata"],
@@ -348,7 +348,7 @@ class DiscussServiceGrpcTransport(DiscussServiceTransport):
         # to pass in the functions for each.
         if "generate_message" not in self._stubs:
             self._stubs["generate_message"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.DiscussService/GenerateMessage",
+                "/google.ai.generativelanguage.v1alpha.DiscussService/GenerateMessage",
                 request_serializer=discuss_service.GenerateMessageRequest.serialize,
                 response_deserializer=discuss_service.GenerateMessageResponse.deserialize,
             )
@@ -378,7 +378,7 @@ class DiscussServiceGrpcTransport(DiscussServiceTransport):
         # to pass in the functions for each.
         if "count_message_tokens" not in self._stubs:
             self._stubs["count_message_tokens"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.DiscussService/CountMessageTokens",
+                "/google.ai.generativelanguage.v1alpha.DiscussService/CountMessageTokens",
                 request_serializer=discuss_service.CountMessageTokensRequest.serialize,
                 response_deserializer=discuss_service.CountMessageTokensResponse.deserialize,
             )

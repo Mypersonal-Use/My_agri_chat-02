@@ -29,11 +29,11 @@ from google.protobuf import empty_pb2  # type: ignore
 from google.protobuf import json_format
 from requests import __version__ as requests_version
 
-from google.ai.generativelanguage_v1beta.types import (
+from google.ai.generativelanguage_v1alpha.types import (
     cached_content as gag_cached_content,
 )
-from google.ai.generativelanguage_v1beta.types import cache_service
-from google.ai.generativelanguage_v1beta.types import cached_content
+from google.ai.generativelanguage_v1alpha.types import cache_service
+from google.ai.generativelanguage_v1alpha.types import cached_content
 
 from .base import DEFAULT_CLIENT_INFO as BASE_DEFAULT_CLIENT_INFO
 from .rest_base import _BaseCacheServiceRestTransport
@@ -473,9 +473,9 @@ class CacheServiceRestTransport(_BaseCacheServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.CacheServiceClient.CreateCachedContent",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.CacheServiceClient.CreateCachedContent",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.CacheService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.CacheService",
                         "rpcName": "CreateCachedContent",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -520,9 +520,9 @@ class CacheServiceRestTransport(_BaseCacheServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.CacheServiceClient.create_cached_content",
+                    "Received response for google.ai.generativelanguage_v1alpha.CacheServiceClient.create_cached_content",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.CacheService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.CacheService",
                         "rpcName": "CreateCachedContent",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -614,9 +614,9 @@ class CacheServiceRestTransport(_BaseCacheServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.CacheServiceClient.DeleteCachedContent",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.CacheServiceClient.DeleteCachedContent",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.CacheService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.CacheService",
                         "rpcName": "DeleteCachedContent",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -732,9 +732,9 @@ class CacheServiceRestTransport(_BaseCacheServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.CacheServiceClient.GetCachedContent",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.CacheServiceClient.GetCachedContent",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.CacheService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.CacheService",
                         "rpcName": "GetCachedContent",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -776,9 +776,9 @@ class CacheServiceRestTransport(_BaseCacheServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.CacheServiceClient.get_cached_content",
+                    "Received response for google.ai.generativelanguage_v1alpha.CacheServiceClient.get_cached_content",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.CacheService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.CacheService",
                         "rpcName": "GetCachedContent",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -874,9 +874,9 @@ class CacheServiceRestTransport(_BaseCacheServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.CacheServiceClient.ListCachedContents",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.CacheServiceClient.ListCachedContents",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.CacheService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.CacheService",
                         "rpcName": "ListCachedContents",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -920,9 +920,9 @@ class CacheServiceRestTransport(_BaseCacheServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.CacheServiceClient.list_cached_contents",
+                    "Received response for google.ai.generativelanguage_v1alpha.CacheServiceClient.list_cached_contents",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.CacheService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.CacheService",
                         "rpcName": "ListCachedContents",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -1029,9 +1029,9 @@ class CacheServiceRestTransport(_BaseCacheServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.CacheServiceClient.UpdateCachedContent",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.CacheServiceClient.UpdateCachedContent",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.CacheService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.CacheService",
                         "rpcName": "UpdateCachedContent",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -1076,9 +1076,9 @@ class CacheServiceRestTransport(_BaseCacheServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.CacheServiceClient.update_cached_content",
+                    "Received response for google.ai.generativelanguage_v1alpha.CacheServiceClient.update_cached_content",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.CacheService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.CacheService",
                         "rpcName": "UpdateCachedContent",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -1226,9 +1226,9 @@ class CacheServiceRestTransport(_BaseCacheServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.CacheServiceClient.GetOperation",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.CacheServiceClient.GetOperation",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.CacheService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.CacheService",
                         "rpcName": "GetOperation",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -1267,9 +1267,9 @@ class CacheServiceRestTransport(_BaseCacheServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.CacheServiceAsyncClient.GetOperation",
+                    "Received response for google.ai.generativelanguage_v1alpha.CacheServiceAsyncClient.GetOperation",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.CacheService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.CacheService",
                         "rpcName": "GetOperation",
                         "httpResponse": http_response,
                         "metadata": http_response["headers"],
@@ -1366,9 +1366,9 @@ class CacheServiceRestTransport(_BaseCacheServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.CacheServiceClient.ListOperations",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.CacheServiceClient.ListOperations",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.CacheService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.CacheService",
                         "rpcName": "ListOperations",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -1407,9 +1407,9 @@ class CacheServiceRestTransport(_BaseCacheServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.CacheServiceAsyncClient.ListOperations",
+                    "Received response for google.ai.generativelanguage_v1alpha.CacheServiceAsyncClient.ListOperations",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.CacheService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.CacheService",
                         "rpcName": "ListOperations",
                         "httpResponse": http_response,
                         "metadata": http_response["headers"],

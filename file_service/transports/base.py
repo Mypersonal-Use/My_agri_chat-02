@@ -26,8 +26,8 @@ from google.longrunning import operations_pb2  # type: ignore
 from google.oauth2 import service_account  # type: ignore
 from google.protobuf import empty_pb2  # type: ignore
 
-from google.ai.generativelanguage_v1beta import gapic_version as package_version
-from google.ai.generativelanguage_v1beta.types import file, file_service
+from google.ai.generativelanguage_v1alpha import gapic_version as package_version
+from google.ai.generativelanguage_v1alpha.types import file, file_service
 
 DEFAULT_CLIENT_INFO = gapic_v1.client_info.ClientInfo(
     gapic_version=package_version.__version__

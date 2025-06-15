@@ -29,7 +29,7 @@ import google.protobuf.message
 import grpc  # type: ignore
 import proto  # type: ignore
 
-from google.ai.generativelanguage_v1beta.types import generative_service
+from google.ai.generativelanguage_v1alpha.types import generative_service
 
 from .base import DEFAULT_CLIENT_INFO, GenerativeServiceTransport
 
@@ -69,7 +69,7 @@ class _LoggingClientInterceptor(grpc.UnaryUnaryClientInterceptor):  # pragma: NO
             _LOGGER.debug(
                 f"Sending request for {client_call_details.method}",
                 extra={
-                    "serviceName": "google.ai.generativelanguage.v1beta.GenerativeService",
+                    "serviceName": "google.ai.generativelanguage.v1alpha.GenerativeService",
                     "rpcName": client_call_details.method,
                     "request": grpc_request,
                     "metadata": grpc_request["metadata"],
@@ -100,7 +100,7 @@ class _LoggingClientInterceptor(grpc.UnaryUnaryClientInterceptor):  # pragma: NO
             _LOGGER.debug(
                 f"Received response for {client_call_details.method}.",
                 extra={
-                    "serviceName": "google.ai.generativelanguage.v1beta.GenerativeService",
+                    "serviceName": "google.ai.generativelanguage.v1alpha.GenerativeService",
                     "rpcName": client_call_details.method,
                     "response": grpc_response,
                     "metadata": grpc_response["metadata"],
@@ -353,7 +353,7 @@ class GenerativeServiceGrpcTransport(GenerativeServiceTransport):
         # to pass in the functions for each.
         if "generate_content" not in self._stubs:
             self._stubs["generate_content"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.GenerativeService/GenerateContent",
+                "/google.ai.generativelanguage.v1alpha.GenerativeService/GenerateContent",
                 request_serializer=generative_service.GenerateContentRequest.serialize,
                 response_deserializer=generative_service.GenerateContentResponse.deserialize,
             )
@@ -383,7 +383,7 @@ class GenerativeServiceGrpcTransport(GenerativeServiceTransport):
         # to pass in the functions for each.
         if "generate_answer" not in self._stubs:
             self._stubs["generate_answer"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.GenerativeService/GenerateAnswer",
+                "/google.ai.generativelanguage.v1alpha.GenerativeService/GenerateAnswer",
                 request_serializer=generative_service.GenerateAnswerRequest.serialize,
                 response_deserializer=generative_service.GenerateAnswerResponse.deserialize,
             )
@@ -414,7 +414,7 @@ class GenerativeServiceGrpcTransport(GenerativeServiceTransport):
         # to pass in the functions for each.
         if "stream_generate_content" not in self._stubs:
             self._stubs["stream_generate_content"] = self._logged_channel.unary_stream(
-                "/google.ai.generativelanguage.v1beta.GenerativeService/StreamGenerateContent",
+                "/google.ai.generativelanguage.v1alpha.GenerativeService/StreamGenerateContent",
                 request_serializer=generative_service.GenerateContentRequest.serialize,
                 response_deserializer=generative_service.GenerateContentResponse.deserialize,
             )
@@ -445,7 +445,7 @@ class GenerativeServiceGrpcTransport(GenerativeServiceTransport):
         # to pass in the functions for each.
         if "embed_content" not in self._stubs:
             self._stubs["embed_content"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.GenerativeService/EmbedContent",
+                "/google.ai.generativelanguage.v1alpha.GenerativeService/EmbedContent",
                 request_serializer=generative_service.EmbedContentRequest.serialize,
                 response_deserializer=generative_service.EmbedContentResponse.deserialize,
             )
@@ -476,7 +476,7 @@ class GenerativeServiceGrpcTransport(GenerativeServiceTransport):
         # to pass in the functions for each.
         if "batch_embed_contents" not in self._stubs:
             self._stubs["batch_embed_contents"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.GenerativeService/BatchEmbedContents",
+                "/google.ai.generativelanguage.v1alpha.GenerativeService/BatchEmbedContents",
                 request_serializer=generative_service.BatchEmbedContentsRequest.serialize,
                 response_deserializer=generative_service.BatchEmbedContentsResponse.deserialize,
             )
@@ -507,11 +507,42 @@ class GenerativeServiceGrpcTransport(GenerativeServiceTransport):
         # to pass in the functions for each.
         if "count_tokens" not in self._stubs:
             self._stubs["count_tokens"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.GenerativeService/CountTokens",
+                "/google.ai.generativelanguage.v1alpha.GenerativeService/CountTokens",
                 request_serializer=generative_service.CountTokensRequest.serialize,
                 response_deserializer=generative_service.CountTokensResponse.deserialize,
             )
         return self._stubs["count_tokens"]
+
+    @property
+    def bidi_generate_content(
+        self,
+    ) -> Callable[
+        [generative_service.BidiGenerateContentClientMessage],
+        generative_service.BidiGenerateContentServerMessage,
+    ]:
+        r"""Return a callable for the bidi generate content method over gRPC.
+
+        Low-Latency bidirectional streaming API that supports
+        audio and video streaming inputs can produce multimodal
+        output streams (audio and text).
+
+        Returns:
+            Callable[[~.BidiGenerateContentClientMessage],
+                    ~.BidiGenerateContentServerMessage]:
+                A function that, when called, will call the underlying RPC
+                on the server.
+        """
+        # Generate a "stub function" on-the-fly which will actually make
+        # the request.
+        # gRPC handles serialization and deserialization, so we just need
+        # to pass in the functions for each.
+        if "bidi_generate_content" not in self._stubs:
+            self._stubs["bidi_generate_content"] = self._logged_channel.stream_stream(
+                "/google.ai.generativelanguage.v1alpha.GenerativeService/BidiGenerateContent",
+                request_serializer=generative_service.BidiGenerateContentClientMessage.serialize,
+                response_deserializer=generative_service.BidiGenerateContentServerMessage.deserialize,
+            )
+        return self._stubs["bidi_generate_content"]
 
     def close(self):
         self._logged_channel.close()

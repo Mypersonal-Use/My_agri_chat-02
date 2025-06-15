@@ -28,7 +28,7 @@ from google.longrunning import operations_pb2  # type: ignore
 from google.protobuf import json_format
 from requests import __version__ as requests_version
 
-from google.ai.generativelanguage_v1beta.types import discuss_service
+from google.ai.generativelanguage_v1alpha.types import discuss_service
 
 from .base import DEFAULT_CLIENT_INFO as BASE_DEFAULT_CLIENT_INFO
 from .rest_base import _BaseDiscussServiceRestTransport
@@ -383,9 +383,9 @@ class DiscussServiceRestTransport(_BaseDiscussServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.DiscussServiceClient.CountMessageTokens",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.DiscussServiceClient.CountMessageTokens",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.DiscussService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.DiscussService",
                         "rpcName": "CountMessageTokens",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -430,9 +430,9 @@ class DiscussServiceRestTransport(_BaseDiscussServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.DiscussServiceClient.count_message_tokens",
+                    "Received response for google.ai.generativelanguage_v1alpha.DiscussServiceClient.count_message_tokens",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.DiscussService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.DiscussService",
                         "rpcName": "CountMessageTokens",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -539,9 +539,9 @@ class DiscussServiceRestTransport(_BaseDiscussServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.DiscussServiceClient.GenerateMessage",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.DiscussServiceClient.GenerateMessage",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.DiscussService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.DiscussService",
                         "rpcName": "GenerateMessage",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -586,9 +586,9 @@ class DiscussServiceRestTransport(_BaseDiscussServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.DiscussServiceClient.generate_message",
+                    "Received response for google.ai.generativelanguage_v1alpha.DiscussServiceClient.generate_message",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.DiscussService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.DiscussService",
                         "rpcName": "GenerateMessage",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -707,9 +707,9 @@ class DiscussServiceRestTransport(_BaseDiscussServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.DiscussServiceClient.GetOperation",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.DiscussServiceClient.GetOperation",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.DiscussService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.DiscussService",
                         "rpcName": "GetOperation",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -748,9 +748,9 @@ class DiscussServiceRestTransport(_BaseDiscussServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.DiscussServiceAsyncClient.GetOperation",
+                    "Received response for google.ai.generativelanguage_v1alpha.DiscussServiceAsyncClient.GetOperation",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.DiscussService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.DiscussService",
                         "rpcName": "GetOperation",
                         "httpResponse": http_response,
                         "metadata": http_response["headers"],
@@ -847,9 +847,9 @@ class DiscussServiceRestTransport(_BaseDiscussServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.DiscussServiceClient.ListOperations",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.DiscussServiceClient.ListOperations",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.DiscussService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.DiscussService",
                         "rpcName": "ListOperations",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -888,9 +888,9 @@ class DiscussServiceRestTransport(_BaseDiscussServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.DiscussServiceAsyncClient.ListOperations",
+                    "Received response for google.ai.generativelanguage_v1alpha.DiscussServiceAsyncClient.ListOperations",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.DiscussService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.DiscussService",
                         "rpcName": "ListOperations",
                         "httpResponse": http_response,
                         "metadata": http_response["headers"],

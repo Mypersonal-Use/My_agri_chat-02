@@ -38,14 +38,14 @@ except AttributeError:  # pragma: NO COVER
     OptionalRetry = Union[retries.Retry, object, None]  # type: ignore
     OptionalAsyncRetry = Union[retries_async.AsyncRetry, object, None]  # type: ignore
 
-from google.ai.generativelanguage_v1beta.types import file, file_service
+from google.ai.generativelanguage_v1alpha.types import file, file_service
 
 
 class ListFilesPager:
     """A pager for iterating through ``list_files`` requests.
 
     This class thinly wraps an initial
-    :class:`google.ai.generativelanguage_v1beta.types.ListFilesResponse` object, and
+    :class:`google.ai.generativelanguage_v1alpha.types.ListFilesResponse` object, and
     provides an ``__iter__`` method to iterate through its
     ``files`` field.
 
@@ -54,7 +54,7 @@ class ListFilesPager:
     through the ``files`` field on the
     corresponding responses.
 
-    All the usual :class:`google.ai.generativelanguage_v1beta.types.ListFilesResponse`
+    All the usual :class:`google.ai.generativelanguage_v1alpha.types.ListFilesResponse`
     attributes are available on the pager. If multiple requests are made, only
     the most recent response is retained, and thus used for attribute lookup.
     """
@@ -74,9 +74,9 @@ class ListFilesPager:
         Args:
             method (Callable): The method that was originally called, and
                 which instantiated this pager.
-            request (google.ai.generativelanguage_v1beta.types.ListFilesRequest):
+            request (google.ai.generativelanguage_v1alpha.types.ListFilesRequest):
                 The initial request object.
-            response (google.ai.generativelanguage_v1beta.types.ListFilesResponse):
+            response (google.ai.generativelanguage_v1alpha.types.ListFilesResponse):
                 The initial response object.
             retry (google.api_core.retry.Retry): Designation of what errors,
                 if any, should be retried.
@@ -121,7 +121,7 @@ class ListFilesAsyncPager:
     """A pager for iterating through ``list_files`` requests.
 
     This class thinly wraps an initial
-    :class:`google.ai.generativelanguage_v1beta.types.ListFilesResponse` object, and
+    :class:`google.ai.generativelanguage_v1alpha.types.ListFilesResponse` object, and
     provides an ``__aiter__`` method to iterate through its
     ``files`` field.
 
@@ -130,7 +130,7 @@ class ListFilesAsyncPager:
     through the ``files`` field on the
     corresponding responses.
 
-    All the usual :class:`google.ai.generativelanguage_v1beta.types.ListFilesResponse`
+    All the usual :class:`google.ai.generativelanguage_v1alpha.types.ListFilesResponse`
     attributes are available on the pager. If multiple requests are made, only
     the most recent response is retained, and thus used for attribute lookup.
     """
@@ -150,9 +150,9 @@ class ListFilesAsyncPager:
         Args:
             method (Callable): The method that was originally called, and
                 which instantiated this pager.
-            request (google.ai.generativelanguage_v1beta.types.ListFilesRequest):
+            request (google.ai.generativelanguage_v1alpha.types.ListFilesRequest):
                 The initial request object.
-            response (google.ai.generativelanguage_v1beta.types.ListFilesResponse):
+            response (google.ai.generativelanguage_v1alpha.types.ListFilesResponse):
                 The initial response object.
             retry (google.api_core.retry.AsyncRetry): Designation of what errors,
                 if any, should be retried.

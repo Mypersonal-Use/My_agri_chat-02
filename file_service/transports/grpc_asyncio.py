@@ -33,7 +33,7 @@ import grpc  # type: ignore
 from grpc.experimental import aio  # type: ignore
 import proto  # type: ignore
 
-from google.ai.generativelanguage_v1beta.types import file, file_service
+from google.ai.generativelanguage_v1alpha.types import file, file_service
 
 from .base import DEFAULT_CLIENT_INFO, FileServiceTransport
 from .grpc import FileServiceGrpcTransport
@@ -76,7 +76,7 @@ class _LoggingClientAIOInterceptor(
             _LOGGER.debug(
                 f"Sending request for {client_call_details.method}",
                 extra={
-                    "serviceName": "google.ai.generativelanguage.v1beta.FileService",
+                    "serviceName": "google.ai.generativelanguage.v1alpha.FileService",
                     "rpcName": str(client_call_details.method),
                     "request": grpc_request,
                     "metadata": grpc_request["metadata"],
@@ -106,7 +106,7 @@ class _LoggingClientAIOInterceptor(
             _LOGGER.debug(
                 f"Received response to rpc {client_call_details.method}.",
                 extra={
-                    "serviceName": "google.ai.generativelanguage.v1beta.FileService",
+                    "serviceName": "google.ai.generativelanguage.v1alpha.FileService",
                     "rpcName": str(client_call_details.method),
                     "response": grpc_response,
                     "metadata": grpc_response["metadata"],
@@ -351,7 +351,7 @@ class FileServiceGrpcAsyncIOTransport(FileServiceTransport):
         # to pass in the functions for each.
         if "create_file" not in self._stubs:
             self._stubs["create_file"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.FileService/CreateFile",
+                "/google.ai.generativelanguage.v1alpha.FileService/CreateFile",
                 request_serializer=file_service.CreateFileRequest.serialize,
                 response_deserializer=file_service.CreateFileResponse.deserialize,
             )
@@ -380,7 +380,7 @@ class FileServiceGrpcAsyncIOTransport(FileServiceTransport):
         # to pass in the functions for each.
         if "list_files" not in self._stubs:
             self._stubs["list_files"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.FileService/ListFiles",
+                "/google.ai.generativelanguage.v1alpha.FileService/ListFiles",
                 request_serializer=file_service.ListFilesRequest.serialize,
                 response_deserializer=file_service.ListFilesResponse.deserialize,
             )
@@ -404,7 +404,7 @@ class FileServiceGrpcAsyncIOTransport(FileServiceTransport):
         # to pass in the functions for each.
         if "get_file" not in self._stubs:
             self._stubs["get_file"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.FileService/GetFile",
+                "/google.ai.generativelanguage.v1alpha.FileService/GetFile",
                 request_serializer=file_service.GetFileRequest.serialize,
                 response_deserializer=file.File.deserialize,
             )
@@ -430,7 +430,7 @@ class FileServiceGrpcAsyncIOTransport(FileServiceTransport):
         # to pass in the functions for each.
         if "delete_file" not in self._stubs:
             self._stubs["delete_file"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.FileService/DeleteFile",
+                "/google.ai.generativelanguage.v1alpha.FileService/DeleteFile",
                 request_serializer=file_service.DeleteFileRequest.serialize,
                 response_deserializer=empty_pb2.Empty.FromString,
             )

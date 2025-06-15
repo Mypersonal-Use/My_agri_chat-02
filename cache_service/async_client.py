@@ -36,7 +36,7 @@ from google.api_core.client_options import ClientOptions
 from google.auth import credentials as ga_credentials  # type: ignore
 from google.oauth2 import service_account  # type: ignore
 
-from google.ai.generativelanguage_v1beta import gapic_version as package_version
+from google.ai.generativelanguage_v1alpha import gapic_version as package_version
 
 try:
     OptionalRetry = Union[retries.AsyncRetry, gapic_v1.method._MethodDefault, None]
@@ -48,13 +48,13 @@ from google.protobuf import duration_pb2  # type: ignore
 from google.protobuf import field_mask_pb2  # type: ignore
 from google.protobuf import timestamp_pb2  # type: ignore
 
-from google.ai.generativelanguage_v1beta.services.cache_service import pagers
-from google.ai.generativelanguage_v1beta.types import (
+from google.ai.generativelanguage_v1alpha.services.cache_service import pagers
+from google.ai.generativelanguage_v1alpha.types import (
     cached_content as gag_cached_content,
 )
-from google.ai.generativelanguage_v1beta.types import cache_service
-from google.ai.generativelanguage_v1beta.types import cached_content
-from google.ai.generativelanguage_v1beta.types import content
+from google.ai.generativelanguage_v1alpha.types import cache_service
+from google.ai.generativelanguage_v1alpha.types import cached_content
+from google.ai.generativelanguage_v1alpha.types import content
 
 from .client import CacheServiceClient
 from .transports.base import DEFAULT_CLIENT_INFO, CacheServiceTransport
@@ -283,9 +283,9 @@ class CacheServiceAsyncClient:
             std_logging.DEBUG
         ):  # pragma: NO COVER
             _LOGGER.debug(
-                "Created client `google.ai.generativelanguage_v1beta.CacheServiceAsyncClient`.",
+                "Created client `google.ai.generativelanguage_v1alpha.CacheServiceAsyncClient`.",
                 extra={
-                    "serviceName": "google.ai.generativelanguage.v1beta.CacheService",
+                    "serviceName": "google.ai.generativelanguage.v1alpha.CacheService",
                     "universeDomain": getattr(
                         self._client._transport._credentials, "universe_domain", ""
                     ),
@@ -296,7 +296,7 @@ class CacheServiceAsyncClient:
                 }
                 if hasattr(self._client._transport, "_credentials")
                 else {
-                    "serviceName": "google.ai.generativelanguage.v1beta.CacheService",
+                    "serviceName": "google.ai.generativelanguage.v1alpha.CacheService",
                     "credentialsType": None,
                 },
             )
@@ -320,14 +320,14 @@ class CacheServiceAsyncClient:
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             async def sample_list_cached_contents():
                 # Create a client
-                client = generativelanguage_v1beta.CacheServiceAsyncClient()
+                client = generativelanguage_v1alpha.CacheServiceAsyncClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.ListCachedContentsRequest(
+                request = generativelanguage_v1alpha.ListCachedContentsRequest(
                 )
 
                 # Make the request
@@ -338,7 +338,7 @@ class CacheServiceAsyncClient:
                     print(response)
 
         Args:
-            request (Optional[Union[google.ai.generativelanguage_v1beta.types.ListCachedContentsRequest, dict]]):
+            request (Optional[Union[google.ai.generativelanguage_v1alpha.types.ListCachedContentsRequest, dict]]):
                 The request object. Request to list CachedContents.
             retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any,
                 should be retried.
@@ -349,7 +349,7 @@ class CacheServiceAsyncClient:
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.services.cache_service.pagers.ListCachedContentsAsyncPager:
+            google.ai.generativelanguage_v1alpha.services.cache_service.pagers.ListCachedContentsAsyncPager:
                 Response with CachedContents list.
 
                 Iterating over this object will yield
@@ -414,14 +414,14 @@ class CacheServiceAsyncClient:
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             async def sample_create_cached_content():
                 # Create a client
-                client = generativelanguage_v1beta.CacheServiceAsyncClient()
+                client = generativelanguage_v1alpha.CacheServiceAsyncClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.CreateCachedContentRequest(
+                request = generativelanguage_v1alpha.CreateCachedContentRequest(
                 )
 
                 # Make the request
@@ -431,9 +431,9 @@ class CacheServiceAsyncClient:
                 print(response)
 
         Args:
-            request (Optional[Union[google.ai.generativelanguage_v1beta.types.CreateCachedContentRequest, dict]]):
+            request (Optional[Union[google.ai.generativelanguage_v1alpha.types.CreateCachedContentRequest, dict]]):
                 The request object. Request to create CachedContent.
-            cached_content (:class:`google.ai.generativelanguage_v1beta.types.CachedContent`):
+            cached_content (:class:`google.ai.generativelanguage_v1alpha.types.CachedContent`):
                 Required. The cached content to
                 create.
 
@@ -449,7 +449,7 @@ class CacheServiceAsyncClient:
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.types.CachedContent:
+            google.ai.generativelanguage_v1alpha.types.CachedContent:
                 Content that has been preprocessed
                 and can be used in subsequent request to
                 GenerativeService.
@@ -518,14 +518,14 @@ class CacheServiceAsyncClient:
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             async def sample_get_cached_content():
                 # Create a client
-                client = generativelanguage_v1beta.CacheServiceAsyncClient()
+                client = generativelanguage_v1alpha.CacheServiceAsyncClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.GetCachedContentRequest(
+                request = generativelanguage_v1alpha.GetCachedContentRequest(
                     name="name_value",
                 )
 
@@ -536,7 +536,7 @@ class CacheServiceAsyncClient:
                 print(response)
 
         Args:
-            request (Optional[Union[google.ai.generativelanguage_v1beta.types.GetCachedContentRequest, dict]]):
+            request (Optional[Union[google.ai.generativelanguage_v1alpha.types.GetCachedContentRequest, dict]]):
                 The request object. Request to read CachedContent.
             name (:class:`str`):
                 Required. The resource name referring to the content
@@ -554,7 +554,7 @@ class CacheServiceAsyncClient:
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.types.CachedContent:
+            google.ai.generativelanguage_v1alpha.types.CachedContent:
                 Content that has been preprocessed
                 and can be used in subsequent request to
                 GenerativeService.
@@ -631,14 +631,14 @@ class CacheServiceAsyncClient:
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             async def sample_update_cached_content():
                 # Create a client
-                client = generativelanguage_v1beta.CacheServiceAsyncClient()
+                client = generativelanguage_v1alpha.CacheServiceAsyncClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.UpdateCachedContentRequest(
+                request = generativelanguage_v1alpha.UpdateCachedContentRequest(
                 )
 
                 # Make the request
@@ -648,9 +648,9 @@ class CacheServiceAsyncClient:
                 print(response)
 
         Args:
-            request (Optional[Union[google.ai.generativelanguage_v1beta.types.UpdateCachedContentRequest, dict]]):
+            request (Optional[Union[google.ai.generativelanguage_v1alpha.types.UpdateCachedContentRequest, dict]]):
                 The request object. Request to update CachedContent.
-            cached_content (:class:`google.ai.generativelanguage_v1beta.types.CachedContent`):
+            cached_content (:class:`google.ai.generativelanguage_v1alpha.types.CachedContent`):
                 Required. The content cache entry to
                 update
 
@@ -671,7 +671,7 @@ class CacheServiceAsyncClient:
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.types.CachedContent:
+            google.ai.generativelanguage_v1alpha.types.CachedContent:
                 Content that has been preprocessed
                 and can be used in subsequent request to
                 GenerativeService.
@@ -750,14 +750,14 @@ class CacheServiceAsyncClient:
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             async def sample_delete_cached_content():
                 # Create a client
-                client = generativelanguage_v1beta.CacheServiceAsyncClient()
+                client = generativelanguage_v1alpha.CacheServiceAsyncClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.DeleteCachedContentRequest(
+                request = generativelanguage_v1alpha.DeleteCachedContentRequest(
                     name="name_value",
                 )
 
@@ -765,7 +765,7 @@ class CacheServiceAsyncClient:
                 await client.delete_cached_content(request=request)
 
         Args:
-            request (Optional[Union[google.ai.generativelanguage_v1beta.types.DeleteCachedContentRequest, dict]]):
+            request (Optional[Union[google.ai.generativelanguage_v1alpha.types.DeleteCachedContentRequest, dict]]):
                 The request object. Request to delete CachedContent.
             name (:class:`str`):
                 Required. The resource name referring to the content

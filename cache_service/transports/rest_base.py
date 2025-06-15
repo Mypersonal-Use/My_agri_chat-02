@@ -22,11 +22,11 @@ from google.longrunning import operations_pb2  # type: ignore
 from google.protobuf import empty_pb2  # type: ignore
 from google.protobuf import json_format
 
-from google.ai.generativelanguage_v1beta.types import (
+from google.ai.generativelanguage_v1alpha.types import (
     cached_content as gag_cached_content,
 )
-from google.ai.generativelanguage_v1beta.types import cache_service
-from google.ai.generativelanguage_v1beta.types import cached_content
+from google.ai.generativelanguage_v1alpha.types import cache_service
+from google.ai.generativelanguage_v1alpha.types import cached_content
 
 from .base import DEFAULT_CLIENT_INFO, CacheServiceTransport
 
@@ -112,7 +112,7 @@ class _BaseCacheServiceRestTransport(CacheServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "post",
-                    "uri": "/v1beta/cachedContents",
+                    "uri": "/v1alpha/cachedContents",
                     "body": "cached_content",
                 },
             ]
@@ -169,7 +169,7 @@ class _BaseCacheServiceRestTransport(CacheServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "delete",
-                    "uri": "/v1beta/{name=cachedContents/*}",
+                    "uri": "/v1alpha/{name=cachedContents/*}",
                 },
             ]
             return http_options
@@ -216,7 +216,7 @@ class _BaseCacheServiceRestTransport(CacheServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=cachedContents/*}",
+                    "uri": "/v1alpha/{name=cachedContents/*}",
                 },
             ]
             return http_options
@@ -253,7 +253,7 @@ class _BaseCacheServiceRestTransport(CacheServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "get",
-                    "uri": "/v1beta/cachedContents",
+                    "uri": "/v1alpha/cachedContents",
                 },
             ]
             return http_options
@@ -295,7 +295,7 @@ class _BaseCacheServiceRestTransport(CacheServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "patch",
-                    "uri": "/v1beta/{cached_content.name=cachedContents/*}",
+                    "uri": "/v1alpha/{cached_content.name=cachedContents/*}",
                     "body": "cached_content",
                 },
             ]
@@ -342,15 +342,15 @@ class _BaseCacheServiceRestTransport(CacheServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=tunedModels/*/operations/*}",
+                    "uri": "/v1alpha/{name=tunedModels/*/operations/*}",
                 },
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=generatedFiles/*/operations/*}",
+                    "uri": "/v1alpha/{name=generatedFiles/*/operations/*}",
                 },
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=models/*/operations/*}",
+                    "uri": "/v1alpha/{name=models/*/operations/*}",
                 },
             ]
             return http_options
@@ -375,11 +375,11 @@ class _BaseCacheServiceRestTransport(CacheServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=tunedModels/*}/operations",
+                    "uri": "/v1alpha/{name=tunedModels/*}/operations",
                 },
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=models/*}/operations",
+                    "uri": "/v1alpha/{name=models/*}/operations",
                 },
             ]
             return http_options

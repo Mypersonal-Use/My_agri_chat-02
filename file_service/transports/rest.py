@@ -29,7 +29,7 @@ from google.protobuf import empty_pb2  # type: ignore
 from google.protobuf import json_format
 from requests import __version__ as requests_version
 
-from google.ai.generativelanguage_v1beta.types import file, file_service
+from google.ai.generativelanguage_v1alpha.types import file, file_service
 
 from .base import DEFAULT_CLIENT_INFO as BASE_DEFAULT_CLIENT_INFO
 from .rest_base import _BaseFileServiceRestTransport
@@ -415,9 +415,9 @@ class FileServiceRestTransport(_BaseFileServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.FileServiceClient.CreateFile",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.FileServiceClient.CreateFile",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.FileService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.FileService",
                         "rpcName": "CreateFile",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -460,9 +460,9 @@ class FileServiceRestTransport(_BaseFileServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.FileServiceClient.create_file",
+                    "Received response for google.ai.generativelanguage_v1alpha.FileServiceClient.create_file",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.FileService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.FileService",
                         "rpcName": "CreateFile",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -556,9 +556,9 @@ class FileServiceRestTransport(_BaseFileServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.FileServiceClient.DeleteFile",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.FileServiceClient.DeleteFile",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.FileService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.FileService",
                         "rpcName": "DeleteFile",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -670,9 +670,9 @@ class FileServiceRestTransport(_BaseFileServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.FileServiceClient.GetFile",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.FileServiceClient.GetFile",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.FileService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.FileService",
                         "rpcName": "GetFile",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -714,9 +714,9 @@ class FileServiceRestTransport(_BaseFileServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.FileServiceClient.get_file",
+                    "Received response for google.ai.generativelanguage_v1alpha.FileServiceClient.get_file",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.FileService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.FileService",
                         "rpcName": "GetFile",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -812,9 +812,9 @@ class FileServiceRestTransport(_BaseFileServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.FileServiceClient.ListFiles",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.FileServiceClient.ListFiles",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.FileService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.FileService",
                         "rpcName": "ListFiles",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -856,9 +856,9 @@ class FileServiceRestTransport(_BaseFileServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.FileServiceClient.list_files",
+                    "Received response for google.ai.generativelanguage_v1alpha.FileServiceClient.list_files",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.FileService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.FileService",
                         "rpcName": "ListFiles",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -989,9 +989,9 @@ class FileServiceRestTransport(_BaseFileServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.FileServiceClient.GetOperation",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.FileServiceClient.GetOperation",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.FileService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.FileService",
                         "rpcName": "GetOperation",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -1030,9 +1030,9 @@ class FileServiceRestTransport(_BaseFileServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.FileServiceAsyncClient.GetOperation",
+                    "Received response for google.ai.generativelanguage_v1alpha.FileServiceAsyncClient.GetOperation",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.FileService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.FileService",
                         "rpcName": "GetOperation",
                         "httpResponse": http_response,
                         "metadata": http_response["headers"],
@@ -1129,9 +1129,9 @@ class FileServiceRestTransport(_BaseFileServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.FileServiceClient.ListOperations",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.FileServiceClient.ListOperations",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.FileService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.FileService",
                         "rpcName": "ListOperations",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -1170,9 +1170,9 @@ class FileServiceRestTransport(_BaseFileServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.FileServiceAsyncClient.ListOperations",
+                    "Received response for google.ai.generativelanguage_v1alpha.FileServiceAsyncClient.ListOperations",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.FileService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.FileService",
                         "rpcName": "ListOperations",
                         "httpResponse": http_response,
                         "metadata": http_response["headers"],
