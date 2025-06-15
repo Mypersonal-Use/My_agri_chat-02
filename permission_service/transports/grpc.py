@@ -30,9 +30,9 @@ import google.protobuf.message
 import grpc  # type: ignore
 import proto  # type: ignore
 
-from google.ai.generativelanguage_v1beta.types import permission as gag_permission
-from google.ai.generativelanguage_v1beta.types import permission
-from google.ai.generativelanguage_v1beta.types import permission_service
+from google.ai.generativelanguage_v1alpha.types import permission as gag_permission
+from google.ai.generativelanguage_v1alpha.types import permission
+from google.ai.generativelanguage_v1alpha.types import permission_service
 
 from .base import DEFAULT_CLIENT_INFO, PermissionServiceTransport
 
@@ -72,7 +72,7 @@ class _LoggingClientInterceptor(grpc.UnaryUnaryClientInterceptor):  # pragma: NO
             _LOGGER.debug(
                 f"Sending request for {client_call_details.method}",
                 extra={
-                    "serviceName": "google.ai.generativelanguage.v1beta.PermissionService",
+                    "serviceName": "google.ai.generativelanguage.v1alpha.PermissionService",
                     "rpcName": client_call_details.method,
                     "request": grpc_request,
                     "metadata": grpc_request["metadata"],
@@ -103,7 +103,7 @@ class _LoggingClientInterceptor(grpc.UnaryUnaryClientInterceptor):  # pragma: NO
             _LOGGER.debug(
                 f"Received response for {client_call_details.method}.",
                 extra={
-                    "serviceName": "google.ai.generativelanguage.v1beta.PermissionService",
+                    "serviceName": "google.ai.generativelanguage.v1alpha.PermissionService",
                     "rpcName": client_call_details.method,
                     "response": grpc_response,
                     "metadata": grpc_response["metadata"],
@@ -347,7 +347,7 @@ class PermissionServiceGrpcTransport(PermissionServiceTransport):
         # to pass in the functions for each.
         if "create_permission" not in self._stubs:
             self._stubs["create_permission"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.PermissionService/CreatePermission",
+                "/google.ai.generativelanguage.v1alpha.PermissionService/CreatePermission",
                 request_serializer=permission_service.CreatePermissionRequest.serialize,
                 response_deserializer=gag_permission.Permission.deserialize,
             )
@@ -373,7 +373,7 @@ class PermissionServiceGrpcTransport(PermissionServiceTransport):
         # to pass in the functions for each.
         if "get_permission" not in self._stubs:
             self._stubs["get_permission"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.PermissionService/GetPermission",
+                "/google.ai.generativelanguage.v1alpha.PermissionService/GetPermission",
                 request_serializer=permission_service.GetPermissionRequest.serialize,
                 response_deserializer=permission.Permission.deserialize,
             )
@@ -402,7 +402,7 @@ class PermissionServiceGrpcTransport(PermissionServiceTransport):
         # to pass in the functions for each.
         if "list_permissions" not in self._stubs:
             self._stubs["list_permissions"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.PermissionService/ListPermissions",
+                "/google.ai.generativelanguage.v1alpha.PermissionService/ListPermissions",
                 request_serializer=permission_service.ListPermissionsRequest.serialize,
                 response_deserializer=permission_service.ListPermissionsResponse.deserialize,
             )
@@ -430,7 +430,7 @@ class PermissionServiceGrpcTransport(PermissionServiceTransport):
         # to pass in the functions for each.
         if "update_permission" not in self._stubs:
             self._stubs["update_permission"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.PermissionService/UpdatePermission",
+                "/google.ai.generativelanguage.v1alpha.PermissionService/UpdatePermission",
                 request_serializer=permission_service.UpdatePermissionRequest.serialize,
                 response_deserializer=gag_permission.Permission.deserialize,
             )
@@ -456,7 +456,7 @@ class PermissionServiceGrpcTransport(PermissionServiceTransport):
         # to pass in the functions for each.
         if "delete_permission" not in self._stubs:
             self._stubs["delete_permission"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.PermissionService/DeletePermission",
+                "/google.ai.generativelanguage.v1alpha.PermissionService/DeletePermission",
                 request_serializer=permission_service.DeletePermissionRequest.serialize,
                 response_deserializer=empty_pb2.Empty.FromString,
             )
@@ -488,7 +488,7 @@ class PermissionServiceGrpcTransport(PermissionServiceTransport):
         # to pass in the functions for each.
         if "transfer_ownership" not in self._stubs:
             self._stubs["transfer_ownership"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.PermissionService/TransferOwnership",
+                "/google.ai.generativelanguage.v1alpha.PermissionService/TransferOwnership",
                 request_serializer=permission_service.TransferOwnershipRequest.serialize,
                 response_deserializer=permission_service.TransferOwnershipResponse.deserialize,
             )

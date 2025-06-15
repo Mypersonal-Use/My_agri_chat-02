@@ -42,7 +42,7 @@ from google.auth.transport import mtls  # type: ignore
 from google.auth.transport.grpc import SslCredentials  # type: ignore
 from google.oauth2 import service_account  # type: ignore
 
-from google.ai.generativelanguage_v1beta import gapic_version as package_version
+from google.ai.generativelanguage_v1alpha import gapic_version as package_version
 
 try:
     OptionalRetry = Union[retries.Retry, gapic_v1.method._MethodDefault, None]
@@ -61,7 +61,7 @@ _LOGGER = std_logging.getLogger(__name__)
 from google.longrunning import operations_pb2  # type: ignore
 from google.protobuf import struct_pb2  # type: ignore
 
-from google.ai.generativelanguage_v1beta.types import prediction_service
+from google.ai.generativelanguage_v1alpha.types import prediction_service
 
 from .transports.base import DEFAULT_CLIENT_INFO, PredictionServiceTransport
 from .transports.grpc import PredictionServiceGrpcTransport
@@ -662,9 +662,9 @@ class PredictionServiceClient(metaclass=PredictionServiceClientMeta):
                 std_logging.DEBUG
             ):  # pragma: NO COVER
                 _LOGGER.debug(
-                    "Created client `google.ai.generativelanguage_v1beta.PredictionServiceClient`.",
+                    "Created client `google.ai.generativelanguage_v1alpha.PredictionServiceClient`.",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.PredictionService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.PredictionService",
                         "universeDomain": getattr(
                             self._transport._credentials, "universe_domain", ""
                         ),
@@ -675,7 +675,7 @@ class PredictionServiceClient(metaclass=PredictionServiceClientMeta):
                     }
                     if hasattr(self._transport, "_credentials")
                     else {
-                        "serviceName": "google.ai.generativelanguage.v1beta.PredictionService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.PredictionService",
                         "credentialsType": None,
                     },
                 )
@@ -701,17 +701,17 @@ class PredictionServiceClient(metaclass=PredictionServiceClientMeta):
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             def sample_predict():
                 # Create a client
-                client = generativelanguage_v1beta.PredictionServiceClient()
+                client = generativelanguage_v1alpha.PredictionServiceClient()
 
                 # Initialize request argument(s)
-                instances = generativelanguage_v1beta.Value()
+                instances = generativelanguage_v1alpha.Value()
                 instances.null_value = "NULL_VALUE"
 
-                request = generativelanguage_v1beta.PredictRequest(
+                request = generativelanguage_v1alpha.PredictRequest(
                     model="model_value",
                     instances=instances,
                 )
@@ -723,9 +723,9 @@ class PredictionServiceClient(metaclass=PredictionServiceClientMeta):
                 print(response)
 
         Args:
-            request (Union[google.ai.generativelanguage_v1beta.types.PredictRequest, dict]):
+            request (Union[google.ai.generativelanguage_v1alpha.types.PredictRequest, dict]):
                 The request object. Request message for
-                [PredictionService.Predict][google.ai.generativelanguage.v1beta.PredictionService.Predict].
+                [PredictionService.Predict][google.ai.generativelanguage.v1alpha.PredictionService.Predict].
             model (str):
                 Required. The name of the model for prediction. Format:
                 ``name=models/{model}``.
@@ -749,7 +749,7 @@ class PredictionServiceClient(metaclass=PredictionServiceClientMeta):
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.types.PredictResponse:
+            google.ai.generativelanguage_v1alpha.types.PredictResponse:
                 Response message for [PredictionService.Predict].
         """
         # Create or coerce a protobuf request object.

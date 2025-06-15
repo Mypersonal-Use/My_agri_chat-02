@@ -42,7 +42,7 @@ from google.auth.transport import mtls  # type: ignore
 from google.auth.transport.grpc import SslCredentials  # type: ignore
 from google.oauth2 import service_account  # type: ignore
 
-from google.ai.generativelanguage_v1beta import gapic_version as package_version
+from google.ai.generativelanguage_v1alpha import gapic_version as package_version
 
 try:
     OptionalRetry = Union[retries.Retry, gapic_v1.method._MethodDefault, None]
@@ -62,8 +62,8 @@ from google.longrunning import operations_pb2  # type: ignore
 from google.protobuf import field_mask_pb2  # type: ignore
 from google.protobuf import timestamp_pb2  # type: ignore
 
-from google.ai.generativelanguage_v1beta.services.retriever_service import pagers
-from google.ai.generativelanguage_v1beta.types import retriever, retriever_service
+from google.ai.generativelanguage_v1alpha.services.retriever_service import pagers
+from google.ai.generativelanguage_v1alpha.types import retriever, retriever_service
 
 from .transports.base import DEFAULT_CLIENT_INFO, RetrieverServiceTransport
 from .transports.grpc import RetrieverServiceGrpcTransport
@@ -703,9 +703,9 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 std_logging.DEBUG
             ):  # pragma: NO COVER
                 _LOGGER.debug(
-                    "Created client `google.ai.generativelanguage_v1beta.RetrieverServiceClient`.",
+                    "Created client `google.ai.generativelanguage_v1alpha.RetrieverServiceClient`.",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "universeDomain": getattr(
                             self._transport._credentials, "universe_domain", ""
                         ),
@@ -716,7 +716,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                     }
                     if hasattr(self._transport, "_credentials")
                     else {
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "credentialsType": None,
                     },
                 )
@@ -741,14 +741,14 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             def sample_create_corpus():
                 # Create a client
-                client = generativelanguage_v1beta.RetrieverServiceClient()
+                client = generativelanguage_v1alpha.RetrieverServiceClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.CreateCorpusRequest(
+                request = generativelanguage_v1alpha.CreateCorpusRequest(
                 )
 
                 # Make the request
@@ -758,9 +758,9 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 print(response)
 
         Args:
-            request (Union[google.ai.generativelanguage_v1beta.types.CreateCorpusRequest, dict]):
+            request (Union[google.ai.generativelanguage_v1alpha.types.CreateCorpusRequest, dict]):
                 The request object. Request to create a ``Corpus``.
-            corpus (google.ai.generativelanguage_v1beta.types.Corpus):
+            corpus (google.ai.generativelanguage_v1alpha.types.Corpus):
                 Required. The ``Corpus`` to create.
                 This corresponds to the ``corpus`` field
                 on the ``request`` instance; if ``request`` is provided, this
@@ -774,7 +774,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.types.Corpus:
+            google.ai.generativelanguage_v1alpha.types.Corpus:
                 A Corpus is a collection of Documents.
                    A project can create up to 5 corpora.
 
@@ -836,14 +836,14 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             def sample_get_corpus():
                 # Create a client
-                client = generativelanguage_v1beta.RetrieverServiceClient()
+                client = generativelanguage_v1alpha.RetrieverServiceClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.GetCorpusRequest(
+                request = generativelanguage_v1alpha.GetCorpusRequest(
                     name="name_value",
                 )
 
@@ -854,7 +854,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 print(response)
 
         Args:
-            request (Union[google.ai.generativelanguage_v1beta.types.GetCorpusRequest, dict]):
+            request (Union[google.ai.generativelanguage_v1alpha.types.GetCorpusRequest, dict]):
                 The request object. Request for getting information about a specific
                 ``Corpus``.
             name (str):
@@ -873,7 +873,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.types.Corpus:
+            google.ai.generativelanguage_v1alpha.types.Corpus:
                 A Corpus is a collection of Documents.
                    A project can create up to 5 corpora.
 
@@ -942,14 +942,14 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             def sample_update_corpus():
                 # Create a client
-                client = generativelanguage_v1beta.RetrieverServiceClient()
+                client = generativelanguage_v1alpha.RetrieverServiceClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.UpdateCorpusRequest(
+                request = generativelanguage_v1alpha.UpdateCorpusRequest(
                 )
 
                 # Make the request
@@ -959,9 +959,9 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 print(response)
 
         Args:
-            request (Union[google.ai.generativelanguage_v1beta.types.UpdateCorpusRequest, dict]):
+            request (Union[google.ai.generativelanguage_v1alpha.types.UpdateCorpusRequest, dict]):
                 The request object. Request to update a ``Corpus``.
-            corpus (google.ai.generativelanguage_v1beta.types.Corpus):
+            corpus (google.ai.generativelanguage_v1alpha.types.Corpus):
                 Required. The ``Corpus`` to update.
                 This corresponds to the ``corpus`` field
                 on the ``request`` instance; if ``request`` is provided, this
@@ -982,7 +982,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.types.Corpus:
+            google.ai.generativelanguage_v1alpha.types.Corpus:
                 A Corpus is a collection of Documents.
                    A project can create up to 5 corpora.
 
@@ -1054,14 +1054,14 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             def sample_delete_corpus():
                 # Create a client
-                client = generativelanguage_v1beta.RetrieverServiceClient()
+                client = generativelanguage_v1alpha.RetrieverServiceClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.DeleteCorpusRequest(
+                request = generativelanguage_v1alpha.DeleteCorpusRequest(
                     name="name_value",
                 )
 
@@ -1069,7 +1069,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 client.delete_corpus(request=request)
 
         Args:
-            request (Union[google.ai.generativelanguage_v1beta.types.DeleteCorpusRequest, dict]):
+            request (Union[google.ai.generativelanguage_v1alpha.types.DeleteCorpusRequest, dict]):
                 The request object. Request to delete a ``Corpus``.
             name (str):
                 Required. The resource name of the ``Corpus``. Example:
@@ -1145,14 +1145,14 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             def sample_list_corpora():
                 # Create a client
-                client = generativelanguage_v1beta.RetrieverServiceClient()
+                client = generativelanguage_v1alpha.RetrieverServiceClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.ListCorporaRequest(
+                request = generativelanguage_v1alpha.ListCorporaRequest(
                 )
 
                 # Make the request
@@ -1163,7 +1163,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                     print(response)
 
         Args:
-            request (Union[google.ai.generativelanguage_v1beta.types.ListCorporaRequest, dict]):
+            request (Union[google.ai.generativelanguage_v1alpha.types.ListCorporaRequest, dict]):
                 The request object. Request for listing ``Corpora``.
             retry (google.api_core.retry.Retry): Designation of what errors, if any,
                 should be retried.
@@ -1174,7 +1174,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.services.retriever_service.pagers.ListCorporaPager:
+            google.ai.generativelanguage_v1alpha.services.retriever_service.pagers.ListCorporaPager:
                 Response from ListCorpora containing a paginated list of Corpora.
                    The results are sorted by ascending
                    corpus.create_time.
@@ -1237,14 +1237,14 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             def sample_query_corpus():
                 # Create a client
-                client = generativelanguage_v1beta.RetrieverServiceClient()
+                client = generativelanguage_v1alpha.RetrieverServiceClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.QueryCorpusRequest(
+                request = generativelanguage_v1alpha.QueryCorpusRequest(
                     name="name_value",
                     query="query_value",
                 )
@@ -1256,7 +1256,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 print(response)
 
         Args:
-            request (Union[google.ai.generativelanguage_v1beta.types.QueryCorpusRequest, dict]):
+            request (Union[google.ai.generativelanguage_v1alpha.types.QueryCorpusRequest, dict]):
                 The request object. Request for querying a ``Corpus``.
             retry (google.api_core.retry.Retry): Designation of what errors, if any,
                 should be retried.
@@ -1267,7 +1267,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.types.QueryCorpusResponse:
+            google.ai.generativelanguage_v1alpha.types.QueryCorpusResponse:
                 Response from QueryCorpus containing a list of relevant
                 chunks.
 
@@ -1323,14 +1323,14 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             def sample_create_document():
                 # Create a client
-                client = generativelanguage_v1beta.RetrieverServiceClient()
+                client = generativelanguage_v1alpha.RetrieverServiceClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.CreateDocumentRequest(
+                request = generativelanguage_v1alpha.CreateDocumentRequest(
                     parent="parent_value",
                 )
 
@@ -1341,7 +1341,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 print(response)
 
         Args:
-            request (Union[google.ai.generativelanguage_v1beta.types.CreateDocumentRequest, dict]):
+            request (Union[google.ai.generativelanguage_v1alpha.types.CreateDocumentRequest, dict]):
                 The request object. Request to create a ``Document``.
             parent (str):
                 Required. The name of the ``Corpus`` where this
@@ -1351,7 +1351,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 This corresponds to the ``parent`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-            document (google.ai.generativelanguage_v1beta.types.Document):
+            document (google.ai.generativelanguage_v1alpha.types.Document):
                 Required. The ``Document`` to create.
                 This corresponds to the ``document`` field
                 on the ``request`` instance; if ``request`` is provided, this
@@ -1365,7 +1365,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.types.Document:
+            google.ai.generativelanguage_v1alpha.types.Document:
                 A Document is a collection of Chunks.
                    A Corpus can have a maximum of 10,000 Documents.
 
@@ -1435,14 +1435,14 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             def sample_get_document():
                 # Create a client
-                client = generativelanguage_v1beta.RetrieverServiceClient()
+                client = generativelanguage_v1alpha.RetrieverServiceClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.GetDocumentRequest(
+                request = generativelanguage_v1alpha.GetDocumentRequest(
                     name="name_value",
                 )
 
@@ -1453,7 +1453,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 print(response)
 
         Args:
-            request (Union[google.ai.generativelanguage_v1beta.types.GetDocumentRequest, dict]):
+            request (Union[google.ai.generativelanguage_v1alpha.types.GetDocumentRequest, dict]):
                 The request object. Request for getting information about a specific
                 ``Document``.
             name (str):
@@ -1472,7 +1472,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.types.Document:
+            google.ai.generativelanguage_v1alpha.types.Document:
                 A Document is a collection of Chunks.
                    A Corpus can have a maximum of 10,000 Documents.
 
@@ -1541,14 +1541,14 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             def sample_update_document():
                 # Create a client
-                client = generativelanguage_v1beta.RetrieverServiceClient()
+                client = generativelanguage_v1alpha.RetrieverServiceClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.UpdateDocumentRequest(
+                request = generativelanguage_v1alpha.UpdateDocumentRequest(
                 )
 
                 # Make the request
@@ -1558,9 +1558,9 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 print(response)
 
         Args:
-            request (Union[google.ai.generativelanguage_v1beta.types.UpdateDocumentRequest, dict]):
+            request (Union[google.ai.generativelanguage_v1alpha.types.UpdateDocumentRequest, dict]):
                 The request object. Request to update a ``Document``.
-            document (google.ai.generativelanguage_v1beta.types.Document):
+            document (google.ai.generativelanguage_v1alpha.types.Document):
                 Required. The ``Document`` to update.
                 This corresponds to the ``document`` field
                 on the ``request`` instance; if ``request`` is provided, this
@@ -1582,7 +1582,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.types.Document:
+            google.ai.generativelanguage_v1alpha.types.Document:
                 A Document is a collection of Chunks.
                    A Corpus can have a maximum of 10,000 Documents.
 
@@ -1654,14 +1654,14 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             def sample_delete_document():
                 # Create a client
-                client = generativelanguage_v1beta.RetrieverServiceClient()
+                client = generativelanguage_v1alpha.RetrieverServiceClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.DeleteDocumentRequest(
+                request = generativelanguage_v1alpha.DeleteDocumentRequest(
                     name="name_value",
                 )
 
@@ -1669,7 +1669,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 client.delete_document(request=request)
 
         Args:
-            request (Union[google.ai.generativelanguage_v1beta.types.DeleteDocumentRequest, dict]):
+            request (Union[google.ai.generativelanguage_v1alpha.types.DeleteDocumentRequest, dict]):
                 The request object. Request to delete a ``Document``.
             name (str):
                 Required. The resource name of the ``Document`` to
@@ -1747,14 +1747,14 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             def sample_list_documents():
                 # Create a client
-                client = generativelanguage_v1beta.RetrieverServiceClient()
+                client = generativelanguage_v1alpha.RetrieverServiceClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.ListDocumentsRequest(
+                request = generativelanguage_v1alpha.ListDocumentsRequest(
                     parent="parent_value",
                 )
 
@@ -1766,7 +1766,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                     print(response)
 
         Args:
-            request (Union[google.ai.generativelanguage_v1beta.types.ListDocumentsRequest, dict]):
+            request (Union[google.ai.generativelanguage_v1alpha.types.ListDocumentsRequest, dict]):
                 The request object. Request for listing ``Document``\ s.
             parent (str):
                 Required. The name of the ``Corpus`` containing
@@ -1784,7 +1784,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.services.retriever_service.pagers.ListDocumentsPager:
+            google.ai.generativelanguage_v1alpha.services.retriever_service.pagers.ListDocumentsPager:
                 Response from ListDocuments containing a paginated list of Documents.
                    The Documents are sorted by ascending
                    document.create_time.
@@ -1866,14 +1866,14 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             def sample_query_document():
                 # Create a client
-                client = generativelanguage_v1beta.RetrieverServiceClient()
+                client = generativelanguage_v1alpha.RetrieverServiceClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.QueryDocumentRequest(
+                request = generativelanguage_v1alpha.QueryDocumentRequest(
                     name="name_value",
                     query="query_value",
                 )
@@ -1885,7 +1885,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 print(response)
 
         Args:
-            request (Union[google.ai.generativelanguage_v1beta.types.QueryDocumentRequest, dict]):
+            request (Union[google.ai.generativelanguage_v1alpha.types.QueryDocumentRequest, dict]):
                 The request object. Request for querying a ``Document``.
             retry (google.api_core.retry.Retry): Designation of what errors, if any,
                 should be retried.
@@ -1896,7 +1896,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.types.QueryDocumentResponse:
+            google.ai.generativelanguage_v1alpha.types.QueryDocumentResponse:
                 Response from QueryDocument containing a list of
                 relevant chunks.
 
@@ -1952,17 +1952,17 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             def sample_create_chunk():
                 # Create a client
-                client = generativelanguage_v1beta.RetrieverServiceClient()
+                client = generativelanguage_v1alpha.RetrieverServiceClient()
 
                 # Initialize request argument(s)
-                chunk = generativelanguage_v1beta.Chunk()
+                chunk = generativelanguage_v1alpha.Chunk()
                 chunk.data.string_value = "string_value_value"
 
-                request = generativelanguage_v1beta.CreateChunkRequest(
+                request = generativelanguage_v1alpha.CreateChunkRequest(
                     parent="parent_value",
                     chunk=chunk,
                 )
@@ -1974,7 +1974,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 print(response)
 
         Args:
-            request (Union[google.ai.generativelanguage_v1beta.types.CreateChunkRequest, dict]):
+            request (Union[google.ai.generativelanguage_v1alpha.types.CreateChunkRequest, dict]):
                 The request object. Request to create a ``Chunk``.
             parent (str):
                 Required. The name of the ``Document`` where this
@@ -1984,7 +1984,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 This corresponds to the ``parent`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-            chunk (google.ai.generativelanguage_v1beta.types.Chunk):
+            chunk (google.ai.generativelanguage_v1alpha.types.Chunk):
                 Required. The ``Chunk`` to create.
                 This corresponds to the ``chunk`` field
                 on the ``request`` instance; if ``request`` is provided, this
@@ -1998,7 +1998,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.types.Chunk:
+            google.ai.generativelanguage_v1alpha.types.Chunk:
                 A Chunk is a subpart of a Document that is treated as an independent unit
                    for the purposes of vector representation and
                    storage. A Corpus can have a maximum of 1 million
@@ -2071,18 +2071,18 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             def sample_batch_create_chunks():
                 # Create a client
-                client = generativelanguage_v1beta.RetrieverServiceClient()
+                client = generativelanguage_v1alpha.RetrieverServiceClient()
 
                 # Initialize request argument(s)
-                requests = generativelanguage_v1beta.CreateChunkRequest()
+                requests = generativelanguage_v1alpha.CreateChunkRequest()
                 requests.parent = "parent_value"
                 requests.chunk.data.string_value = "string_value_value"
 
-                request = generativelanguage_v1beta.BatchCreateChunksRequest(
+                request = generativelanguage_v1alpha.BatchCreateChunksRequest(
                     requests=requests,
                 )
 
@@ -2093,7 +2093,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 print(response)
 
         Args:
-            request (Union[google.ai.generativelanguage_v1beta.types.BatchCreateChunksRequest, dict]):
+            request (Union[google.ai.generativelanguage_v1alpha.types.BatchCreateChunksRequest, dict]):
                 The request object. Request to batch create ``Chunk``\ s.
             retry (google.api_core.retry.Retry): Designation of what errors, if any,
                 should be retried.
@@ -2104,7 +2104,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.types.BatchCreateChunksResponse:
+            google.ai.generativelanguage_v1alpha.types.BatchCreateChunksResponse:
                 Response from BatchCreateChunks containing a list of
                 created Chunks.
 
@@ -2159,14 +2159,14 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             def sample_get_chunk():
                 # Create a client
-                client = generativelanguage_v1beta.RetrieverServiceClient()
+                client = generativelanguage_v1alpha.RetrieverServiceClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.GetChunkRequest(
+                request = generativelanguage_v1alpha.GetChunkRequest(
                     name="name_value",
                 )
 
@@ -2177,7 +2177,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 print(response)
 
         Args:
-            request (Union[google.ai.generativelanguage_v1beta.types.GetChunkRequest, dict]):
+            request (Union[google.ai.generativelanguage_v1alpha.types.GetChunkRequest, dict]):
                 The request object. Request for getting information about a specific
                 ``Chunk``.
             name (str):
@@ -2197,7 +2197,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.types.Chunk:
+            google.ai.generativelanguage_v1alpha.types.Chunk:
                 A Chunk is a subpart of a Document that is treated as an independent unit
                    for the purposes of vector representation and
                    storage. A Corpus can have a maximum of 1 million
@@ -2268,17 +2268,17 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             def sample_update_chunk():
                 # Create a client
-                client = generativelanguage_v1beta.RetrieverServiceClient()
+                client = generativelanguage_v1alpha.RetrieverServiceClient()
 
                 # Initialize request argument(s)
-                chunk = generativelanguage_v1beta.Chunk()
+                chunk = generativelanguage_v1alpha.Chunk()
                 chunk.data.string_value = "string_value_value"
 
-                request = generativelanguage_v1beta.UpdateChunkRequest(
+                request = generativelanguage_v1alpha.UpdateChunkRequest(
                     chunk=chunk,
                 )
 
@@ -2289,9 +2289,9 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 print(response)
 
         Args:
-            request (Union[google.ai.generativelanguage_v1beta.types.UpdateChunkRequest, dict]):
+            request (Union[google.ai.generativelanguage_v1alpha.types.UpdateChunkRequest, dict]):
                 The request object. Request to update a ``Chunk``.
-            chunk (google.ai.generativelanguage_v1beta.types.Chunk):
+            chunk (google.ai.generativelanguage_v1alpha.types.Chunk):
                 Required. The ``Chunk`` to update.
                 This corresponds to the ``chunk`` field
                 on the ``request`` instance; if ``request`` is provided, this
@@ -2312,7 +2312,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.types.Chunk:
+            google.ai.generativelanguage_v1alpha.types.Chunk:
                 A Chunk is a subpart of a Document that is treated as an independent unit
                    for the purposes of vector representation and
                    storage. A Corpus can have a maximum of 1 million
@@ -2387,17 +2387,17 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             def sample_batch_update_chunks():
                 # Create a client
-                client = generativelanguage_v1beta.RetrieverServiceClient()
+                client = generativelanguage_v1alpha.RetrieverServiceClient()
 
                 # Initialize request argument(s)
-                requests = generativelanguage_v1beta.UpdateChunkRequest()
+                requests = generativelanguage_v1alpha.UpdateChunkRequest()
                 requests.chunk.data.string_value = "string_value_value"
 
-                request = generativelanguage_v1beta.BatchUpdateChunksRequest(
+                request = generativelanguage_v1alpha.BatchUpdateChunksRequest(
                     requests=requests,
                 )
 
@@ -2408,7 +2408,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 print(response)
 
         Args:
-            request (Union[google.ai.generativelanguage_v1beta.types.BatchUpdateChunksRequest, dict]):
+            request (Union[google.ai.generativelanguage_v1alpha.types.BatchUpdateChunksRequest, dict]):
                 The request object. Request to batch update ``Chunk``\ s.
             retry (google.api_core.retry.Retry): Designation of what errors, if any,
                 should be retried.
@@ -2419,7 +2419,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.types.BatchUpdateChunksResponse:
+            google.ai.generativelanguage_v1alpha.types.BatchUpdateChunksResponse:
                 Response from BatchUpdateChunks containing a list of
                 updated Chunks.
 
@@ -2474,14 +2474,14 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             def sample_delete_chunk():
                 # Create a client
-                client = generativelanguage_v1beta.RetrieverServiceClient()
+                client = generativelanguage_v1alpha.RetrieverServiceClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.DeleteChunkRequest(
+                request = generativelanguage_v1alpha.DeleteChunkRequest(
                     name="name_value",
                 )
 
@@ -2489,7 +2489,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 client.delete_chunk(request=request)
 
         Args:
-            request (Union[google.ai.generativelanguage_v1beta.types.DeleteChunkRequest, dict]):
+            request (Union[google.ai.generativelanguage_v1alpha.types.DeleteChunkRequest, dict]):
                 The request object. Request to delete a ``Chunk``.
             name (str):
                 Required. The resource name of the ``Chunk`` to delete.
@@ -2568,17 +2568,17 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             def sample_batch_delete_chunks():
                 # Create a client
-                client = generativelanguage_v1beta.RetrieverServiceClient()
+                client = generativelanguage_v1alpha.RetrieverServiceClient()
 
                 # Initialize request argument(s)
-                requests = generativelanguage_v1beta.DeleteChunkRequest()
+                requests = generativelanguage_v1alpha.DeleteChunkRequest()
                 requests.name = "name_value"
 
-                request = generativelanguage_v1beta.BatchDeleteChunksRequest(
+                request = generativelanguage_v1alpha.BatchDeleteChunksRequest(
                     requests=requests,
                 )
 
@@ -2586,7 +2586,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 client.batch_delete_chunks(request=request)
 
         Args:
-            request (Union[google.ai.generativelanguage_v1beta.types.BatchDeleteChunksRequest, dict]):
+            request (Union[google.ai.generativelanguage_v1alpha.types.BatchDeleteChunksRequest, dict]):
                 The request object. Request to batch delete ``Chunk``\ s.
             retry (google.api_core.retry.Retry): Designation of what errors, if any,
                 should be retried.
@@ -2643,14 +2643,14 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             def sample_list_chunks():
                 # Create a client
-                client = generativelanguage_v1beta.RetrieverServiceClient()
+                client = generativelanguage_v1alpha.RetrieverServiceClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.ListChunksRequest(
+                request = generativelanguage_v1alpha.ListChunksRequest(
                     parent="parent_value",
                 )
 
@@ -2662,7 +2662,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                     print(response)
 
         Args:
-            request (Union[google.ai.generativelanguage_v1beta.types.ListChunksRequest, dict]):
+            request (Union[google.ai.generativelanguage_v1alpha.types.ListChunksRequest, dict]):
                 The request object. Request for listing ``Chunk``\ s.
             parent (str):
                 Required. The name of the ``Document`` containing
@@ -2681,7 +2681,7 @@ class RetrieverServiceClient(metaclass=RetrieverServiceClientMeta):
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.services.retriever_service.pagers.ListChunksPager:
+            google.ai.generativelanguage_v1alpha.services.retriever_service.pagers.ListChunksPager:
                 Response from ListChunks containing a paginated list of Chunks.
                    The Chunks are sorted by ascending chunk.create_time.
 

@@ -29,9 +29,9 @@ from google.protobuf import empty_pb2  # type: ignore
 from google.protobuf import json_format
 from requests import __version__ as requests_version
 
-from google.ai.generativelanguage_v1beta.types import permission as gag_permission
-from google.ai.generativelanguage_v1beta.types import permission
-from google.ai.generativelanguage_v1beta.types import permission_service
+from google.ai.generativelanguage_v1alpha.types import permission as gag_permission
+from google.ai.generativelanguage_v1alpha.types import permission
+from google.ai.generativelanguage_v1alpha.types import permission_service
 
 from .base import DEFAULT_CLIENT_INFO as BASE_DEFAULT_CLIENT_INFO
 from .rest_base import _BasePermissionServiceRestTransport
@@ -521,9 +521,9 @@ class PermissionServiceRestTransport(_BasePermissionServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.PermissionServiceClient.CreatePermission",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.PermissionServiceClient.CreatePermission",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.PermissionService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.PermissionService",
                         "rpcName": "CreatePermission",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -566,9 +566,9 @@ class PermissionServiceRestTransport(_BasePermissionServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.PermissionServiceClient.create_permission",
+                    "Received response for google.ai.generativelanguage_v1alpha.PermissionServiceClient.create_permission",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.PermissionService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.PermissionService",
                         "rpcName": "CreatePermission",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -661,9 +661,9 @@ class PermissionServiceRestTransport(_BasePermissionServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.PermissionServiceClient.DeletePermission",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.PermissionServiceClient.DeletePermission",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.PermissionService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.PermissionService",
                         "rpcName": "DeletePermission",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -796,9 +796,9 @@ class PermissionServiceRestTransport(_BasePermissionServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.PermissionServiceClient.GetPermission",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.PermissionServiceClient.GetPermission",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.PermissionService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.PermissionService",
                         "rpcName": "GetPermission",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -840,9 +840,9 @@ class PermissionServiceRestTransport(_BasePermissionServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.PermissionServiceClient.get_permission",
+                    "Received response for google.ai.generativelanguage_v1alpha.PermissionServiceClient.get_permission",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.PermissionService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.PermissionService",
                         "rpcName": "GetPermission",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -941,9 +941,9 @@ class PermissionServiceRestTransport(_BasePermissionServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.PermissionServiceClient.ListPermissions",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.PermissionServiceClient.ListPermissions",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.PermissionService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.PermissionService",
                         "rpcName": "ListPermissions",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -987,9 +987,9 @@ class PermissionServiceRestTransport(_BasePermissionServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.PermissionServiceClient.list_permissions",
+                    "Received response for google.ai.generativelanguage_v1alpha.PermissionServiceClient.list_permissions",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.PermissionService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.PermissionService",
                         "rpcName": "ListPermissions",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -1092,9 +1092,9 @@ class PermissionServiceRestTransport(_BasePermissionServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.PermissionServiceClient.TransferOwnership",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.PermissionServiceClient.TransferOwnership",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.PermissionService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.PermissionService",
                         "rpcName": "TransferOwnership",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -1139,9 +1139,9 @@ class PermissionServiceRestTransport(_BasePermissionServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.PermissionServiceClient.transfer_ownership",
+                    "Received response for google.ai.generativelanguage_v1alpha.PermissionServiceClient.transfer_ownership",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.PermissionService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.PermissionService",
                         "rpcName": "TransferOwnership",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -1266,9 +1266,9 @@ class PermissionServiceRestTransport(_BasePermissionServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.PermissionServiceClient.UpdatePermission",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.PermissionServiceClient.UpdatePermission",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.PermissionService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.PermissionService",
                         "rpcName": "UpdatePermission",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -1311,9 +1311,9 @@ class PermissionServiceRestTransport(_BasePermissionServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.PermissionServiceClient.update_permission",
+                    "Received response for google.ai.generativelanguage_v1alpha.PermissionServiceClient.update_permission",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.PermissionService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.PermissionService",
                         "rpcName": "UpdatePermission",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -1468,9 +1468,9 @@ class PermissionServiceRestTransport(_BasePermissionServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.PermissionServiceClient.GetOperation",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.PermissionServiceClient.GetOperation",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.PermissionService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.PermissionService",
                         "rpcName": "GetOperation",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -1509,9 +1509,9 @@ class PermissionServiceRestTransport(_BasePermissionServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.PermissionServiceAsyncClient.GetOperation",
+                    "Received response for google.ai.generativelanguage_v1alpha.PermissionServiceAsyncClient.GetOperation",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.PermissionService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.PermissionService",
                         "rpcName": "GetOperation",
                         "httpResponse": http_response,
                         "metadata": http_response["headers"],
@@ -1609,9 +1609,9 @@ class PermissionServiceRestTransport(_BasePermissionServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.PermissionServiceClient.ListOperations",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.PermissionServiceClient.ListOperations",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.PermissionService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.PermissionService",
                         "rpcName": "ListOperations",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -1650,9 +1650,9 @@ class PermissionServiceRestTransport(_BasePermissionServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.PermissionServiceAsyncClient.ListOperations",
+                    "Received response for google.ai.generativelanguage_v1alpha.PermissionServiceAsyncClient.ListOperations",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.PermissionService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.PermissionService",
                         "rpcName": "ListOperations",
                         "httpResponse": http_response,
                         "metadata": http_response["headers"],

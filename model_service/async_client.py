@@ -36,7 +36,7 @@ from google.api_core.client_options import ClientOptions
 from google.auth import credentials as ga_credentials  # type: ignore
 from google.oauth2 import service_account  # type: ignore
 
-from google.ai.generativelanguage_v1beta import gapic_version as package_version
+from google.ai.generativelanguage_v1alpha import gapic_version as package_version
 
 try:
     OptionalRetry = Union[retries.AsyncRetry, gapic_v1.method._MethodDefault, None]
@@ -49,10 +49,10 @@ from google.longrunning import operations_pb2  # type: ignore
 from google.protobuf import field_mask_pb2  # type: ignore
 from google.protobuf import timestamp_pb2  # type: ignore
 
-from google.ai.generativelanguage_v1beta.services.model_service import pagers
-from google.ai.generativelanguage_v1beta.types import tuned_model as gag_tuned_model
-from google.ai.generativelanguage_v1beta.types import model, model_service
-from google.ai.generativelanguage_v1beta.types import tuned_model
+from google.ai.generativelanguage_v1alpha.services.model_service import pagers
+from google.ai.generativelanguage_v1alpha.types import tuned_model as gag_tuned_model
+from google.ai.generativelanguage_v1alpha.types import model, model_service
+from google.ai.generativelanguage_v1alpha.types import tuned_model
 
 from .client import ModelServiceClient
 from .transports.base import DEFAULT_CLIENT_INFO, ModelServiceTransport
@@ -276,9 +276,9 @@ class ModelServiceAsyncClient:
             std_logging.DEBUG
         ):  # pragma: NO COVER
             _LOGGER.debug(
-                "Created client `google.ai.generativelanguage_v1beta.ModelServiceAsyncClient`.",
+                "Created client `google.ai.generativelanguage_v1alpha.ModelServiceAsyncClient`.",
                 extra={
-                    "serviceName": "google.ai.generativelanguage.v1beta.ModelService",
+                    "serviceName": "google.ai.generativelanguage.v1alpha.ModelService",
                     "universeDomain": getattr(
                         self._client._transport._credentials, "universe_domain", ""
                     ),
@@ -289,7 +289,7 @@ class ModelServiceAsyncClient:
                 }
                 if hasattr(self._client._transport, "_credentials")
                 else {
-                    "serviceName": "google.ai.generativelanguage.v1beta.ModelService",
+                    "serviceName": "google.ai.generativelanguage.v1alpha.ModelService",
                     "credentialsType": None,
                 },
             )
@@ -319,14 +319,14 @@ class ModelServiceAsyncClient:
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             async def sample_get_model():
                 # Create a client
-                client = generativelanguage_v1beta.ModelServiceAsyncClient()
+                client = generativelanguage_v1alpha.ModelServiceAsyncClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.GetModelRequest(
+                request = generativelanguage_v1alpha.GetModelRequest(
                     name="name_value",
                 )
 
@@ -337,7 +337,7 @@ class ModelServiceAsyncClient:
                 print(response)
 
         Args:
-            request (Optional[Union[google.ai.generativelanguage_v1beta.types.GetModelRequest, dict]]):
+            request (Optional[Union[google.ai.generativelanguage_v1alpha.types.GetModelRequest, dict]]):
                 The request object. Request for getting information about
                 a specific Model.
             name (:class:`str`):
@@ -360,7 +360,7 @@ class ModelServiceAsyncClient:
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.types.Model:
+            google.ai.generativelanguage_v1alpha.types.Model:
                 Information about a Generative
                 Language Model.
 
@@ -434,14 +434,14 @@ class ModelServiceAsyncClient:
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             async def sample_list_models():
                 # Create a client
-                client = generativelanguage_v1beta.ModelServiceAsyncClient()
+                client = generativelanguage_v1alpha.ModelServiceAsyncClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.ListModelsRequest(
+                request = generativelanguage_v1alpha.ListModelsRequest(
                 )
 
                 # Make the request
@@ -452,7 +452,7 @@ class ModelServiceAsyncClient:
                     print(response)
 
         Args:
-            request (Optional[Union[google.ai.generativelanguage_v1beta.types.ListModelsRequest, dict]]):
+            request (Optional[Union[google.ai.generativelanguage_v1alpha.types.ListModelsRequest, dict]]):
                 The request object. Request for listing all Models.
             page_size (:class:`int`):
                 The maximum number of ``Models`` to return (per page).
@@ -487,7 +487,7 @@ class ModelServiceAsyncClient:
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.services.model_service.pagers.ListModelsAsyncPager:
+            google.ai.generativelanguage_v1alpha.services.model_service.pagers.ListModelsAsyncPager:
                 Response from ListModel containing a paginated list of
                 Models.
 
@@ -568,14 +568,14 @@ class ModelServiceAsyncClient:
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             async def sample_get_tuned_model():
                 # Create a client
-                client = generativelanguage_v1beta.ModelServiceAsyncClient()
+                client = generativelanguage_v1alpha.ModelServiceAsyncClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.GetTunedModelRequest(
+                request = generativelanguage_v1alpha.GetTunedModelRequest(
                     name="name_value",
                 )
 
@@ -586,7 +586,7 @@ class ModelServiceAsyncClient:
                 print(response)
 
         Args:
-            request (Optional[Union[google.ai.generativelanguage_v1beta.types.GetTunedModelRequest, dict]]):
+            request (Optional[Union[google.ai.generativelanguage_v1alpha.types.GetTunedModelRequest, dict]]):
                 The request object. Request for getting information about
                 a specific Model.
             name (:class:`str`):
@@ -606,7 +606,7 @@ class ModelServiceAsyncClient:
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.types.TunedModel:
+            google.ai.generativelanguage_v1alpha.types.TunedModel:
                 A fine-tuned model created using
                 ModelService.CreateTunedModel.
 
@@ -678,14 +678,14 @@ class ModelServiceAsyncClient:
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             async def sample_list_tuned_models():
                 # Create a client
-                client = generativelanguage_v1beta.ModelServiceAsyncClient()
+                client = generativelanguage_v1alpha.ModelServiceAsyncClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.ListTunedModelsRequest(
+                request = generativelanguage_v1alpha.ListTunedModelsRequest(
                 )
 
                 # Make the request
@@ -696,7 +696,7 @@ class ModelServiceAsyncClient:
                     print(response)
 
         Args:
-            request (Optional[Union[google.ai.generativelanguage_v1beta.types.ListTunedModelsRequest, dict]]):
+            request (Optional[Union[google.ai.generativelanguage_v1alpha.types.ListTunedModelsRequest, dict]]):
                 The request object. Request for listing TunedModels.
             page_size (:class:`int`):
                 Optional. The maximum number of ``TunedModels`` to
@@ -733,7 +733,7 @@ class ModelServiceAsyncClient:
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.services.model_service.pagers.ListTunedModelsAsyncPager:
+            google.ai.generativelanguage_v1alpha.services.model_service.pagers.ListTunedModelsAsyncPager:
                 Response from ListTunedModels containing a paginated
                 list of Models.
 
@@ -819,14 +819,14 @@ class ModelServiceAsyncClient:
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             async def sample_create_tuned_model():
                 # Create a client
-                client = generativelanguage_v1beta.ModelServiceAsyncClient()
+                client = generativelanguage_v1alpha.ModelServiceAsyncClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.CreateTunedModelRequest(
+                request = generativelanguage_v1alpha.CreateTunedModelRequest(
                 )
 
                 # Make the request
@@ -840,9 +840,9 @@ class ModelServiceAsyncClient:
                 print(response)
 
         Args:
-            request (Optional[Union[google.ai.generativelanguage_v1beta.types.CreateTunedModelRequest, dict]]):
+            request (Optional[Union[google.ai.generativelanguage_v1alpha.types.CreateTunedModelRequest, dict]]):
                 The request object. Request to create a TunedModel.
-            tuned_model (:class:`google.ai.generativelanguage_v1beta.types.TunedModel`):
+            tuned_model (:class:`google.ai.generativelanguage_v1alpha.types.TunedModel`):
                 Required. The tuned model to create.
                 This corresponds to the ``tuned_model`` field
                 on the ``request`` instance; if ``request`` is provided, this
@@ -870,7 +870,7 @@ class ModelServiceAsyncClient:
                 An object representing a long-running operation.
 
                 The result type for the operation will be
-                :class:`google.ai.generativelanguage_v1beta.types.TunedModel`
+                :class:`google.ai.generativelanguage_v1alpha.types.TunedModel`
                 A fine-tuned model created using
                 ModelService.CreateTunedModel.
 
@@ -946,14 +946,14 @@ class ModelServiceAsyncClient:
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             async def sample_update_tuned_model():
                 # Create a client
-                client = generativelanguage_v1beta.ModelServiceAsyncClient()
+                client = generativelanguage_v1alpha.ModelServiceAsyncClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.UpdateTunedModelRequest(
+                request = generativelanguage_v1alpha.UpdateTunedModelRequest(
                 )
 
                 # Make the request
@@ -963,9 +963,9 @@ class ModelServiceAsyncClient:
                 print(response)
 
         Args:
-            request (Optional[Union[google.ai.generativelanguage_v1beta.types.UpdateTunedModelRequest, dict]]):
+            request (Optional[Union[google.ai.generativelanguage_v1alpha.types.UpdateTunedModelRequest, dict]]):
                 The request object. Request to update a TunedModel.
-            tuned_model (:class:`google.ai.generativelanguage_v1beta.types.TunedModel`):
+            tuned_model (:class:`google.ai.generativelanguage_v1alpha.types.TunedModel`):
                 Required. The tuned model to update.
                 This corresponds to the ``tuned_model`` field
                 on the ``request`` instance; if ``request`` is provided, this
@@ -986,7 +986,7 @@ class ModelServiceAsyncClient:
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.types.TunedModel:
+            google.ai.generativelanguage_v1alpha.types.TunedModel:
                 A fine-tuned model created using
                 ModelService.CreateTunedModel.
 
@@ -1061,14 +1061,14 @@ class ModelServiceAsyncClient:
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             async def sample_delete_tuned_model():
                 # Create a client
-                client = generativelanguage_v1beta.ModelServiceAsyncClient()
+                client = generativelanguage_v1alpha.ModelServiceAsyncClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.DeleteTunedModelRequest(
+                request = generativelanguage_v1alpha.DeleteTunedModelRequest(
                     name="name_value",
                 )
 
@@ -1076,7 +1076,7 @@ class ModelServiceAsyncClient:
                 await client.delete_tuned_model(request=request)
 
         Args:
-            request (Optional[Union[google.ai.generativelanguage_v1beta.types.DeleteTunedModelRequest, dict]]):
+            request (Optional[Union[google.ai.generativelanguage_v1alpha.types.DeleteTunedModelRequest, dict]]):
                 The request object. Request to delete a TunedModel.
             name (:class:`str`):
                 Required. The resource name of the model. Format:

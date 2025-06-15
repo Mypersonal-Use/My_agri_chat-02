@@ -42,7 +42,7 @@ from google.auth.transport import mtls  # type: ignore
 from google.auth.transport.grpc import SslCredentials  # type: ignore
 from google.oauth2 import service_account  # type: ignore
 
-from google.ai.generativelanguage_v1beta import gapic_version as package_version
+from google.ai.generativelanguage_v1alpha import gapic_version as package_version
 
 try:
     OptionalRetry = Union[retries.Retry, gapic_v1.method._MethodDefault, None]
@@ -60,7 +60,7 @@ _LOGGER = std_logging.getLogger(__name__)
 
 from google.longrunning import operations_pb2  # type: ignore
 
-from google.ai.generativelanguage_v1beta.types import safety, text_service
+from google.ai.generativelanguage_v1alpha.types import safety, text_service
 
 from .transports.base import DEFAULT_CLIENT_INFO, TextServiceTransport
 from .transports.grpc import TextServiceGrpcTransport
@@ -655,9 +655,9 @@ class TextServiceClient(metaclass=TextServiceClientMeta):
                 std_logging.DEBUG
             ):  # pragma: NO COVER
                 _LOGGER.debug(
-                    "Created client `google.ai.generativelanguage_v1beta.TextServiceClient`.",
+                    "Created client `google.ai.generativelanguage_v1alpha.TextServiceClient`.",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.TextService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.TextService",
                         "universeDomain": getattr(
                             self._transport._credentials, "universe_domain", ""
                         ),
@@ -668,7 +668,7 @@ class TextServiceClient(metaclass=TextServiceClientMeta):
                     }
                     if hasattr(self._transport, "_credentials")
                     else {
-                        "serviceName": "google.ai.generativelanguage.v1beta.TextService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.TextService",
                         "credentialsType": None,
                     },
                 )
@@ -700,17 +700,17 @@ class TextServiceClient(metaclass=TextServiceClientMeta):
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             def sample_generate_text():
                 # Create a client
-                client = generativelanguage_v1beta.TextServiceClient()
+                client = generativelanguage_v1alpha.TextServiceClient()
 
                 # Initialize request argument(s)
-                prompt = generativelanguage_v1beta.TextPrompt()
+                prompt = generativelanguage_v1alpha.TextPrompt()
                 prompt.text = "text_value"
 
-                request = generativelanguage_v1beta.GenerateTextRequest(
+                request = generativelanguage_v1alpha.GenerateTextRequest(
                     model="model_value",
                     prompt=prompt,
                 )
@@ -722,7 +722,7 @@ class TextServiceClient(metaclass=TextServiceClientMeta):
                 print(response)
 
         Args:
-            request (Union[google.ai.generativelanguage_v1beta.types.GenerateTextRequest, dict]):
+            request (Union[google.ai.generativelanguage_v1alpha.types.GenerateTextRequest, dict]):
                 The request object. Request to generate a text completion
                 response from the model.
             model (str):
@@ -734,7 +734,7 @@ class TextServiceClient(metaclass=TextServiceClientMeta):
                 This corresponds to the ``model`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-            prompt (google.ai.generativelanguage_v1beta.types.TextPrompt):
+            prompt (google.ai.generativelanguage_v1alpha.types.TextPrompt):
                 Required. The free-form input text
                 given to the model as a prompt.
                 Given a prompt, the model will generate
@@ -822,7 +822,7 @@ class TextServiceClient(metaclass=TextServiceClientMeta):
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.types.GenerateTextResponse:
+            google.ai.generativelanguage_v1alpha.types.GenerateTextResponse:
                 The response from the model,
                 including candidate completions.
 
@@ -914,14 +914,14 @@ class TextServiceClient(metaclass=TextServiceClientMeta):
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             def sample_embed_text():
                 # Create a client
-                client = generativelanguage_v1beta.TextServiceClient()
+                client = generativelanguage_v1alpha.TextServiceClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.EmbedTextRequest(
+                request = generativelanguage_v1alpha.EmbedTextRequest(
                     model="model_value",
                 )
 
@@ -932,7 +932,7 @@ class TextServiceClient(metaclass=TextServiceClientMeta):
                 print(response)
 
         Args:
-            request (Union[google.ai.generativelanguage_v1beta.types.EmbedTextRequest, dict]):
+            request (Union[google.ai.generativelanguage_v1alpha.types.EmbedTextRequest, dict]):
                 The request object. Request to get a text embedding from
                 the model.
             model (str):
@@ -959,7 +959,7 @@ class TextServiceClient(metaclass=TextServiceClientMeta):
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.types.EmbedTextResponse:
+            google.ai.generativelanguage_v1alpha.types.EmbedTextResponse:
                 The response to a EmbedTextRequest.
         """
         # Create or coerce a protobuf request object.
@@ -1029,14 +1029,14 @@ class TextServiceClient(metaclass=TextServiceClientMeta):
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             def sample_batch_embed_text():
                 # Create a client
-                client = generativelanguage_v1beta.TextServiceClient()
+                client = generativelanguage_v1alpha.TextServiceClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta.BatchEmbedTextRequest(
+                request = generativelanguage_v1alpha.BatchEmbedTextRequest(
                     model="model_value",
                 )
 
@@ -1047,7 +1047,7 @@ class TextServiceClient(metaclass=TextServiceClientMeta):
                 print(response)
 
         Args:
-            request (Union[google.ai.generativelanguage_v1beta.types.BatchEmbedTextRequest, dict]):
+            request (Union[google.ai.generativelanguage_v1alpha.types.BatchEmbedTextRequest, dict]):
                 The request object. Batch request to get a text embedding
                 from the model.
             model (str):
@@ -1077,7 +1077,7 @@ class TextServiceClient(metaclass=TextServiceClientMeta):
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.types.BatchEmbedTextResponse:
+            google.ai.generativelanguage_v1alpha.types.BatchEmbedTextResponse:
                 The response to a EmbedTextRequest.
         """
         # Create or coerce a protobuf request object.
@@ -1147,17 +1147,17 @@ class TextServiceClient(metaclass=TextServiceClientMeta):
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta
+            from google.ai import generativelanguage_v1alpha
 
             def sample_count_text_tokens():
                 # Create a client
-                client = generativelanguage_v1beta.TextServiceClient()
+                client = generativelanguage_v1alpha.TextServiceClient()
 
                 # Initialize request argument(s)
-                prompt = generativelanguage_v1beta.TextPrompt()
+                prompt = generativelanguage_v1alpha.TextPrompt()
                 prompt.text = "text_value"
 
-                request = generativelanguage_v1beta.CountTextTokensRequest(
+                request = generativelanguage_v1alpha.CountTextTokensRequest(
                     model="model_value",
                     prompt=prompt,
                 )
@@ -1169,7 +1169,7 @@ class TextServiceClient(metaclass=TextServiceClientMeta):
                 print(response)
 
         Args:
-            request (Union[google.ai.generativelanguage_v1beta.types.CountTextTokensRequest, dict]):
+            request (Union[google.ai.generativelanguage_v1alpha.types.CountTextTokensRequest, dict]):
                 The request object. Counts the number of tokens in the ``prompt`` sent to a
                 model.
 
@@ -1187,7 +1187,7 @@ class TextServiceClient(metaclass=TextServiceClientMeta):
                 This corresponds to the ``model`` field
                 on the ``request`` instance; if ``request`` is provided, this
                 should not be set.
-            prompt (google.ai.generativelanguage_v1beta.types.TextPrompt):
+            prompt (google.ai.generativelanguage_v1alpha.types.TextPrompt):
                 Required. The free-form input text
                 given to the model as a prompt.
 
@@ -1203,7 +1203,7 @@ class TextServiceClient(metaclass=TextServiceClientMeta):
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta.types.CountTextTokensResponse:
+            google.ai.generativelanguage_v1alpha.types.CountTextTokensResponse:
                 A response from CountTextTokens.
 
                    It returns the model's token_count for the prompt.

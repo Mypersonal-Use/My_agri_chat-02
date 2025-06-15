@@ -33,9 +33,9 @@ import grpc  # type: ignore
 from grpc.experimental import aio  # type: ignore
 import proto  # type: ignore
 
-from google.ai.generativelanguage_v1beta.types import tuned_model as gag_tuned_model
-from google.ai.generativelanguage_v1beta.types import model, model_service
-from google.ai.generativelanguage_v1beta.types import tuned_model
+from google.ai.generativelanguage_v1alpha.types import tuned_model as gag_tuned_model
+from google.ai.generativelanguage_v1alpha.types import model, model_service
+from google.ai.generativelanguage_v1alpha.types import tuned_model
 
 from .base import DEFAULT_CLIENT_INFO, ModelServiceTransport
 from .grpc import ModelServiceGrpcTransport
@@ -78,7 +78,7 @@ class _LoggingClientAIOInterceptor(
             _LOGGER.debug(
                 f"Sending request for {client_call_details.method}",
                 extra={
-                    "serviceName": "google.ai.generativelanguage.v1beta.ModelService",
+                    "serviceName": "google.ai.generativelanguage.v1alpha.ModelService",
                     "rpcName": str(client_call_details.method),
                     "request": grpc_request,
                     "metadata": grpc_request["metadata"],
@@ -108,7 +108,7 @@ class _LoggingClientAIOInterceptor(
             _LOGGER.debug(
                 f"Received response to rpc {client_call_details.method}.",
                 extra={
-                    "serviceName": "google.ai.generativelanguage.v1beta.ModelService",
+                    "serviceName": "google.ai.generativelanguage.v1alpha.ModelService",
                     "rpcName": str(client_call_details.method),
                     "response": grpc_response,
                     "metadata": grpc_response["metadata"],
@@ -374,7 +374,7 @@ class ModelServiceGrpcAsyncIOTransport(ModelServiceTransport):
         # to pass in the functions for each.
         if "get_model" not in self._stubs:
             self._stubs["get_model"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.ModelService/GetModel",
+                "/google.ai.generativelanguage.v1alpha.ModelService/GetModel",
                 request_serializer=model_service.GetModelRequest.serialize,
                 response_deserializer=model.Model.deserialize,
             )
@@ -404,7 +404,7 @@ class ModelServiceGrpcAsyncIOTransport(ModelServiceTransport):
         # to pass in the functions for each.
         if "list_models" not in self._stubs:
             self._stubs["list_models"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.ModelService/ListModels",
+                "/google.ai.generativelanguage.v1alpha.ModelService/ListModels",
                 request_serializer=model_service.ListModelsRequest.serialize,
                 response_deserializer=model_service.ListModelsResponse.deserialize,
             )
@@ -432,7 +432,7 @@ class ModelServiceGrpcAsyncIOTransport(ModelServiceTransport):
         # to pass in the functions for each.
         if "get_tuned_model" not in self._stubs:
             self._stubs["get_tuned_model"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.ModelService/GetTunedModel",
+                "/google.ai.generativelanguage.v1alpha.ModelService/GetTunedModel",
                 request_serializer=model_service.GetTunedModelRequest.serialize,
                 response_deserializer=tuned_model.TunedModel.deserialize,
             )
@@ -461,7 +461,7 @@ class ModelServiceGrpcAsyncIOTransport(ModelServiceTransport):
         # to pass in the functions for each.
         if "list_tuned_models" not in self._stubs:
             self._stubs["list_tuned_models"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.ModelService/ListTunedModels",
+                "/google.ai.generativelanguage.v1alpha.ModelService/ListTunedModels",
                 request_serializer=model_service.ListTunedModelsRequest.serialize,
                 response_deserializer=model_service.ListTunedModelsResponse.deserialize,
             )
@@ -493,7 +493,7 @@ class ModelServiceGrpcAsyncIOTransport(ModelServiceTransport):
         # to pass in the functions for each.
         if "create_tuned_model" not in self._stubs:
             self._stubs["create_tuned_model"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.ModelService/CreateTunedModel",
+                "/google.ai.generativelanguage.v1alpha.ModelService/CreateTunedModel",
                 request_serializer=model_service.CreateTunedModelRequest.serialize,
                 response_deserializer=operations_pb2.Operation.FromString,
             )
@@ -521,7 +521,7 @@ class ModelServiceGrpcAsyncIOTransport(ModelServiceTransport):
         # to pass in the functions for each.
         if "update_tuned_model" not in self._stubs:
             self._stubs["update_tuned_model"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.ModelService/UpdateTunedModel",
+                "/google.ai.generativelanguage.v1alpha.ModelService/UpdateTunedModel",
                 request_serializer=model_service.UpdateTunedModelRequest.serialize,
                 response_deserializer=gag_tuned_model.TunedModel.deserialize,
             )
@@ -547,7 +547,7 @@ class ModelServiceGrpcAsyncIOTransport(ModelServiceTransport):
         # to pass in the functions for each.
         if "delete_tuned_model" not in self._stubs:
             self._stubs["delete_tuned_model"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.ModelService/DeleteTunedModel",
+                "/google.ai.generativelanguage.v1alpha.ModelService/DeleteTunedModel",
                 request_serializer=model_service.DeleteTunedModelRequest.serialize,
                 response_deserializer=empty_pb2.Empty.FromString,
             )
@@ -558,100 +558,37 @@ class ModelServiceGrpcAsyncIOTransport(ModelServiceTransport):
         self._wrapped_methods = {
             self.get_model: self._wrap_method(
                 self.get_model,
-                default_retry=retries.AsyncRetry(
-                    initial=1.0,
-                    maximum=10.0,
-                    multiplier=1.3,
-                    predicate=retries.if_exception_type(
-                        core_exceptions.ServiceUnavailable,
-                    ),
-                    deadline=60.0,
-                ),
-                default_timeout=60.0,
+                default_timeout=None,
                 client_info=client_info,
             ),
             self.list_models: self._wrap_method(
                 self.list_models,
-                default_retry=retries.AsyncRetry(
-                    initial=1.0,
-                    maximum=10.0,
-                    multiplier=1.3,
-                    predicate=retries.if_exception_type(
-                        core_exceptions.ServiceUnavailable,
-                    ),
-                    deadline=60.0,
-                ),
-                default_timeout=60.0,
+                default_timeout=None,
                 client_info=client_info,
             ),
             self.get_tuned_model: self._wrap_method(
                 self.get_tuned_model,
-                default_retry=retries.AsyncRetry(
-                    initial=1.0,
-                    maximum=10.0,
-                    multiplier=1.3,
-                    predicate=retries.if_exception_type(
-                        core_exceptions.ServiceUnavailable,
-                    ),
-                    deadline=60.0,
-                ),
-                default_timeout=60.0,
+                default_timeout=None,
                 client_info=client_info,
             ),
             self.list_tuned_models: self._wrap_method(
                 self.list_tuned_models,
-                default_retry=retries.AsyncRetry(
-                    initial=1.0,
-                    maximum=10.0,
-                    multiplier=1.3,
-                    predicate=retries.if_exception_type(
-                        core_exceptions.ServiceUnavailable,
-                    ),
-                    deadline=60.0,
-                ),
-                default_timeout=60.0,
+                default_timeout=None,
                 client_info=client_info,
             ),
             self.create_tuned_model: self._wrap_method(
                 self.create_tuned_model,
-                default_retry=retries.AsyncRetry(
-                    initial=1.0,
-                    maximum=10.0,
-                    multiplier=1.3,
-                    predicate=retries.if_exception_type(
-                        core_exceptions.ServiceUnavailable,
-                    ),
-                    deadline=60.0,
-                ),
-                default_timeout=60.0,
+                default_timeout=None,
                 client_info=client_info,
             ),
             self.update_tuned_model: self._wrap_method(
                 self.update_tuned_model,
-                default_retry=retries.AsyncRetry(
-                    initial=1.0,
-                    maximum=10.0,
-                    multiplier=1.3,
-                    predicate=retries.if_exception_type(
-                        core_exceptions.ServiceUnavailable,
-                    ),
-                    deadline=60.0,
-                ),
-                default_timeout=60.0,
+                default_timeout=None,
                 client_info=client_info,
             ),
             self.delete_tuned_model: self._wrap_method(
                 self.delete_tuned_model,
-                default_retry=retries.AsyncRetry(
-                    initial=1.0,
-                    maximum=10.0,
-                    multiplier=1.3,
-                    predicate=retries.if_exception_type(
-                        core_exceptions.ServiceUnavailable,
-                    ),
-                    deadline=60.0,
-                ),
-                default_timeout=60.0,
+                default_timeout=None,
                 client_info=client_info,
             ),
             self.get_operation: self._wrap_method(

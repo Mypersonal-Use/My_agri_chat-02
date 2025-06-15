@@ -29,7 +29,7 @@ from google.protobuf import empty_pb2  # type: ignore
 from google.protobuf import json_format
 from requests import __version__ as requests_version
 
-from google.ai.generativelanguage_v1beta.types import retriever, retriever_service
+from google.ai.generativelanguage_v1alpha.types import retriever, retriever_service
 
 from .base import DEFAULT_CLIENT_INFO as BASE_DEFAULT_CLIENT_INFO
 from .rest_base import _BaseRetrieverServiceRestTransport
@@ -895,9 +895,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.RetrieverServiceClient.BatchCreateChunks",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.BatchCreateChunks",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "BatchCreateChunks",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -942,9 +942,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.RetrieverServiceClient.batch_create_chunks",
+                    "Received response for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.batch_create_chunks",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "BatchCreateChunks",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -1042,9 +1042,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.RetrieverServiceClient.BatchDeleteChunks",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.BatchDeleteChunks",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "BatchDeleteChunks",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -1163,9 +1163,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.RetrieverServiceClient.BatchUpdateChunks",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.BatchUpdateChunks",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "BatchUpdateChunks",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -1210,9 +1210,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.RetrieverServiceClient.batch_update_chunks",
+                    "Received response for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.batch_update_chunks",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "BatchUpdateChunks",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -1315,9 +1315,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.RetrieverServiceClient.CreateChunk",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.CreateChunk",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "CreateChunk",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -1360,9 +1360,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.RetrieverServiceClient.create_chunk",
+                    "Received response for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.create_chunk",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "CreateChunk",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -1463,9 +1463,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.RetrieverServiceClient.CreateCorpus",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.CreateCorpus",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "CreateCorpus",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -1508,9 +1508,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.RetrieverServiceClient.create_corpus",
+                    "Received response for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.create_corpus",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "CreateCorpus",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -1611,9 +1611,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.RetrieverServiceClient.CreateDocument",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.CreateDocument",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "CreateDocument",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -1656,9 +1656,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.RetrieverServiceClient.create_document",
+                    "Received response for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.create_document",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "CreateDocument",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -1748,9 +1748,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.RetrieverServiceClient.DeleteChunk",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.DeleteChunk",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "DeleteChunk",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -1854,9 +1854,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.RetrieverServiceClient.DeleteCorpus",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.DeleteCorpus",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "DeleteCorpus",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -1960,9 +1960,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.RetrieverServiceClient.DeleteDocument",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.DeleteDocument",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "DeleteDocument",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -2077,9 +2077,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.RetrieverServiceClient.GetChunk",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.GetChunk",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "GetChunk",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -2121,9 +2121,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.RetrieverServiceClient.get_chunk",
+                    "Received response for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.get_chunk",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "GetChunk",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -2220,9 +2220,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.RetrieverServiceClient.GetCorpus",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.GetCorpus",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "GetCorpus",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -2264,9 +2264,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.RetrieverServiceClient.get_corpus",
+                    "Received response for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.get_corpus",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "GetCorpus",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -2363,9 +2363,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.RetrieverServiceClient.GetDocument",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.GetDocument",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "GetDocument",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -2407,9 +2407,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.RetrieverServiceClient.get_document",
+                    "Received response for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.get_document",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "GetDocument",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -2506,9 +2506,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.RetrieverServiceClient.ListChunks",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.ListChunks",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "ListChunks",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -2552,9 +2552,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.RetrieverServiceClient.list_chunks",
+                    "Received response for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.list_chunks",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "ListChunks",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -2651,9 +2651,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.RetrieverServiceClient.ListCorpora",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.ListCorpora",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "ListCorpora",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -2697,9 +2697,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.RetrieverServiceClient.list_corpora",
+                    "Received response for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.list_corpora",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "ListCorpora",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -2796,9 +2796,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.RetrieverServiceClient.ListDocuments",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.ListDocuments",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "ListDocuments",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -2842,9 +2842,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.RetrieverServiceClient.list_documents",
+                    "Received response for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.list_documents",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "ListDocuments",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -2945,9 +2945,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.RetrieverServiceClient.QueryCorpus",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.QueryCorpus",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "QueryCorpus",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -2992,9 +2992,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.RetrieverServiceClient.query_corpus",
+                    "Received response for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.query_corpus",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "QueryCorpus",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -3095,9 +3095,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.RetrieverServiceClient.QueryDocument",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.QueryDocument",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "QueryDocument",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -3142,9 +3142,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.RetrieverServiceClient.query_document",
+                    "Received response for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.query_document",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "QueryDocument",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -3247,9 +3247,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.RetrieverServiceClient.UpdateChunk",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.UpdateChunk",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "UpdateChunk",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -3292,9 +3292,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.RetrieverServiceClient.update_chunk",
+                    "Received response for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.update_chunk",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "UpdateChunk",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -3395,9 +3395,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.RetrieverServiceClient.UpdateCorpus",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.UpdateCorpus",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "UpdateCorpus",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -3440,9 +3440,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.RetrieverServiceClient.update_corpus",
+                    "Received response for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.update_corpus",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "UpdateCorpus",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -3543,9 +3543,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.RetrieverServiceClient.UpdateDocument",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.UpdateDocument",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "UpdateDocument",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -3588,9 +3588,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.RetrieverServiceClient.update_document",
+                    "Received response for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.update_document",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "UpdateDocument",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -3865,9 +3865,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.RetrieverServiceClient.GetOperation",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.GetOperation",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "GetOperation",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -3906,9 +3906,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.RetrieverServiceAsyncClient.GetOperation",
+                    "Received response for google.ai.generativelanguage_v1alpha.RetrieverServiceAsyncClient.GetOperation",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "GetOperation",
                         "httpResponse": http_response,
                         "metadata": http_response["headers"],
@@ -4005,9 +4005,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.RetrieverServiceClient.ListOperations",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.RetrieverServiceClient.ListOperations",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "ListOperations",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -4046,9 +4046,9 @@ class RetrieverServiceRestTransport(_BaseRetrieverServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.RetrieverServiceAsyncClient.ListOperations",
+                    "Received response for google.ai.generativelanguage_v1alpha.RetrieverServiceAsyncClient.ListOperations",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                         "rpcName": "ListOperations",
                         "httpResponse": http_response,
                         "metadata": http_response["headers"],

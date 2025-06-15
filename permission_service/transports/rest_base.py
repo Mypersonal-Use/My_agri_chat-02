@@ -22,9 +22,9 @@ from google.longrunning import operations_pb2  # type: ignore
 from google.protobuf import empty_pb2  # type: ignore
 from google.protobuf import json_format
 
-from google.ai.generativelanguage_v1beta.types import permission as gag_permission
-from google.ai.generativelanguage_v1beta.types import permission
-from google.ai.generativelanguage_v1beta.types import permission_service
+from google.ai.generativelanguage_v1alpha.types import permission as gag_permission
+from google.ai.generativelanguage_v1alpha.types import permission
+from google.ai.generativelanguage_v1alpha.types import permission_service
 
 from .base import DEFAULT_CLIENT_INFO, PermissionServiceTransport
 
@@ -110,12 +110,12 @@ class _BasePermissionServiceRestTransport(PermissionServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "post",
-                    "uri": "/v1beta/{parent=tunedModels/*}/permissions",
+                    "uri": "/v1alpha/{parent=tunedModels/*}/permissions",
                     "body": "permission",
                 },
                 {
                     "method": "post",
-                    "uri": "/v1beta/{parent=corpora/*}/permissions",
+                    "uri": "/v1alpha/{parent=corpora/*}/permissions",
                     "body": "permission",
                 },
             ]
@@ -172,11 +172,11 @@ class _BasePermissionServiceRestTransport(PermissionServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "delete",
-                    "uri": "/v1beta/{name=tunedModels/*/permissions/*}",
+                    "uri": "/v1alpha/{name=tunedModels/*/permissions/*}",
                 },
                 {
                     "method": "delete",
-                    "uri": "/v1beta/{name=corpora/*/permissions/*}",
+                    "uri": "/v1alpha/{name=corpora/*/permissions/*}",
                 },
             ]
             return http_options
@@ -223,11 +223,11 @@ class _BasePermissionServiceRestTransport(PermissionServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=tunedModels/*/permissions/*}",
+                    "uri": "/v1alpha/{name=tunedModels/*/permissions/*}",
                 },
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=corpora/*/permissions/*}",
+                    "uri": "/v1alpha/{name=corpora/*/permissions/*}",
                 },
             ]
             return http_options
@@ -274,11 +274,11 @@ class _BasePermissionServiceRestTransport(PermissionServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "get",
-                    "uri": "/v1beta/{parent=tunedModels/*}/permissions",
+                    "uri": "/v1alpha/{parent=tunedModels/*}/permissions",
                 },
                 {
                     "method": "get",
-                    "uri": "/v1beta/{parent=corpora/*}/permissions",
+                    "uri": "/v1alpha/{parent=corpora/*}/permissions",
                 },
             ]
             return http_options
@@ -325,7 +325,7 @@ class _BasePermissionServiceRestTransport(PermissionServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "post",
-                    "uri": "/v1beta/{name=tunedModels/*}:transferOwnership",
+                    "uri": "/v1alpha/{name=tunedModels/*}:transferOwnership",
                     "body": "*",
                 },
             ]
@@ -384,12 +384,12 @@ class _BasePermissionServiceRestTransport(PermissionServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "patch",
-                    "uri": "/v1beta/{permission.name=tunedModels/*/permissions/*}",
+                    "uri": "/v1alpha/{permission.name=tunedModels/*/permissions/*}",
                     "body": "permission",
                 },
                 {
                     "method": "patch",
-                    "uri": "/v1beta/{permission.name=corpora/*/permissions/*}",
+                    "uri": "/v1alpha/{permission.name=corpora/*/permissions/*}",
                     "body": "permission",
                 },
             ]
@@ -436,15 +436,15 @@ class _BasePermissionServiceRestTransport(PermissionServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=tunedModels/*/operations/*}",
+                    "uri": "/v1alpha/{name=tunedModels/*/operations/*}",
                 },
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=generatedFiles/*/operations/*}",
+                    "uri": "/v1alpha/{name=generatedFiles/*/operations/*}",
                 },
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=models/*/operations/*}",
+                    "uri": "/v1alpha/{name=models/*/operations/*}",
                 },
             ]
             return http_options
@@ -469,11 +469,11 @@ class _BasePermissionServiceRestTransport(PermissionServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=tunedModels/*}/operations",
+                    "uri": "/v1alpha/{name=tunedModels/*}/operations",
                 },
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=models/*}/operations",
+                    "uri": "/v1alpha/{name=models/*}/operations",
                 },
             ]
             return http_options

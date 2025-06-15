@@ -30,9 +30,9 @@ import google.protobuf.message
 import grpc  # type: ignore
 import proto  # type: ignore
 
-from google.ai.generativelanguage_v1beta.types import tuned_model as gag_tuned_model
-from google.ai.generativelanguage_v1beta.types import model, model_service
-from google.ai.generativelanguage_v1beta.types import tuned_model
+from google.ai.generativelanguage_v1alpha.types import tuned_model as gag_tuned_model
+from google.ai.generativelanguage_v1alpha.types import model, model_service
+from google.ai.generativelanguage_v1alpha.types import tuned_model
 
 from .base import DEFAULT_CLIENT_INFO, ModelServiceTransport
 
@@ -72,7 +72,7 @@ class _LoggingClientInterceptor(grpc.UnaryUnaryClientInterceptor):  # pragma: NO
             _LOGGER.debug(
                 f"Sending request for {client_call_details.method}",
                 extra={
-                    "serviceName": "google.ai.generativelanguage.v1beta.ModelService",
+                    "serviceName": "google.ai.generativelanguage.v1alpha.ModelService",
                     "rpcName": client_call_details.method,
                     "request": grpc_request,
                     "metadata": grpc_request["metadata"],
@@ -103,7 +103,7 @@ class _LoggingClientInterceptor(grpc.UnaryUnaryClientInterceptor):  # pragma: NO
             _LOGGER.debug(
                 f"Received response for {client_call_details.method}.",
                 extra={
-                    "serviceName": "google.ai.generativelanguage.v1beta.ModelService",
+                    "serviceName": "google.ai.generativelanguage.v1alpha.ModelService",
                     "rpcName": client_call_details.method,
                     "response": grpc_response,
                     "metadata": grpc_response["metadata"],
@@ -365,7 +365,7 @@ class ModelServiceGrpcTransport(ModelServiceTransport):
         # to pass in the functions for each.
         if "get_model" not in self._stubs:
             self._stubs["get_model"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.ModelService/GetModel",
+                "/google.ai.generativelanguage.v1alpha.ModelService/GetModel",
                 request_serializer=model_service.GetModelRequest.serialize,
                 response_deserializer=model.Model.deserialize,
             )
@@ -393,7 +393,7 @@ class ModelServiceGrpcTransport(ModelServiceTransport):
         # to pass in the functions for each.
         if "list_models" not in self._stubs:
             self._stubs["list_models"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.ModelService/ListModels",
+                "/google.ai.generativelanguage.v1alpha.ModelService/ListModels",
                 request_serializer=model_service.ListModelsRequest.serialize,
                 response_deserializer=model_service.ListModelsResponse.deserialize,
             )
@@ -419,7 +419,7 @@ class ModelServiceGrpcTransport(ModelServiceTransport):
         # to pass in the functions for each.
         if "get_tuned_model" not in self._stubs:
             self._stubs["get_tuned_model"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.ModelService/GetTunedModel",
+                "/google.ai.generativelanguage.v1alpha.ModelService/GetTunedModel",
                 request_serializer=model_service.GetTunedModelRequest.serialize,
                 response_deserializer=tuned_model.TunedModel.deserialize,
             )
@@ -447,7 +447,7 @@ class ModelServiceGrpcTransport(ModelServiceTransport):
         # to pass in the functions for each.
         if "list_tuned_models" not in self._stubs:
             self._stubs["list_tuned_models"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.ModelService/ListTunedModels",
+                "/google.ai.generativelanguage.v1alpha.ModelService/ListTunedModels",
                 request_serializer=model_service.ListTunedModelsRequest.serialize,
                 response_deserializer=model_service.ListTunedModelsResponse.deserialize,
             )
@@ -477,7 +477,7 @@ class ModelServiceGrpcTransport(ModelServiceTransport):
         # to pass in the functions for each.
         if "create_tuned_model" not in self._stubs:
             self._stubs["create_tuned_model"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.ModelService/CreateTunedModel",
+                "/google.ai.generativelanguage.v1alpha.ModelService/CreateTunedModel",
                 request_serializer=model_service.CreateTunedModelRequest.serialize,
                 response_deserializer=operations_pb2.Operation.FromString,
             )
@@ -503,7 +503,7 @@ class ModelServiceGrpcTransport(ModelServiceTransport):
         # to pass in the functions for each.
         if "update_tuned_model" not in self._stubs:
             self._stubs["update_tuned_model"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.ModelService/UpdateTunedModel",
+                "/google.ai.generativelanguage.v1alpha.ModelService/UpdateTunedModel",
                 request_serializer=model_service.UpdateTunedModelRequest.serialize,
                 response_deserializer=gag_tuned_model.TunedModel.deserialize,
             )
@@ -529,7 +529,7 @@ class ModelServiceGrpcTransport(ModelServiceTransport):
         # to pass in the functions for each.
         if "delete_tuned_model" not in self._stubs:
             self._stubs["delete_tuned_model"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.ModelService/DeleteTunedModel",
+                "/google.ai.generativelanguage.v1alpha.ModelService/DeleteTunedModel",
                 request_serializer=model_service.DeleteTunedModelRequest.serialize,
                 response_deserializer=empty_pb2.Empty.FromString,
             )

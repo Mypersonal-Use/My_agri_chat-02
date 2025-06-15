@@ -33,9 +33,9 @@ import grpc  # type: ignore
 from grpc.experimental import aio  # type: ignore
 import proto  # type: ignore
 
-from google.ai.generativelanguage_v1beta.types import permission as gag_permission
-from google.ai.generativelanguage_v1beta.types import permission
-from google.ai.generativelanguage_v1beta.types import permission_service
+from google.ai.generativelanguage_v1alpha.types import permission as gag_permission
+from google.ai.generativelanguage_v1alpha.types import permission
+from google.ai.generativelanguage_v1alpha.types import permission_service
 
 from .base import DEFAULT_CLIENT_INFO, PermissionServiceTransport
 from .grpc import PermissionServiceGrpcTransport
@@ -78,7 +78,7 @@ class _LoggingClientAIOInterceptor(
             _LOGGER.debug(
                 f"Sending request for {client_call_details.method}",
                 extra={
-                    "serviceName": "google.ai.generativelanguage.v1beta.PermissionService",
+                    "serviceName": "google.ai.generativelanguage.v1alpha.PermissionService",
                     "rpcName": str(client_call_details.method),
                     "request": grpc_request,
                     "metadata": grpc_request["metadata"],
@@ -108,7 +108,7 @@ class _LoggingClientAIOInterceptor(
             _LOGGER.debug(
                 f"Received response to rpc {client_call_details.method}.",
                 extra={
-                    "serviceName": "google.ai.generativelanguage.v1beta.PermissionService",
+                    "serviceName": "google.ai.generativelanguage.v1alpha.PermissionService",
                     "rpcName": str(client_call_details.method),
                     "response": grpc_response,
                     "metadata": grpc_response["metadata"],
@@ -355,7 +355,7 @@ class PermissionServiceGrpcAsyncIOTransport(PermissionServiceTransport):
         # to pass in the functions for each.
         if "create_permission" not in self._stubs:
             self._stubs["create_permission"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.PermissionService/CreatePermission",
+                "/google.ai.generativelanguage.v1alpha.PermissionService/CreatePermission",
                 request_serializer=permission_service.CreatePermissionRequest.serialize,
                 response_deserializer=gag_permission.Permission.deserialize,
             )
@@ -383,7 +383,7 @@ class PermissionServiceGrpcAsyncIOTransport(PermissionServiceTransport):
         # to pass in the functions for each.
         if "get_permission" not in self._stubs:
             self._stubs["get_permission"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.PermissionService/GetPermission",
+                "/google.ai.generativelanguage.v1alpha.PermissionService/GetPermission",
                 request_serializer=permission_service.GetPermissionRequest.serialize,
                 response_deserializer=permission.Permission.deserialize,
             )
@@ -412,7 +412,7 @@ class PermissionServiceGrpcAsyncIOTransport(PermissionServiceTransport):
         # to pass in the functions for each.
         if "list_permissions" not in self._stubs:
             self._stubs["list_permissions"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.PermissionService/ListPermissions",
+                "/google.ai.generativelanguage.v1alpha.PermissionService/ListPermissions",
                 request_serializer=permission_service.ListPermissionsRequest.serialize,
                 response_deserializer=permission_service.ListPermissionsResponse.deserialize,
             )
@@ -441,7 +441,7 @@ class PermissionServiceGrpcAsyncIOTransport(PermissionServiceTransport):
         # to pass in the functions for each.
         if "update_permission" not in self._stubs:
             self._stubs["update_permission"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.PermissionService/UpdatePermission",
+                "/google.ai.generativelanguage.v1alpha.PermissionService/UpdatePermission",
                 request_serializer=permission_service.UpdatePermissionRequest.serialize,
                 response_deserializer=gag_permission.Permission.deserialize,
             )
@@ -469,7 +469,7 @@ class PermissionServiceGrpcAsyncIOTransport(PermissionServiceTransport):
         # to pass in the functions for each.
         if "delete_permission" not in self._stubs:
             self._stubs["delete_permission"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.PermissionService/DeletePermission",
+                "/google.ai.generativelanguage.v1alpha.PermissionService/DeletePermission",
                 request_serializer=permission_service.DeletePermissionRequest.serialize,
                 response_deserializer=empty_pb2.Empty.FromString,
             )
@@ -501,7 +501,7 @@ class PermissionServiceGrpcAsyncIOTransport(PermissionServiceTransport):
         # to pass in the functions for each.
         if "transfer_ownership" not in self._stubs:
             self._stubs["transfer_ownership"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.PermissionService/TransferOwnership",
+                "/google.ai.generativelanguage.v1alpha.PermissionService/TransferOwnership",
                 request_serializer=permission_service.TransferOwnershipRequest.serialize,
                 response_deserializer=permission_service.TransferOwnershipResponse.deserialize,
             )
@@ -512,30 +512,12 @@ class PermissionServiceGrpcAsyncIOTransport(PermissionServiceTransport):
         self._wrapped_methods = {
             self.create_permission: self._wrap_method(
                 self.create_permission,
-                default_retry=retries.AsyncRetry(
-                    initial=1.0,
-                    maximum=10.0,
-                    multiplier=1.3,
-                    predicate=retries.if_exception_type(
-                        core_exceptions.ServiceUnavailable,
-                    ),
-                    deadline=60.0,
-                ),
-                default_timeout=60.0,
+                default_timeout=None,
                 client_info=client_info,
             ),
             self.get_permission: self._wrap_method(
                 self.get_permission,
-                default_retry=retries.AsyncRetry(
-                    initial=1.0,
-                    maximum=10.0,
-                    multiplier=1.3,
-                    predicate=retries.if_exception_type(
-                        core_exceptions.ServiceUnavailable,
-                    ),
-                    deadline=60.0,
-                ),
-                default_timeout=60.0,
+                default_timeout=None,
                 client_info=client_info,
             ),
             self.list_permissions: self._wrap_method(
@@ -545,44 +527,17 @@ class PermissionServiceGrpcAsyncIOTransport(PermissionServiceTransport):
             ),
             self.update_permission: self._wrap_method(
                 self.update_permission,
-                default_retry=retries.AsyncRetry(
-                    initial=1.0,
-                    maximum=10.0,
-                    multiplier=1.3,
-                    predicate=retries.if_exception_type(
-                        core_exceptions.ServiceUnavailable,
-                    ),
-                    deadline=60.0,
-                ),
-                default_timeout=60.0,
+                default_timeout=None,
                 client_info=client_info,
             ),
             self.delete_permission: self._wrap_method(
                 self.delete_permission,
-                default_retry=retries.AsyncRetry(
-                    initial=1.0,
-                    maximum=10.0,
-                    multiplier=1.3,
-                    predicate=retries.if_exception_type(
-                        core_exceptions.ServiceUnavailable,
-                    ),
-                    deadline=60.0,
-                ),
-                default_timeout=60.0,
+                default_timeout=None,
                 client_info=client_info,
             ),
             self.transfer_ownership: self._wrap_method(
                 self.transfer_ownership,
-                default_retry=retries.AsyncRetry(
-                    initial=1.0,
-                    maximum=10.0,
-                    multiplier=1.3,
-                    predicate=retries.if_exception_type(
-                        core_exceptions.ServiceUnavailable,
-                    ),
-                    deadline=60.0,
-                ),
-                default_timeout=60.0,
+                default_timeout=None,
                 client_info=client_info,
             ),
             self.get_operation: self._wrap_method(

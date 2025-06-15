@@ -38,14 +38,14 @@ except AttributeError:  # pragma: NO COVER
     OptionalRetry = Union[retries.Retry, object, None]  # type: ignore
     OptionalAsyncRetry = Union[retries_async.AsyncRetry, object, None]  # type: ignore
 
-from google.ai.generativelanguage_v1beta.types import retriever, retriever_service
+from google.ai.generativelanguage_v1alpha.types import retriever, retriever_service
 
 
 class ListCorporaPager:
     """A pager for iterating through ``list_corpora`` requests.
 
     This class thinly wraps an initial
-    :class:`google.ai.generativelanguage_v1beta.types.ListCorporaResponse` object, and
+    :class:`google.ai.generativelanguage_v1alpha.types.ListCorporaResponse` object, and
     provides an ``__iter__`` method to iterate through its
     ``corpora`` field.
 
@@ -54,7 +54,7 @@ class ListCorporaPager:
     through the ``corpora`` field on the
     corresponding responses.
 
-    All the usual :class:`google.ai.generativelanguage_v1beta.types.ListCorporaResponse`
+    All the usual :class:`google.ai.generativelanguage_v1alpha.types.ListCorporaResponse`
     attributes are available on the pager. If multiple requests are made, only
     the most recent response is retained, and thus used for attribute lookup.
     """
@@ -74,9 +74,9 @@ class ListCorporaPager:
         Args:
             method (Callable): The method that was originally called, and
                 which instantiated this pager.
-            request (google.ai.generativelanguage_v1beta.types.ListCorporaRequest):
+            request (google.ai.generativelanguage_v1alpha.types.ListCorporaRequest):
                 The initial request object.
-            response (google.ai.generativelanguage_v1beta.types.ListCorporaResponse):
+            response (google.ai.generativelanguage_v1alpha.types.ListCorporaResponse):
                 The initial response object.
             retry (google.api_core.retry.Retry): Designation of what errors,
                 if any, should be retried.
@@ -121,7 +121,7 @@ class ListCorporaAsyncPager:
     """A pager for iterating through ``list_corpora`` requests.
 
     This class thinly wraps an initial
-    :class:`google.ai.generativelanguage_v1beta.types.ListCorporaResponse` object, and
+    :class:`google.ai.generativelanguage_v1alpha.types.ListCorporaResponse` object, and
     provides an ``__aiter__`` method to iterate through its
     ``corpora`` field.
 
@@ -130,7 +130,7 @@ class ListCorporaAsyncPager:
     through the ``corpora`` field on the
     corresponding responses.
 
-    All the usual :class:`google.ai.generativelanguage_v1beta.types.ListCorporaResponse`
+    All the usual :class:`google.ai.generativelanguage_v1alpha.types.ListCorporaResponse`
     attributes are available on the pager. If multiple requests are made, only
     the most recent response is retained, and thus used for attribute lookup.
     """
@@ -150,9 +150,9 @@ class ListCorporaAsyncPager:
         Args:
             method (Callable): The method that was originally called, and
                 which instantiated this pager.
-            request (google.ai.generativelanguage_v1beta.types.ListCorporaRequest):
+            request (google.ai.generativelanguage_v1alpha.types.ListCorporaRequest):
                 The initial request object.
-            response (google.ai.generativelanguage_v1beta.types.ListCorporaResponse):
+            response (google.ai.generativelanguage_v1alpha.types.ListCorporaResponse):
                 The initial response object.
             retry (google.api_core.retry.AsyncRetry): Designation of what errors,
                 if any, should be retried.
@@ -201,7 +201,7 @@ class ListDocumentsPager:
     """A pager for iterating through ``list_documents`` requests.
 
     This class thinly wraps an initial
-    :class:`google.ai.generativelanguage_v1beta.types.ListDocumentsResponse` object, and
+    :class:`google.ai.generativelanguage_v1alpha.types.ListDocumentsResponse` object, and
     provides an ``__iter__`` method to iterate through its
     ``documents`` field.
 
@@ -210,7 +210,7 @@ class ListDocumentsPager:
     through the ``documents`` field on the
     corresponding responses.
 
-    All the usual :class:`google.ai.generativelanguage_v1beta.types.ListDocumentsResponse`
+    All the usual :class:`google.ai.generativelanguage_v1alpha.types.ListDocumentsResponse`
     attributes are available on the pager. If multiple requests are made, only
     the most recent response is retained, and thus used for attribute lookup.
     """
@@ -230,9 +230,9 @@ class ListDocumentsPager:
         Args:
             method (Callable): The method that was originally called, and
                 which instantiated this pager.
-            request (google.ai.generativelanguage_v1beta.types.ListDocumentsRequest):
+            request (google.ai.generativelanguage_v1alpha.types.ListDocumentsRequest):
                 The initial request object.
-            response (google.ai.generativelanguage_v1beta.types.ListDocumentsResponse):
+            response (google.ai.generativelanguage_v1alpha.types.ListDocumentsResponse):
                 The initial response object.
             retry (google.api_core.retry.Retry): Designation of what errors,
                 if any, should be retried.
@@ -277,7 +277,7 @@ class ListDocumentsAsyncPager:
     """A pager for iterating through ``list_documents`` requests.
 
     This class thinly wraps an initial
-    :class:`google.ai.generativelanguage_v1beta.types.ListDocumentsResponse` object, and
+    :class:`google.ai.generativelanguage_v1alpha.types.ListDocumentsResponse` object, and
     provides an ``__aiter__`` method to iterate through its
     ``documents`` field.
 
@@ -286,7 +286,7 @@ class ListDocumentsAsyncPager:
     through the ``documents`` field on the
     corresponding responses.
 
-    All the usual :class:`google.ai.generativelanguage_v1beta.types.ListDocumentsResponse`
+    All the usual :class:`google.ai.generativelanguage_v1alpha.types.ListDocumentsResponse`
     attributes are available on the pager. If multiple requests are made, only
     the most recent response is retained, and thus used for attribute lookup.
     """
@@ -306,9 +306,9 @@ class ListDocumentsAsyncPager:
         Args:
             method (Callable): The method that was originally called, and
                 which instantiated this pager.
-            request (google.ai.generativelanguage_v1beta.types.ListDocumentsRequest):
+            request (google.ai.generativelanguage_v1alpha.types.ListDocumentsRequest):
                 The initial request object.
-            response (google.ai.generativelanguage_v1beta.types.ListDocumentsResponse):
+            response (google.ai.generativelanguage_v1alpha.types.ListDocumentsResponse):
                 The initial response object.
             retry (google.api_core.retry.AsyncRetry): Designation of what errors,
                 if any, should be retried.
@@ -357,7 +357,7 @@ class ListChunksPager:
     """A pager for iterating through ``list_chunks`` requests.
 
     This class thinly wraps an initial
-    :class:`google.ai.generativelanguage_v1beta.types.ListChunksResponse` object, and
+    :class:`google.ai.generativelanguage_v1alpha.types.ListChunksResponse` object, and
     provides an ``__iter__`` method to iterate through its
     ``chunks`` field.
 
@@ -366,7 +366,7 @@ class ListChunksPager:
     through the ``chunks`` field on the
     corresponding responses.
 
-    All the usual :class:`google.ai.generativelanguage_v1beta.types.ListChunksResponse`
+    All the usual :class:`google.ai.generativelanguage_v1alpha.types.ListChunksResponse`
     attributes are available on the pager. If multiple requests are made, only
     the most recent response is retained, and thus used for attribute lookup.
     """
@@ -386,9 +386,9 @@ class ListChunksPager:
         Args:
             method (Callable): The method that was originally called, and
                 which instantiated this pager.
-            request (google.ai.generativelanguage_v1beta.types.ListChunksRequest):
+            request (google.ai.generativelanguage_v1alpha.types.ListChunksRequest):
                 The initial request object.
-            response (google.ai.generativelanguage_v1beta.types.ListChunksResponse):
+            response (google.ai.generativelanguage_v1alpha.types.ListChunksResponse):
                 The initial response object.
             retry (google.api_core.retry.Retry): Designation of what errors,
                 if any, should be retried.
@@ -433,7 +433,7 @@ class ListChunksAsyncPager:
     """A pager for iterating through ``list_chunks`` requests.
 
     This class thinly wraps an initial
-    :class:`google.ai.generativelanguage_v1beta.types.ListChunksResponse` object, and
+    :class:`google.ai.generativelanguage_v1alpha.types.ListChunksResponse` object, and
     provides an ``__aiter__`` method to iterate through its
     ``chunks`` field.
 
@@ -442,7 +442,7 @@ class ListChunksAsyncPager:
     through the ``chunks`` field on the
     corresponding responses.
 
-    All the usual :class:`google.ai.generativelanguage_v1beta.types.ListChunksResponse`
+    All the usual :class:`google.ai.generativelanguage_v1alpha.types.ListChunksResponse`
     attributes are available on the pager. If multiple requests are made, only
     the most recent response is retained, and thus used for attribute lookup.
     """
@@ -462,9 +462,9 @@ class ListChunksAsyncPager:
         Args:
             method (Callable): The method that was originally called, and
                 which instantiated this pager.
-            request (google.ai.generativelanguage_v1beta.types.ListChunksRequest):
+            request (google.ai.generativelanguage_v1alpha.types.ListChunksRequest):
                 The initial request object.
-            response (google.ai.generativelanguage_v1beta.types.ListChunksResponse):
+            response (google.ai.generativelanguage_v1alpha.types.ListChunksResponse):
                 The initial response object.
             retry (google.api_core.retry.AsyncRetry): Designation of what errors,
                 if any, should be retried.

@@ -22,9 +22,9 @@ from google.longrunning import operations_pb2  # type: ignore
 from google.protobuf import empty_pb2  # type: ignore
 from google.protobuf import json_format
 
-from google.ai.generativelanguage_v1beta.types import tuned_model as gag_tuned_model
-from google.ai.generativelanguage_v1beta.types import model, model_service
-from google.ai.generativelanguage_v1beta.types import tuned_model
+from google.ai.generativelanguage_v1alpha.types import tuned_model as gag_tuned_model
+from google.ai.generativelanguage_v1alpha.types import model, model_service
+from google.ai.generativelanguage_v1alpha.types import tuned_model
 
 from .base import DEFAULT_CLIENT_INFO, ModelServiceTransport
 
@@ -110,7 +110,7 @@ class _BaseModelServiceRestTransport(ModelServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "post",
-                    "uri": "/v1beta/tunedModels",
+                    "uri": "/v1alpha/tunedModels",
                     "body": "tuned_model",
                 },
             ]
@@ -167,7 +167,7 @@ class _BaseModelServiceRestTransport(ModelServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "delete",
-                    "uri": "/v1beta/{name=tunedModels/*}",
+                    "uri": "/v1alpha/{name=tunedModels/*}",
                 },
             ]
             return http_options
@@ -214,7 +214,7 @@ class _BaseModelServiceRestTransport(ModelServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=models/*}",
+                    "uri": "/v1alpha/{name=models/*}",
                 },
             ]
             return http_options
@@ -261,7 +261,7 @@ class _BaseModelServiceRestTransport(ModelServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=tunedModels/*}",
+                    "uri": "/v1alpha/{name=tunedModels/*}",
                 },
             ]
             return http_options
@@ -298,7 +298,7 @@ class _BaseModelServiceRestTransport(ModelServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "get",
-                    "uri": "/v1beta/models",
+                    "uri": "/v1alpha/models",
                 },
             ]
             return http_options
@@ -330,7 +330,7 @@ class _BaseModelServiceRestTransport(ModelServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "get",
-                    "uri": "/v1beta/tunedModels",
+                    "uri": "/v1alpha/tunedModels",
                 },
             ]
             return http_options
@@ -372,7 +372,7 @@ class _BaseModelServiceRestTransport(ModelServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "patch",
-                    "uri": "/v1beta/{tuned_model.name=tunedModels/*}",
+                    "uri": "/v1alpha/{tuned_model.name=tunedModels/*}",
                     "body": "tuned_model",
                 },
             ]
@@ -419,15 +419,15 @@ class _BaseModelServiceRestTransport(ModelServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=tunedModels/*/operations/*}",
+                    "uri": "/v1alpha/{name=tunedModels/*/operations/*}",
                 },
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=generatedFiles/*/operations/*}",
+                    "uri": "/v1alpha/{name=generatedFiles/*/operations/*}",
                 },
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=models/*/operations/*}",
+                    "uri": "/v1alpha/{name=models/*/operations/*}",
                 },
             ]
             return http_options
@@ -452,11 +452,11 @@ class _BaseModelServiceRestTransport(ModelServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=tunedModels/*}/operations",
+                    "uri": "/v1alpha/{name=tunedModels/*}/operations",
                 },
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=models/*}/operations",
+                    "uri": "/v1alpha/{name=models/*}/operations",
                 },
             ]
             return http_options

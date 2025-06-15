@@ -30,7 +30,7 @@ import google.protobuf.message
 import grpc  # type: ignore
 import proto  # type: ignore
 
-from google.ai.generativelanguage_v1beta.types import retriever, retriever_service
+from google.ai.generativelanguage_v1alpha.types import retriever, retriever_service
 
 from .base import DEFAULT_CLIENT_INFO, RetrieverServiceTransport
 
@@ -70,7 +70,7 @@ class _LoggingClientInterceptor(grpc.UnaryUnaryClientInterceptor):  # pragma: NO
             _LOGGER.debug(
                 f"Sending request for {client_call_details.method}",
                 extra={
-                    "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                    "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                     "rpcName": client_call_details.method,
                     "request": grpc_request,
                     "metadata": grpc_request["metadata"],
@@ -101,7 +101,7 @@ class _LoggingClientInterceptor(grpc.UnaryUnaryClientInterceptor):  # pragma: NO
             _LOGGER.debug(
                 f"Received response for {client_call_details.method}.",
                 extra={
-                    "serviceName": "google.ai.generativelanguage.v1beta.RetrieverService",
+                    "serviceName": "google.ai.generativelanguage.v1alpha.RetrieverService",
                     "rpcName": client_call_details.method,
                     "response": grpc_response,
                     "metadata": grpc_response["metadata"],
@@ -343,7 +343,7 @@ class RetrieverServiceGrpcTransport(RetrieverServiceTransport):
         # to pass in the functions for each.
         if "create_corpus" not in self._stubs:
             self._stubs["create_corpus"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.RetrieverService/CreateCorpus",
+                "/google.ai.generativelanguage.v1alpha.RetrieverService/CreateCorpus",
                 request_serializer=retriever_service.CreateCorpusRequest.serialize,
                 response_deserializer=retriever.Corpus.deserialize,
             )
@@ -369,7 +369,7 @@ class RetrieverServiceGrpcTransport(RetrieverServiceTransport):
         # to pass in the functions for each.
         if "get_corpus" not in self._stubs:
             self._stubs["get_corpus"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.RetrieverService/GetCorpus",
+                "/google.ai.generativelanguage.v1alpha.RetrieverService/GetCorpus",
                 request_serializer=retriever_service.GetCorpusRequest.serialize,
                 response_deserializer=retriever.Corpus.deserialize,
             )
@@ -395,7 +395,7 @@ class RetrieverServiceGrpcTransport(RetrieverServiceTransport):
         # to pass in the functions for each.
         if "update_corpus" not in self._stubs:
             self._stubs["update_corpus"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.RetrieverService/UpdateCorpus",
+                "/google.ai.generativelanguage.v1alpha.RetrieverService/UpdateCorpus",
                 request_serializer=retriever_service.UpdateCorpusRequest.serialize,
                 response_deserializer=retriever.Corpus.deserialize,
             )
@@ -421,7 +421,7 @@ class RetrieverServiceGrpcTransport(RetrieverServiceTransport):
         # to pass in the functions for each.
         if "delete_corpus" not in self._stubs:
             self._stubs["delete_corpus"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.RetrieverService/DeleteCorpus",
+                "/google.ai.generativelanguage.v1alpha.RetrieverService/DeleteCorpus",
                 request_serializer=retriever_service.DeleteCorpusRequest.serialize,
                 response_deserializer=empty_pb2.Empty.FromString,
             )
@@ -449,7 +449,7 @@ class RetrieverServiceGrpcTransport(RetrieverServiceTransport):
         # to pass in the functions for each.
         if "list_corpora" not in self._stubs:
             self._stubs["list_corpora"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.RetrieverService/ListCorpora",
+                "/google.ai.generativelanguage.v1alpha.RetrieverService/ListCorpora",
                 request_serializer=retriever_service.ListCorporaRequest.serialize,
                 response_deserializer=retriever_service.ListCorporaResponse.deserialize,
             )
@@ -477,7 +477,7 @@ class RetrieverServiceGrpcTransport(RetrieverServiceTransport):
         # to pass in the functions for each.
         if "query_corpus" not in self._stubs:
             self._stubs["query_corpus"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.RetrieverService/QueryCorpus",
+                "/google.ai.generativelanguage.v1alpha.RetrieverService/QueryCorpus",
                 request_serializer=retriever_service.QueryCorpusRequest.serialize,
                 response_deserializer=retriever_service.QueryCorpusResponse.deserialize,
             )
@@ -503,7 +503,7 @@ class RetrieverServiceGrpcTransport(RetrieverServiceTransport):
         # to pass in the functions for each.
         if "create_document" not in self._stubs:
             self._stubs["create_document"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.RetrieverService/CreateDocument",
+                "/google.ai.generativelanguage.v1alpha.RetrieverService/CreateDocument",
                 request_serializer=retriever_service.CreateDocumentRequest.serialize,
                 response_deserializer=retriever.Document.deserialize,
             )
@@ -529,7 +529,7 @@ class RetrieverServiceGrpcTransport(RetrieverServiceTransport):
         # to pass in the functions for each.
         if "get_document" not in self._stubs:
             self._stubs["get_document"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.RetrieverService/GetDocument",
+                "/google.ai.generativelanguage.v1alpha.RetrieverService/GetDocument",
                 request_serializer=retriever_service.GetDocumentRequest.serialize,
                 response_deserializer=retriever.Document.deserialize,
             )
@@ -555,7 +555,7 @@ class RetrieverServiceGrpcTransport(RetrieverServiceTransport):
         # to pass in the functions for each.
         if "update_document" not in self._stubs:
             self._stubs["update_document"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.RetrieverService/UpdateDocument",
+                "/google.ai.generativelanguage.v1alpha.RetrieverService/UpdateDocument",
                 request_serializer=retriever_service.UpdateDocumentRequest.serialize,
                 response_deserializer=retriever.Document.deserialize,
             )
@@ -581,7 +581,7 @@ class RetrieverServiceGrpcTransport(RetrieverServiceTransport):
         # to pass in the functions for each.
         if "delete_document" not in self._stubs:
             self._stubs["delete_document"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.RetrieverService/DeleteDocument",
+                "/google.ai.generativelanguage.v1alpha.RetrieverService/DeleteDocument",
                 request_serializer=retriever_service.DeleteDocumentRequest.serialize,
                 response_deserializer=empty_pb2.Empty.FromString,
             )
@@ -610,7 +610,7 @@ class RetrieverServiceGrpcTransport(RetrieverServiceTransport):
         # to pass in the functions for each.
         if "list_documents" not in self._stubs:
             self._stubs["list_documents"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.RetrieverService/ListDocuments",
+                "/google.ai.generativelanguage.v1alpha.RetrieverService/ListDocuments",
                 request_serializer=retriever_service.ListDocumentsRequest.serialize,
                 response_deserializer=retriever_service.ListDocumentsResponse.deserialize,
             )
@@ -639,7 +639,7 @@ class RetrieverServiceGrpcTransport(RetrieverServiceTransport):
         # to pass in the functions for each.
         if "query_document" not in self._stubs:
             self._stubs["query_document"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.RetrieverService/QueryDocument",
+                "/google.ai.generativelanguage.v1alpha.RetrieverService/QueryDocument",
                 request_serializer=retriever_service.QueryDocumentRequest.serialize,
                 response_deserializer=retriever_service.QueryDocumentResponse.deserialize,
             )
@@ -665,7 +665,7 @@ class RetrieverServiceGrpcTransport(RetrieverServiceTransport):
         # to pass in the functions for each.
         if "create_chunk" not in self._stubs:
             self._stubs["create_chunk"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.RetrieverService/CreateChunk",
+                "/google.ai.generativelanguage.v1alpha.RetrieverService/CreateChunk",
                 request_serializer=retriever_service.CreateChunkRequest.serialize,
                 response_deserializer=retriever.Chunk.deserialize,
             )
@@ -694,7 +694,7 @@ class RetrieverServiceGrpcTransport(RetrieverServiceTransport):
         # to pass in the functions for each.
         if "batch_create_chunks" not in self._stubs:
             self._stubs["batch_create_chunks"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.RetrieverService/BatchCreateChunks",
+                "/google.ai.generativelanguage.v1alpha.RetrieverService/BatchCreateChunks",
                 request_serializer=retriever_service.BatchCreateChunksRequest.serialize,
                 response_deserializer=retriever_service.BatchCreateChunksResponse.deserialize,
             )
@@ -720,7 +720,7 @@ class RetrieverServiceGrpcTransport(RetrieverServiceTransport):
         # to pass in the functions for each.
         if "get_chunk" not in self._stubs:
             self._stubs["get_chunk"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.RetrieverService/GetChunk",
+                "/google.ai.generativelanguage.v1alpha.RetrieverService/GetChunk",
                 request_serializer=retriever_service.GetChunkRequest.serialize,
                 response_deserializer=retriever.Chunk.deserialize,
             )
@@ -746,7 +746,7 @@ class RetrieverServiceGrpcTransport(RetrieverServiceTransport):
         # to pass in the functions for each.
         if "update_chunk" not in self._stubs:
             self._stubs["update_chunk"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.RetrieverService/UpdateChunk",
+                "/google.ai.generativelanguage.v1alpha.RetrieverService/UpdateChunk",
                 request_serializer=retriever_service.UpdateChunkRequest.serialize,
                 response_deserializer=retriever.Chunk.deserialize,
             )
@@ -775,7 +775,7 @@ class RetrieverServiceGrpcTransport(RetrieverServiceTransport):
         # to pass in the functions for each.
         if "batch_update_chunks" not in self._stubs:
             self._stubs["batch_update_chunks"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.RetrieverService/BatchUpdateChunks",
+                "/google.ai.generativelanguage.v1alpha.RetrieverService/BatchUpdateChunks",
                 request_serializer=retriever_service.BatchUpdateChunksRequest.serialize,
                 response_deserializer=retriever_service.BatchUpdateChunksResponse.deserialize,
             )
@@ -801,7 +801,7 @@ class RetrieverServiceGrpcTransport(RetrieverServiceTransport):
         # to pass in the functions for each.
         if "delete_chunk" not in self._stubs:
             self._stubs["delete_chunk"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.RetrieverService/DeleteChunk",
+                "/google.ai.generativelanguage.v1alpha.RetrieverService/DeleteChunk",
                 request_serializer=retriever_service.DeleteChunkRequest.serialize,
                 response_deserializer=empty_pb2.Empty.FromString,
             )
@@ -827,7 +827,7 @@ class RetrieverServiceGrpcTransport(RetrieverServiceTransport):
         # to pass in the functions for each.
         if "batch_delete_chunks" not in self._stubs:
             self._stubs["batch_delete_chunks"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.RetrieverService/BatchDeleteChunks",
+                "/google.ai.generativelanguage.v1alpha.RetrieverService/BatchDeleteChunks",
                 request_serializer=retriever_service.BatchDeleteChunksRequest.serialize,
                 response_deserializer=empty_pb2.Empty.FromString,
             )
@@ -855,7 +855,7 @@ class RetrieverServiceGrpcTransport(RetrieverServiceTransport):
         # to pass in the functions for each.
         if "list_chunks" not in self._stubs:
             self._stubs["list_chunks"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.RetrieverService/ListChunks",
+                "/google.ai.generativelanguage.v1alpha.RetrieverService/ListChunks",
                 request_serializer=retriever_service.ListChunksRequest.serialize,
                 response_deserializer=retriever_service.ListChunksResponse.deserialize,
             )

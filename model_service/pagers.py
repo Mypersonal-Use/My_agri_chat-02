@@ -38,14 +38,14 @@ except AttributeError:  # pragma: NO COVER
     OptionalRetry = Union[retries.Retry, object, None]  # type: ignore
     OptionalAsyncRetry = Union[retries_async.AsyncRetry, object, None]  # type: ignore
 
-from google.ai.generativelanguage_v1beta.types import model, model_service, tuned_model
+from google.ai.generativelanguage_v1alpha.types import model, model_service, tuned_model
 
 
 class ListModelsPager:
     """A pager for iterating through ``list_models`` requests.
 
     This class thinly wraps an initial
-    :class:`google.ai.generativelanguage_v1beta.types.ListModelsResponse` object, and
+    :class:`google.ai.generativelanguage_v1alpha.types.ListModelsResponse` object, and
     provides an ``__iter__`` method to iterate through its
     ``models`` field.
 
@@ -54,7 +54,7 @@ class ListModelsPager:
     through the ``models`` field on the
     corresponding responses.
 
-    All the usual :class:`google.ai.generativelanguage_v1beta.types.ListModelsResponse`
+    All the usual :class:`google.ai.generativelanguage_v1alpha.types.ListModelsResponse`
     attributes are available on the pager. If multiple requests are made, only
     the most recent response is retained, and thus used for attribute lookup.
     """
@@ -74,9 +74,9 @@ class ListModelsPager:
         Args:
             method (Callable): The method that was originally called, and
                 which instantiated this pager.
-            request (google.ai.generativelanguage_v1beta.types.ListModelsRequest):
+            request (google.ai.generativelanguage_v1alpha.types.ListModelsRequest):
                 The initial request object.
-            response (google.ai.generativelanguage_v1beta.types.ListModelsResponse):
+            response (google.ai.generativelanguage_v1alpha.types.ListModelsResponse):
                 The initial response object.
             retry (google.api_core.retry.Retry): Designation of what errors,
                 if any, should be retried.
@@ -121,7 +121,7 @@ class ListModelsAsyncPager:
     """A pager for iterating through ``list_models`` requests.
 
     This class thinly wraps an initial
-    :class:`google.ai.generativelanguage_v1beta.types.ListModelsResponse` object, and
+    :class:`google.ai.generativelanguage_v1alpha.types.ListModelsResponse` object, and
     provides an ``__aiter__`` method to iterate through its
     ``models`` field.
 
@@ -130,7 +130,7 @@ class ListModelsAsyncPager:
     through the ``models`` field on the
     corresponding responses.
 
-    All the usual :class:`google.ai.generativelanguage_v1beta.types.ListModelsResponse`
+    All the usual :class:`google.ai.generativelanguage_v1alpha.types.ListModelsResponse`
     attributes are available on the pager. If multiple requests are made, only
     the most recent response is retained, and thus used for attribute lookup.
     """
@@ -150,9 +150,9 @@ class ListModelsAsyncPager:
         Args:
             method (Callable): The method that was originally called, and
                 which instantiated this pager.
-            request (google.ai.generativelanguage_v1beta.types.ListModelsRequest):
+            request (google.ai.generativelanguage_v1alpha.types.ListModelsRequest):
                 The initial request object.
-            response (google.ai.generativelanguage_v1beta.types.ListModelsResponse):
+            response (google.ai.generativelanguage_v1alpha.types.ListModelsResponse):
                 The initial response object.
             retry (google.api_core.retry.AsyncRetry): Designation of what errors,
                 if any, should be retried.
@@ -201,7 +201,7 @@ class ListTunedModelsPager:
     """A pager for iterating through ``list_tuned_models`` requests.
 
     This class thinly wraps an initial
-    :class:`google.ai.generativelanguage_v1beta.types.ListTunedModelsResponse` object, and
+    :class:`google.ai.generativelanguage_v1alpha.types.ListTunedModelsResponse` object, and
     provides an ``__iter__`` method to iterate through its
     ``tuned_models`` field.
 
@@ -210,7 +210,7 @@ class ListTunedModelsPager:
     through the ``tuned_models`` field on the
     corresponding responses.
 
-    All the usual :class:`google.ai.generativelanguage_v1beta.types.ListTunedModelsResponse`
+    All the usual :class:`google.ai.generativelanguage_v1alpha.types.ListTunedModelsResponse`
     attributes are available on the pager. If multiple requests are made, only
     the most recent response is retained, and thus used for attribute lookup.
     """
@@ -230,9 +230,9 @@ class ListTunedModelsPager:
         Args:
             method (Callable): The method that was originally called, and
                 which instantiated this pager.
-            request (google.ai.generativelanguage_v1beta.types.ListTunedModelsRequest):
+            request (google.ai.generativelanguage_v1alpha.types.ListTunedModelsRequest):
                 The initial request object.
-            response (google.ai.generativelanguage_v1beta.types.ListTunedModelsResponse):
+            response (google.ai.generativelanguage_v1alpha.types.ListTunedModelsResponse):
                 The initial response object.
             retry (google.api_core.retry.Retry): Designation of what errors,
                 if any, should be retried.
@@ -277,7 +277,7 @@ class ListTunedModelsAsyncPager:
     """A pager for iterating through ``list_tuned_models`` requests.
 
     This class thinly wraps an initial
-    :class:`google.ai.generativelanguage_v1beta.types.ListTunedModelsResponse` object, and
+    :class:`google.ai.generativelanguage_v1alpha.types.ListTunedModelsResponse` object, and
     provides an ``__aiter__`` method to iterate through its
     ``tuned_models`` field.
 
@@ -286,7 +286,7 @@ class ListTunedModelsAsyncPager:
     through the ``tuned_models`` field on the
     corresponding responses.
 
-    All the usual :class:`google.ai.generativelanguage_v1beta.types.ListTunedModelsResponse`
+    All the usual :class:`google.ai.generativelanguage_v1alpha.types.ListTunedModelsResponse`
     attributes are available on the pager. If multiple requests are made, only
     the most recent response is retained, and thus used for attribute lookup.
     """
@@ -306,9 +306,9 @@ class ListTunedModelsAsyncPager:
         Args:
             method (Callable): The method that was originally called, and
                 which instantiated this pager.
-            request (google.ai.generativelanguage_v1beta.types.ListTunedModelsRequest):
+            request (google.ai.generativelanguage_v1alpha.types.ListTunedModelsRequest):
                 The initial request object.
-            response (google.ai.generativelanguage_v1beta.types.ListTunedModelsResponse):
+            response (google.ai.generativelanguage_v1alpha.types.ListTunedModelsResponse):
                 The initial response object.
             retry (google.api_core.retry.AsyncRetry): Designation of what errors,
                 if any, should be retried.

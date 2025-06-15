@@ -22,7 +22,7 @@ from google.longrunning import operations_pb2  # type: ignore
 from google.protobuf import empty_pb2  # type: ignore
 from google.protobuf import json_format
 
-from google.ai.generativelanguage_v1beta.types import retriever, retriever_service
+from google.ai.generativelanguage_v1alpha.types import retriever, retriever_service
 
 from .base import DEFAULT_CLIENT_INFO, RetrieverServiceTransport
 
@@ -108,7 +108,7 @@ class _BaseRetrieverServiceRestTransport(RetrieverServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "post",
-                    "uri": "/v1beta/{parent=corpora/*/documents/*}/chunks:batchCreate",
+                    "uri": "/v1alpha/{parent=corpora/*/documents/*}/chunks:batchCreate",
                     "body": "*",
                 },
             ]
@@ -165,7 +165,7 @@ class _BaseRetrieverServiceRestTransport(RetrieverServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "post",
-                    "uri": "/v1beta/{parent=corpora/*/documents/*}/chunks:batchDelete",
+                    "uri": "/v1alpha/{parent=corpora/*/documents/*}/chunks:batchDelete",
                     "body": "*",
                 },
             ]
@@ -222,7 +222,7 @@ class _BaseRetrieverServiceRestTransport(RetrieverServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "post",
-                    "uri": "/v1beta/{parent=corpora/*/documents/*}/chunks:batchUpdate",
+                    "uri": "/v1alpha/{parent=corpora/*/documents/*}/chunks:batchUpdate",
                     "body": "*",
                 },
             ]
@@ -279,7 +279,7 @@ class _BaseRetrieverServiceRestTransport(RetrieverServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "post",
-                    "uri": "/v1beta/{parent=corpora/*/documents/*}/chunks",
+                    "uri": "/v1alpha/{parent=corpora/*/documents/*}/chunks",
                     "body": "chunk",
                 },
             ]
@@ -336,7 +336,7 @@ class _BaseRetrieverServiceRestTransport(RetrieverServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "post",
-                    "uri": "/v1beta/corpora",
+                    "uri": "/v1alpha/corpora",
                     "body": "corpus",
                 },
             ]
@@ -393,7 +393,7 @@ class _BaseRetrieverServiceRestTransport(RetrieverServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "post",
-                    "uri": "/v1beta/{parent=corpora/*}/documents",
+                    "uri": "/v1alpha/{parent=corpora/*}/documents",
                     "body": "document",
                 },
             ]
@@ -450,7 +450,7 @@ class _BaseRetrieverServiceRestTransport(RetrieverServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "delete",
-                    "uri": "/v1beta/{name=corpora/*/documents/*/chunks/*}",
+                    "uri": "/v1alpha/{name=corpora/*/documents/*/chunks/*}",
                 },
             ]
             return http_options
@@ -497,7 +497,7 @@ class _BaseRetrieverServiceRestTransport(RetrieverServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "delete",
-                    "uri": "/v1beta/{name=corpora/*}",
+                    "uri": "/v1alpha/{name=corpora/*}",
                 },
             ]
             return http_options
@@ -544,7 +544,7 @@ class _BaseRetrieverServiceRestTransport(RetrieverServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "delete",
-                    "uri": "/v1beta/{name=corpora/*/documents/*}",
+                    "uri": "/v1alpha/{name=corpora/*/documents/*}",
                 },
             ]
             return http_options
@@ -591,7 +591,7 @@ class _BaseRetrieverServiceRestTransport(RetrieverServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=corpora/*/documents/*/chunks/*}",
+                    "uri": "/v1alpha/{name=corpora/*/documents/*/chunks/*}",
                 },
             ]
             return http_options
@@ -638,7 +638,7 @@ class _BaseRetrieverServiceRestTransport(RetrieverServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=corpora/*}",
+                    "uri": "/v1alpha/{name=corpora/*}",
                 },
             ]
             return http_options
@@ -685,7 +685,7 @@ class _BaseRetrieverServiceRestTransport(RetrieverServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=corpora/*/documents/*}",
+                    "uri": "/v1alpha/{name=corpora/*/documents/*}",
                 },
             ]
             return http_options
@@ -732,7 +732,7 @@ class _BaseRetrieverServiceRestTransport(RetrieverServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "get",
-                    "uri": "/v1beta/{parent=corpora/*/documents/*}/chunks",
+                    "uri": "/v1alpha/{parent=corpora/*/documents/*}/chunks",
                 },
             ]
             return http_options
@@ -769,7 +769,7 @@ class _BaseRetrieverServiceRestTransport(RetrieverServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "get",
-                    "uri": "/v1beta/corpora",
+                    "uri": "/v1alpha/corpora",
                 },
             ]
             return http_options
@@ -811,7 +811,7 @@ class _BaseRetrieverServiceRestTransport(RetrieverServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "get",
-                    "uri": "/v1beta/{parent=corpora/*}/documents",
+                    "uri": "/v1alpha/{parent=corpora/*}/documents",
                 },
             ]
             return http_options
@@ -858,7 +858,7 @@ class _BaseRetrieverServiceRestTransport(RetrieverServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "post",
-                    "uri": "/v1beta/{name=corpora/*}:query",
+                    "uri": "/v1alpha/{name=corpora/*}:query",
                     "body": "*",
                 },
             ]
@@ -915,7 +915,7 @@ class _BaseRetrieverServiceRestTransport(RetrieverServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "post",
-                    "uri": "/v1beta/{name=corpora/*/documents/*}:query",
+                    "uri": "/v1alpha/{name=corpora/*/documents/*}:query",
                     "body": "*",
                 },
             ]
@@ -974,7 +974,7 @@ class _BaseRetrieverServiceRestTransport(RetrieverServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "patch",
-                    "uri": "/v1beta/{chunk.name=corpora/*/documents/*/chunks/*}",
+                    "uri": "/v1alpha/{chunk.name=corpora/*/documents/*/chunks/*}",
                     "body": "chunk",
                 },
             ]
@@ -1033,7 +1033,7 @@ class _BaseRetrieverServiceRestTransport(RetrieverServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "patch",
-                    "uri": "/v1beta/{corpus.name=corpora/*}",
+                    "uri": "/v1alpha/{corpus.name=corpora/*}",
                     "body": "corpus",
                 },
             ]
@@ -1092,7 +1092,7 @@ class _BaseRetrieverServiceRestTransport(RetrieverServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "patch",
-                    "uri": "/v1beta/{document.name=corpora/*/documents/*}",
+                    "uri": "/v1alpha/{document.name=corpora/*/documents/*}",
                     "body": "document",
                 },
             ]
@@ -1139,15 +1139,15 @@ class _BaseRetrieverServiceRestTransport(RetrieverServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=tunedModels/*/operations/*}",
+                    "uri": "/v1alpha/{name=tunedModels/*/operations/*}",
                 },
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=generatedFiles/*/operations/*}",
+                    "uri": "/v1alpha/{name=generatedFiles/*/operations/*}",
                 },
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=models/*/operations/*}",
+                    "uri": "/v1alpha/{name=models/*/operations/*}",
                 },
             ]
             return http_options
@@ -1172,11 +1172,11 @@ class _BaseRetrieverServiceRestTransport(RetrieverServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=tunedModels/*}/operations",
+                    "uri": "/v1alpha/{name=tunedModels/*}/operations",
                 },
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=models/*}/operations",
+                    "uri": "/v1alpha/{name=models/*}/operations",
                 },
             ]
             return http_options

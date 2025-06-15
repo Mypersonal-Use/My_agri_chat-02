@@ -32,7 +32,7 @@ import grpc  # type: ignore
 from grpc.experimental import aio  # type: ignore
 import proto  # type: ignore
 
-from google.ai.generativelanguage_v1beta.types import prediction_service
+from google.ai.generativelanguage_v1alpha.types import prediction_service
 
 from .base import DEFAULT_CLIENT_INFO, PredictionServiceTransport
 from .grpc import PredictionServiceGrpcTransport
@@ -75,7 +75,7 @@ class _LoggingClientAIOInterceptor(
             _LOGGER.debug(
                 f"Sending request for {client_call_details.method}",
                 extra={
-                    "serviceName": "google.ai.generativelanguage.v1beta.PredictionService",
+                    "serviceName": "google.ai.generativelanguage.v1alpha.PredictionService",
                     "rpcName": str(client_call_details.method),
                     "request": grpc_request,
                     "metadata": grpc_request["metadata"],
@@ -105,7 +105,7 @@ class _LoggingClientAIOInterceptor(
             _LOGGER.debug(
                 f"Received response to rpc {client_call_details.method}.",
                 extra={
-                    "serviceName": "google.ai.generativelanguage.v1beta.PredictionService",
+                    "serviceName": "google.ai.generativelanguage.v1alpha.PredictionService",
                     "rpcName": str(client_call_details.method),
                     "response": grpc_response,
                     "metadata": grpc_response["metadata"],
@@ -351,7 +351,7 @@ class PredictionServiceGrpcAsyncIOTransport(PredictionServiceTransport):
         # to pass in the functions for each.
         if "predict" not in self._stubs:
             self._stubs["predict"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.PredictionService/Predict",
+                "/google.ai.generativelanguage.v1alpha.PredictionService/Predict",
                 request_serializer=prediction_service.PredictRequest.serialize,
                 response_deserializer=prediction_service.PredictResponse.deserialize,
             )

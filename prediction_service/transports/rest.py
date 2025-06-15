@@ -28,7 +28,7 @@ from google.longrunning import operations_pb2  # type: ignore
 from google.protobuf import json_format
 from requests import __version__ as requests_version
 
-from google.ai.generativelanguage_v1beta.types import prediction_service
+from google.ai.generativelanguage_v1alpha.types import prediction_service
 
 from .base import DEFAULT_CLIENT_INFO as BASE_DEFAULT_CLIENT_INFO
 from .rest_base import _BasePredictionServiceRestTransport
@@ -287,7 +287,7 @@ class PredictionServiceRestTransport(_BasePredictionServiceRestTransport):
             Args:
                 request (~.prediction_service.PredictRequest):
                     The request object. Request message for
-                [PredictionService.Predict][google.ai.generativelanguage.v1beta.PredictionService.Predict].
+                [PredictionService.Predict][google.ai.generativelanguage.v1alpha.PredictionService.Predict].
                 retry (google.api_core.retry.Retry): Designation of what errors, if any,
                     should be retried.
                 timeout (float): The timeout for this request.
@@ -341,9 +341,9 @@ class PredictionServiceRestTransport(_BasePredictionServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.PredictionServiceClient.Predict",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.PredictionServiceClient.Predict",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.PredictionService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.PredictionService",
                         "rpcName": "Predict",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -388,9 +388,9 @@ class PredictionServiceRestTransport(_BasePredictionServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.PredictionServiceClient.predict",
+                    "Received response for google.ai.generativelanguage_v1alpha.PredictionServiceClient.predict",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.PredictionService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.PredictionService",
                         "rpcName": "Predict",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -497,9 +497,9 @@ class PredictionServiceRestTransport(_BasePredictionServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.PredictionServiceClient.GetOperation",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.PredictionServiceClient.GetOperation",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.PredictionService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.PredictionService",
                         "rpcName": "GetOperation",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -538,9 +538,9 @@ class PredictionServiceRestTransport(_BasePredictionServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.PredictionServiceAsyncClient.GetOperation",
+                    "Received response for google.ai.generativelanguage_v1alpha.PredictionServiceAsyncClient.GetOperation",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.PredictionService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.PredictionService",
                         "rpcName": "GetOperation",
                         "httpResponse": http_response,
                         "metadata": http_response["headers"],
@@ -638,9 +638,9 @@ class PredictionServiceRestTransport(_BasePredictionServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.PredictionServiceClient.ListOperations",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.PredictionServiceClient.ListOperations",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.PredictionService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.PredictionService",
                         "rpcName": "ListOperations",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -679,9 +679,9 @@ class PredictionServiceRestTransport(_BasePredictionServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.PredictionServiceAsyncClient.ListOperations",
+                    "Received response for google.ai.generativelanguage_v1alpha.PredictionServiceAsyncClient.ListOperations",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.PredictionService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.PredictionService",
                         "rpcName": "ListOperations",
                         "httpResponse": http_response,
                         "metadata": http_response["headers"],

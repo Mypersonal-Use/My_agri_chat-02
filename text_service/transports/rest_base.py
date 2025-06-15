@@ -21,7 +21,7 @@ from google.api_core import gapic_v1, path_template
 from google.longrunning import operations_pb2  # type: ignore
 from google.protobuf import json_format
 
-from google.ai.generativelanguage_v1beta.types import text_service
+from google.ai.generativelanguage_v1alpha.types import text_service
 
 from .base import DEFAULT_CLIENT_INFO, TextServiceTransport
 
@@ -107,7 +107,7 @@ class _BaseTextServiceRestTransport(TextServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "post",
-                    "uri": "/v1beta/{model=models/*}:batchEmbedText",
+                    "uri": "/v1alpha/{model=models/*}:batchEmbedText",
                     "body": "*",
                 },
             ]
@@ -164,7 +164,7 @@ class _BaseTextServiceRestTransport(TextServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "post",
-                    "uri": "/v1beta/{model=models/*}:countTextTokens",
+                    "uri": "/v1alpha/{model=models/*}:countTextTokens",
                     "body": "*",
                 },
             ]
@@ -221,7 +221,7 @@ class _BaseTextServiceRestTransport(TextServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "post",
-                    "uri": "/v1beta/{model=models/*}:embedText",
+                    "uri": "/v1alpha/{model=models/*}:embedText",
                     "body": "*",
                 },
             ]
@@ -278,12 +278,12 @@ class _BaseTextServiceRestTransport(TextServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "post",
-                    "uri": "/v1beta/{model=models/*}:generateText",
+                    "uri": "/v1alpha/{model=models/*}:generateText",
                     "body": "*",
                 },
                 {
                     "method": "post",
-                    "uri": "/v1beta/{model=tunedModels/*}:generateText",
+                    "uri": "/v1alpha/{model=tunedModels/*}:generateText",
                     "body": "*",
                 },
             ]
@@ -330,15 +330,15 @@ class _BaseTextServiceRestTransport(TextServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=tunedModels/*/operations/*}",
+                    "uri": "/v1alpha/{name=tunedModels/*/operations/*}",
                 },
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=generatedFiles/*/operations/*}",
+                    "uri": "/v1alpha/{name=generatedFiles/*/operations/*}",
                 },
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=models/*/operations/*}",
+                    "uri": "/v1alpha/{name=models/*/operations/*}",
                 },
             ]
             return http_options
@@ -363,11 +363,11 @@ class _BaseTextServiceRestTransport(TextServiceTransport):
             http_options: List[Dict[str, str]] = [
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=tunedModels/*}/operations",
+                    "uri": "/v1alpha/{name=tunedModels/*}/operations",
                 },
                 {
                     "method": "get",
-                    "uri": "/v1beta/{name=models/*}/operations",
+                    "uri": "/v1alpha/{name=models/*}/operations",
                 },
             ]
             return http_options

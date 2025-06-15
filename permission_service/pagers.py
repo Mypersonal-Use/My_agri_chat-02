@@ -38,14 +38,14 @@ except AttributeError:  # pragma: NO COVER
     OptionalRetry = Union[retries.Retry, object, None]  # type: ignore
     OptionalAsyncRetry = Union[retries_async.AsyncRetry, object, None]  # type: ignore
 
-from google.ai.generativelanguage_v1beta.types import permission, permission_service
+from google.ai.generativelanguage_v1alpha.types import permission, permission_service
 
 
 class ListPermissionsPager:
     """A pager for iterating through ``list_permissions`` requests.
 
     This class thinly wraps an initial
-    :class:`google.ai.generativelanguage_v1beta.types.ListPermissionsResponse` object, and
+    :class:`google.ai.generativelanguage_v1alpha.types.ListPermissionsResponse` object, and
     provides an ``__iter__`` method to iterate through its
     ``permissions`` field.
 
@@ -54,7 +54,7 @@ class ListPermissionsPager:
     through the ``permissions`` field on the
     corresponding responses.
 
-    All the usual :class:`google.ai.generativelanguage_v1beta.types.ListPermissionsResponse`
+    All the usual :class:`google.ai.generativelanguage_v1alpha.types.ListPermissionsResponse`
     attributes are available on the pager. If multiple requests are made, only
     the most recent response is retained, and thus used for attribute lookup.
     """
@@ -74,9 +74,9 @@ class ListPermissionsPager:
         Args:
             method (Callable): The method that was originally called, and
                 which instantiated this pager.
-            request (google.ai.generativelanguage_v1beta.types.ListPermissionsRequest):
+            request (google.ai.generativelanguage_v1alpha.types.ListPermissionsRequest):
                 The initial request object.
-            response (google.ai.generativelanguage_v1beta.types.ListPermissionsResponse):
+            response (google.ai.generativelanguage_v1alpha.types.ListPermissionsResponse):
                 The initial response object.
             retry (google.api_core.retry.Retry): Designation of what errors,
                 if any, should be retried.
@@ -121,7 +121,7 @@ class ListPermissionsAsyncPager:
     """A pager for iterating through ``list_permissions`` requests.
 
     This class thinly wraps an initial
-    :class:`google.ai.generativelanguage_v1beta.types.ListPermissionsResponse` object, and
+    :class:`google.ai.generativelanguage_v1alpha.types.ListPermissionsResponse` object, and
     provides an ``__aiter__`` method to iterate through its
     ``permissions`` field.
 
@@ -130,7 +130,7 @@ class ListPermissionsAsyncPager:
     through the ``permissions`` field on the
     corresponding responses.
 
-    All the usual :class:`google.ai.generativelanguage_v1beta.types.ListPermissionsResponse`
+    All the usual :class:`google.ai.generativelanguage_v1alpha.types.ListPermissionsResponse`
     attributes are available on the pager. If multiple requests are made, only
     the most recent response is retained, and thus used for attribute lookup.
     """
@@ -150,9 +150,9 @@ class ListPermissionsAsyncPager:
         Args:
             method (Callable): The method that was originally called, and
                 which instantiated this pager.
-            request (google.ai.generativelanguage_v1beta.types.ListPermissionsRequest):
+            request (google.ai.generativelanguage_v1alpha.types.ListPermissionsRequest):
                 The initial request object.
-            response (google.ai.generativelanguage_v1beta.types.ListPermissionsResponse):
+            response (google.ai.generativelanguage_v1alpha.types.ListPermissionsResponse):
                 The initial response object.
             retry (google.api_core.retry.AsyncRetry): Designation of what errors,
                 if any, should be retried.

@@ -29,7 +29,7 @@ import google.protobuf.message
 import grpc  # type: ignore
 import proto  # type: ignore
 
-from google.ai.generativelanguage_v1beta.types import text_service
+from google.ai.generativelanguage_v1alpha.types import text_service
 
 from .base import DEFAULT_CLIENT_INFO, TextServiceTransport
 
@@ -69,7 +69,7 @@ class _LoggingClientInterceptor(grpc.UnaryUnaryClientInterceptor):  # pragma: NO
             _LOGGER.debug(
                 f"Sending request for {client_call_details.method}",
                 extra={
-                    "serviceName": "google.ai.generativelanguage.v1beta.TextService",
+                    "serviceName": "google.ai.generativelanguage.v1alpha.TextService",
                     "rpcName": client_call_details.method,
                     "request": grpc_request,
                     "metadata": grpc_request["metadata"],
@@ -100,7 +100,7 @@ class _LoggingClientInterceptor(grpc.UnaryUnaryClientInterceptor):  # pragma: NO
             _LOGGER.debug(
                 f"Received response for {client_call_details.method}.",
                 extra={
-                    "serviceName": "google.ai.generativelanguage.v1beta.TextService",
+                    "serviceName": "google.ai.generativelanguage.v1alpha.TextService",
                     "rpcName": client_call_details.method,
                     "response": grpc_response,
                     "metadata": grpc_response["metadata"],
@@ -347,7 +347,7 @@ class TextServiceGrpcTransport(TextServiceTransport):
         # to pass in the functions for each.
         if "generate_text" not in self._stubs:
             self._stubs["generate_text"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.TextService/GenerateText",
+                "/google.ai.generativelanguage.v1alpha.TextService/GenerateText",
                 request_serializer=text_service.GenerateTextRequest.serialize,
                 response_deserializer=text_service.GenerateTextResponse.deserialize,
             )
@@ -374,7 +374,7 @@ class TextServiceGrpcTransport(TextServiceTransport):
         # to pass in the functions for each.
         if "embed_text" not in self._stubs:
             self._stubs["embed_text"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.TextService/EmbedText",
+                "/google.ai.generativelanguage.v1alpha.TextService/EmbedText",
                 request_serializer=text_service.EmbedTextRequest.serialize,
                 response_deserializer=text_service.EmbedTextResponse.deserialize,
             )
@@ -403,7 +403,7 @@ class TextServiceGrpcTransport(TextServiceTransport):
         # to pass in the functions for each.
         if "batch_embed_text" not in self._stubs:
             self._stubs["batch_embed_text"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.TextService/BatchEmbedText",
+                "/google.ai.generativelanguage.v1alpha.TextService/BatchEmbedText",
                 request_serializer=text_service.BatchEmbedTextRequest.serialize,
                 response_deserializer=text_service.BatchEmbedTextResponse.deserialize,
             )
@@ -432,7 +432,7 @@ class TextServiceGrpcTransport(TextServiceTransport):
         # to pass in the functions for each.
         if "count_text_tokens" not in self._stubs:
             self._stubs["count_text_tokens"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta.TextService/CountTextTokens",
+                "/google.ai.generativelanguage.v1alpha.TextService/CountTextTokens",
                 request_serializer=text_service.CountTextTokensRequest.serialize,
                 response_deserializer=text_service.CountTextTokensResponse.deserialize,
             )

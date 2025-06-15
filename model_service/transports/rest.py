@@ -29,9 +29,9 @@ from google.protobuf import empty_pb2  # type: ignore
 from google.protobuf import json_format
 from requests import __version__ as requests_version
 
-from google.ai.generativelanguage_v1beta.types import tuned_model as gag_tuned_model
-from google.ai.generativelanguage_v1beta.types import model, model_service
-from google.ai.generativelanguage_v1beta.types import tuned_model
+from google.ai.generativelanguage_v1alpha.types import tuned_model as gag_tuned_model
+from google.ai.generativelanguage_v1alpha.types import model, model_service
+from google.ai.generativelanguage_v1alpha.types import tuned_model
 
 from .base import DEFAULT_CLIENT_INFO as BASE_DEFAULT_CLIENT_INFO
 from .rest_base import _BaseModelServiceRestTransport
@@ -442,25 +442,25 @@ class ModelServiceRestTransport(_BaseModelServiceRestTransport):
                 "google.longrunning.Operations.GetOperation": [
                     {
                         "method": "get",
-                        "uri": "/v1beta/{name=tunedModels/*/operations/*}",
+                        "uri": "/v1alpha/{name=tunedModels/*/operations/*}",
                     },
                     {
                         "method": "get",
-                        "uri": "/v1beta/{name=generatedFiles/*/operations/*}",
+                        "uri": "/v1alpha/{name=generatedFiles/*/operations/*}",
                     },
                     {
                         "method": "get",
-                        "uri": "/v1beta/{name=models/*/operations/*}",
+                        "uri": "/v1alpha/{name=models/*/operations/*}",
                     },
                 ],
                 "google.longrunning.Operations.ListOperations": [
                     {
                         "method": "get",
-                        "uri": "/v1beta/{name=tunedModels/*}/operations",
+                        "uri": "/v1alpha/{name=tunedModels/*}/operations",
                     },
                     {
                         "method": "get",
-                        "uri": "/v1beta/{name=models/*}/operations",
+                        "uri": "/v1alpha/{name=models/*}/operations",
                     },
                 ],
             }
@@ -471,7 +471,7 @@ class ModelServiceRestTransport(_BaseModelServiceRestTransport):
                 credentials=self._credentials,
                 scopes=self._scopes,
                 http_options=http_options,
-                path_prefix="v1beta",
+                path_prefix="v1alpha",
             )
 
             self._operations_client = operations_v1.AbstractOperationsClient(
@@ -577,9 +577,9 @@ class ModelServiceRestTransport(_BaseModelServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.ModelServiceClient.CreateTunedModel",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.ModelServiceClient.CreateTunedModel",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.ModelService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.ModelService",
                         "rpcName": "CreateTunedModel",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -620,9 +620,9 @@ class ModelServiceRestTransport(_BaseModelServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.ModelServiceClient.create_tuned_model",
+                    "Received response for google.ai.generativelanguage_v1alpha.ModelServiceClient.create_tuned_model",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.ModelService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.ModelService",
                         "rpcName": "CreateTunedModel",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -714,9 +714,9 @@ class ModelServiceRestTransport(_BaseModelServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.ModelServiceClient.DeleteTunedModel",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.ModelServiceClient.DeleteTunedModel",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.ModelService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.ModelService",
                         "rpcName": "DeleteTunedModel",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -829,9 +829,9 @@ class ModelServiceRestTransport(_BaseModelServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.ModelServiceClient.GetModel",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.ModelServiceClient.GetModel",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.ModelService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.ModelService",
                         "rpcName": "GetModel",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -873,9 +873,9 @@ class ModelServiceRestTransport(_BaseModelServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.ModelServiceClient.get_model",
+                    "Received response for google.ai.generativelanguage_v1alpha.ModelServiceClient.get_model",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.ModelService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.ModelService",
                         "rpcName": "GetModel",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -972,9 +972,9 @@ class ModelServiceRestTransport(_BaseModelServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.ModelServiceClient.GetTunedModel",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.ModelServiceClient.GetTunedModel",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.ModelService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.ModelService",
                         "rpcName": "GetTunedModel",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -1016,9 +1016,9 @@ class ModelServiceRestTransport(_BaseModelServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.ModelServiceClient.get_tuned_model",
+                    "Received response for google.ai.generativelanguage_v1alpha.ModelServiceClient.get_tuned_model",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.ModelService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.ModelService",
                         "rpcName": "GetTunedModel",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -1118,9 +1118,9 @@ class ModelServiceRestTransport(_BaseModelServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.ModelServiceClient.ListModels",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.ModelServiceClient.ListModels",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.ModelService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.ModelService",
                         "rpcName": "ListModels",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -1164,9 +1164,9 @@ class ModelServiceRestTransport(_BaseModelServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.ModelServiceClient.list_models",
+                    "Received response for google.ai.generativelanguage_v1alpha.ModelServiceClient.list_models",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.ModelService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.ModelService",
                         "rpcName": "ListModels",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -1264,9 +1264,9 @@ class ModelServiceRestTransport(_BaseModelServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.ModelServiceClient.ListTunedModels",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.ModelServiceClient.ListTunedModels",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.ModelService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.ModelService",
                         "rpcName": "ListTunedModels",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -1310,9 +1310,9 @@ class ModelServiceRestTransport(_BaseModelServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.ModelServiceClient.list_tuned_models",
+                    "Received response for google.ai.generativelanguage_v1alpha.ModelServiceClient.list_tuned_models",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.ModelService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.ModelService",
                         "rpcName": "ListTunedModels",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -1415,9 +1415,9 @@ class ModelServiceRestTransport(_BaseModelServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.ModelServiceClient.UpdateTunedModel",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.ModelServiceClient.UpdateTunedModel",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.ModelService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.ModelService",
                         "rpcName": "UpdateTunedModel",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -1460,9 +1460,9 @@ class ModelServiceRestTransport(_BaseModelServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.ModelServiceClient.update_tuned_model",
+                    "Received response for google.ai.generativelanguage_v1alpha.ModelServiceClient.update_tuned_model",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.ModelService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.ModelService",
                         "rpcName": "UpdateTunedModel",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -1617,9 +1617,9 @@ class ModelServiceRestTransport(_BaseModelServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.ModelServiceClient.GetOperation",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.ModelServiceClient.GetOperation",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.ModelService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.ModelService",
                         "rpcName": "GetOperation",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -1658,9 +1658,9 @@ class ModelServiceRestTransport(_BaseModelServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.ModelServiceAsyncClient.GetOperation",
+                    "Received response for google.ai.generativelanguage_v1alpha.ModelServiceAsyncClient.GetOperation",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.ModelService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.ModelService",
                         "rpcName": "GetOperation",
                         "httpResponse": http_response,
                         "metadata": http_response["headers"],
@@ -1757,9 +1757,9 @@ class ModelServiceRestTransport(_BaseModelServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.ModelServiceClient.ListOperations",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.ModelServiceClient.ListOperations",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.ModelService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.ModelService",
                         "rpcName": "ListOperations",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -1798,9 +1798,9 @@ class ModelServiceRestTransport(_BaseModelServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.ModelServiceAsyncClient.ListOperations",
+                    "Received response for google.ai.generativelanguage_v1alpha.ModelServiceAsyncClient.ListOperations",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.ModelService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.ModelService",
                         "rpcName": "ListOperations",
                         "httpResponse": http_response,
                         "metadata": http_response["headers"],

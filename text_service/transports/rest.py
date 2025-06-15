@@ -28,7 +28,7 @@ from google.longrunning import operations_pb2  # type: ignore
 from google.protobuf import json_format
 from requests import __version__ as requests_version
 
-from google.ai.generativelanguage_v1beta.types import text_service
+from google.ai.generativelanguage_v1alpha.types import text_service
 
 from .base import DEFAULT_CLIENT_INFO as BASE_DEFAULT_CLIENT_INFO
 from .rest_base import _BaseTextServiceRestTransport
@@ -439,9 +439,9 @@ class TextServiceRestTransport(_BaseTextServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.TextServiceClient.BatchEmbedText",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.TextServiceClient.BatchEmbedText",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.TextService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.TextService",
                         "rpcName": "BatchEmbedText",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -486,9 +486,9 @@ class TextServiceRestTransport(_BaseTextServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.TextServiceClient.batch_embed_text",
+                    "Received response for google.ai.generativelanguage_v1alpha.TextServiceClient.batch_embed_text",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.TextService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.TextService",
                         "rpcName": "BatchEmbedText",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -597,9 +597,9 @@ class TextServiceRestTransport(_BaseTextServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.TextServiceClient.CountTextTokens",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.TextServiceClient.CountTextTokens",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.TextService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.TextService",
                         "rpcName": "CountTextTokens",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -644,9 +644,9 @@ class TextServiceRestTransport(_BaseTextServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.TextServiceClient.count_text_tokens",
+                    "Received response for google.ai.generativelanguage_v1alpha.TextServiceClient.count_text_tokens",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.TextService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.TextService",
                         "rpcName": "CountTextTokens",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -748,9 +748,9 @@ class TextServiceRestTransport(_BaseTextServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.TextServiceClient.EmbedText",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.TextServiceClient.EmbedText",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.TextService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.TextService",
                         "rpcName": "EmbedText",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -793,9 +793,9 @@ class TextServiceRestTransport(_BaseTextServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.TextServiceClient.embed_text",
+                    "Received response for google.ai.generativelanguage_v1alpha.TextServiceClient.embed_text",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.TextService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.TextService",
                         "rpcName": "EmbedText",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -903,9 +903,9 @@ class TextServiceRestTransport(_BaseTextServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.TextServiceClient.GenerateText",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.TextServiceClient.GenerateText",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.TextService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.TextService",
                         "rpcName": "GenerateText",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -950,9 +950,9 @@ class TextServiceRestTransport(_BaseTextServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.TextServiceClient.generate_text",
+                    "Received response for google.ai.generativelanguage_v1alpha.TextServiceClient.generate_text",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.TextService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.TextService",
                         "rpcName": "GenerateText",
                         "metadata": http_response["headers"],
                         "httpResponse": http_response,
@@ -1091,9 +1091,9 @@ class TextServiceRestTransport(_BaseTextServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.TextServiceClient.GetOperation",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.TextServiceClient.GetOperation",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.TextService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.TextService",
                         "rpcName": "GetOperation",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -1132,9 +1132,9 @@ class TextServiceRestTransport(_BaseTextServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.TextServiceAsyncClient.GetOperation",
+                    "Received response for google.ai.generativelanguage_v1alpha.TextServiceAsyncClient.GetOperation",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.TextService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.TextService",
                         "rpcName": "GetOperation",
                         "httpResponse": http_response,
                         "metadata": http_response["headers"],
@@ -1231,9 +1231,9 @@ class TextServiceRestTransport(_BaseTextServiceRestTransport):
                     "headers": dict(metadata),
                 }
                 _LOGGER.debug(
-                    f"Sending request for google.ai.generativelanguage_v1beta.TextServiceClient.ListOperations",
+                    f"Sending request for google.ai.generativelanguage_v1alpha.TextServiceClient.ListOperations",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.TextService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.TextService",
                         "rpcName": "ListOperations",
                         "httpRequest": http_request,
                         "metadata": http_request["headers"],
@@ -1272,9 +1272,9 @@ class TextServiceRestTransport(_BaseTextServiceRestTransport):
                     "status": response.status_code,
                 }
                 _LOGGER.debug(
-                    "Received response for google.ai.generativelanguage_v1beta.TextServiceAsyncClient.ListOperations",
+                    "Received response for google.ai.generativelanguage_v1alpha.TextServiceAsyncClient.ListOperations",
                     extra={
-                        "serviceName": "google.ai.generativelanguage.v1beta.TextService",
+                        "serviceName": "google.ai.generativelanguage.v1alpha.TextService",
                         "rpcName": "ListOperations",
                         "httpResponse": http_response,
                         "metadata": http_response["headers"],
