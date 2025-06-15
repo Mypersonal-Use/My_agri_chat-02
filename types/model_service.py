@@ -20,11 +20,11 @@ from typing import MutableMapping, MutableSequence
 from google.protobuf import field_mask_pb2  # type: ignore
 import proto  # type: ignore
 
-from google.ai.generativelanguage_v1beta3.types import tuned_model as gag_tuned_model
-from google.ai.generativelanguage_v1beta3.types import model
+from google.ai.generativelanguage_v1beta.types import tuned_model as gag_tuned_model
+from google.ai.generativelanguage_v1beta.types import model
 
 __protobuf__ = proto.module(
-    package="google.ai.generativelanguage.v1beta3",
+    package="google.ai.generativelanguage.v1beta",
     manifest={
         "GetModelRequest",
         "ListModelsRequest",
@@ -66,10 +66,9 @@ class ListModelsRequest(proto.Message):
         page_size (int):
             The maximum number of ``Models`` to return (per page).
 
-            The service may return fewer models. If unspecified, at most
-            50 models will be returned per page. This method returns at
-            most 1000 models per page, even if you pass a larger
-            page_size.
+            If unspecified, 50 models will be returned per page. This
+            method returns at most 1000 models per page, even if you
+            pass a larger page_size.
         page_token (str):
             A page token, received from a previous ``ListModels`` call.
 
@@ -95,7 +94,7 @@ class ListModelsResponse(proto.Message):
     r"""Response from ``ListModel`` containing a paginated list of Models.
 
     Attributes:
-        models (MutableSequence[google.ai.generativelanguage_v1beta3.types.Model]):
+        models (MutableSequence[google.ai.generativelanguage_v1beta.types.Model]):
             The returned Models.
         next_page_token (str):
             A token, which can be sent as ``page_token`` to retrieve the
@@ -156,6 +155,26 @@ class ListTunedModelsRequest(proto.Message):
             When paginating, all other parameters provided to
             ``ListTunedModels`` must match the call that provided the
             page token.
+        filter (str):
+            Optional. A filter is a full text search over
+            the tuned model's description and display name.
+            By default, results will not include tuned
+            models shared with everyone.
+
+            Additional operators:
+
+              - owner:me
+              - writers:me
+              - readers:me
+              - readers:everyone
+
+            Examples:
+
+              "owner:me" returns all tuned models to which
+            caller has owner role   "readers:me" returns all
+            tuned models to which caller has reader role
+            "readers:everyone" returns all tuned models that
+            are shared with everyone
     """
 
     page_size: int = proto.Field(
@@ -166,6 +185,10 @@ class ListTunedModelsRequest(proto.Message):
         proto.STRING,
         number=2,
     )
+    filter: str = proto.Field(
+        proto.STRING,
+        number=3,
+    )
 
 
 class ListTunedModelsResponse(proto.Message):
@@ -173,7 +196,7 @@ class ListTunedModelsResponse(proto.Message):
     Models.
 
     Attributes:
-        tuned_models (MutableSequence[google.ai.generativelanguage_v1beta3.types.TunedModel]):
+        tuned_models (MutableSequence[google.ai.generativelanguage_v1beta.types.TunedModel]):
             The returned Models.
         next_page_token (str):
             A token, which can be sent as ``page_token`` to retrieve the
@@ -208,10 +231,10 @@ class CreateTunedModelRequest(proto.Message):
             This value should be up to 40 characters, the first
             character must be a letter, the last could be a letter or a
             number. The id must match the regular expression:
-            `a-z <[a-z0-9-]{0,38}[a-z0-9]>`__?.
+            ``[a-z]([a-z0-9-]{0,38}[a-z0-9])?``.
 
             This field is a member of `oneof`_ ``_tuned_model_id``.
-        tuned_model (google.ai.generativelanguage_v1beta3.types.TunedModel):
+        tuned_model (google.ai.generativelanguage_v1beta.types.TunedModel):
             Required. The tuned model to create.
     """
 
@@ -242,7 +265,7 @@ class CreateTunedModelMetadata(proto.Message):
         completed_percent (float):
             The completed percentage for the tuning
             operation.
-        snapshots (MutableSequence[google.ai.generativelanguage_v1beta3.types.TuningSnapshot]):
+        snapshots (MutableSequence[google.ai.generativelanguage_v1beta.types.TuningSnapshot]):
             Metrics collected during tuning.
     """
 
@@ -273,10 +296,10 @@ class UpdateTunedModelRequest(proto.Message):
     r"""Request to update a TunedModel.
 
     Attributes:
-        tuned_model (google.ai.generativelanguage_v1beta3.types.TunedModel):
+        tuned_model (google.ai.generativelanguage_v1beta.types.TunedModel):
             Required. The tuned model to update.
         update_mask (google.protobuf.field_mask_pb2.FieldMask):
-            Required. The list of fields to update.
+            Optional. The list of fields to update.
     """
 
     tuned_model: gag_tuned_model.TunedModel = proto.Field(

@@ -20,7 +20,7 @@ from typing import MutableMapping, MutableSequence
 import proto  # type: ignore
 
 __protobuf__ = proto.module(
-    package="google.ai.generativelanguage.v1beta3",
+    package="google.ai.generativelanguage.v1beta",
     manifest={
         "HarmCategory",
         "ContentFilter",
@@ -41,23 +41,32 @@ class HarmCategory(proto.Enum):
         HARM_CATEGORY_UNSPECIFIED (0):
             Category is unspecified.
         HARM_CATEGORY_DEROGATORY (1):
-            Negative or harmful comments targeting
-            identity and/or protected attribute.
+            **PaLM** - Negative or harmful comments targeting identity
+            and/or protected attribute.
         HARM_CATEGORY_TOXICITY (2):
-            Content that is rude, disrepspectful, or
-            profane.
+            **PaLM** - Content that is rude, disrespectful, or profane.
         HARM_CATEGORY_VIOLENCE (3):
-            Describes scenarios depictng violence against
-            an individual or group, or general descriptions
-            of gore.
+            **PaLM** - Describes scenarios depicting violence against an
+            individual or group, or general descriptions of gore.
         HARM_CATEGORY_SEXUAL (4):
-            Contains references to sexual acts or other
-            lewd content.
+            **PaLM** - Contains references to sexual acts or other lewd
+            content.
         HARM_CATEGORY_MEDICAL (5):
-            Promotes unchecked medical advice.
+            **PaLM** - Promotes unchecked medical advice.
         HARM_CATEGORY_DANGEROUS (6):
-            Dangerous content that promotes, facilitates,
-            or encourages harmful acts.
+            **PaLM** - Dangerous content that promotes, facilitates, or
+            encourages harmful acts.
+        HARM_CATEGORY_HARASSMENT (7):
+            **Gemini** - Harassment content.
+        HARM_CATEGORY_HATE_SPEECH (8):
+            **Gemini** - Hate speech and content.
+        HARM_CATEGORY_SEXUALLY_EXPLICIT (9):
+            **Gemini** - Sexually explicit content.
+        HARM_CATEGORY_DANGEROUS_CONTENT (10):
+            **Gemini** - Dangerous content.
+        HARM_CATEGORY_CIVIC_INTEGRITY (11):
+            **Gemini** - Content that may be used to harm civic
+            integrity.
     """
     HARM_CATEGORY_UNSPECIFIED = 0
     HARM_CATEGORY_DEROGATORY = 1
@@ -66,6 +75,11 @@ class HarmCategory(proto.Enum):
     HARM_CATEGORY_SEXUAL = 4
     HARM_CATEGORY_MEDICAL = 5
     HARM_CATEGORY_DANGEROUS = 6
+    HARM_CATEGORY_HARASSMENT = 7
+    HARM_CATEGORY_HATE_SPEECH = 8
+    HARM_CATEGORY_SEXUALLY_EXPLICIT = 9
+    HARM_CATEGORY_DANGEROUS_CONTENT = 10
+    HARM_CATEGORY_CIVIC_INTEGRITY = 11
 
 
 class ContentFilter(proto.Message):
@@ -78,7 +92,7 @@ class ContentFilter(proto.Message):
     .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
 
     Attributes:
-        reason (google.ai.generativelanguage_v1beta3.types.ContentFilter.BlockedReason):
+        reason (google.ai.generativelanguage_v1beta.types.ContentFilter.BlockedReason):
             The reason content was blocked during request
             processing.
         message (str):
@@ -127,9 +141,9 @@ class SafetyFeedback(proto.Message):
     result.
 
     Attributes:
-        rating (google.ai.generativelanguage_v1beta3.types.SafetyRating):
+        rating (google.ai.generativelanguage_v1beta.types.SafetyRating):
             Safety rating evaluated from content.
-        setting (google.ai.generativelanguage_v1beta3.types.SafetySetting):
+        setting (google.ai.generativelanguage_v1beta.types.SafetySetting):
             Safety settings applied to the request.
     """
 
@@ -155,11 +169,14 @@ class SafetyRating(proto.Message):
     included here.
 
     Attributes:
-        category (google.ai.generativelanguage_v1beta3.types.HarmCategory):
+        category (google.ai.generativelanguage_v1beta.types.HarmCategory):
             Required. The category for this rating.
-        probability (google.ai.generativelanguage_v1beta3.types.SafetyRating.HarmProbability):
+        probability (google.ai.generativelanguage_v1beta.types.SafetyRating.HarmProbability):
             Required. The probability of harm for this
             content.
+        blocked (bool):
+            Was this content blocked because of this
+            rating?
     """
 
     class HarmProbability(proto.Enum):
@@ -198,18 +215,22 @@ class SafetyRating(proto.Message):
         number=4,
         enum=HarmProbability,
     )
+    blocked: bool = proto.Field(
+        proto.BOOL,
+        number=5,
+    )
 
 
 class SafetySetting(proto.Message):
     r"""Safety setting, affecting the safety-blocking behavior.
 
     Passing a safety setting for a category changes the allowed
-    proability that content is blocked.
+    probability that content is blocked.
 
     Attributes:
-        category (google.ai.generativelanguage_v1beta3.types.HarmCategory):
+        category (google.ai.generativelanguage_v1beta.types.HarmCategory):
             Required. The category for this setting.
-        threshold (google.ai.generativelanguage_v1beta3.types.SafetySetting.HarmBlockThreshold):
+        threshold (google.ai.generativelanguage_v1beta.types.SafetySetting.HarmBlockThreshold):
             Required. Controls the probability threshold
             at which harm is blocked.
     """
@@ -230,12 +251,15 @@ class SafetySetting(proto.Message):
                 be allowed.
             BLOCK_NONE (4):
                 All content will be allowed.
+            OFF (5):
+                Turn off the safety filter.
         """
         HARM_BLOCK_THRESHOLD_UNSPECIFIED = 0
         BLOCK_LOW_AND_ABOVE = 1
         BLOCK_MEDIUM_AND_ABOVE = 2
         BLOCK_ONLY_HIGH = 3
         BLOCK_NONE = 4
+        OFF = 5
 
     category: "HarmCategory" = proto.Field(
         proto.ENUM,

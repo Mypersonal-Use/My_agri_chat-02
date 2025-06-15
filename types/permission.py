@@ -20,7 +20,7 @@ from typing import MutableMapping, MutableSequence
 import proto  # type: ignore
 
 __protobuf__ = proto.module(
-    package="google.ai.generativelanguage.v1beta3",
+    package="google.ai.generativelanguage.v1beta",
     manifest={
         "Permission",
     },
@@ -30,7 +30,7 @@ __protobuf__ = proto.module(
 class Permission(proto.Message):
     r"""Permission resource grants user, group or the rest of the
     world access to the PaLM API resource (e.g. a tuned model,
-    file).
+    corpus).
 
     A role is a collection of permitted operations that allows users
     to perform specific actions on PaLM API resources. To make them
@@ -41,7 +41,8 @@ class Permission(proto.Message):
     There are three concentric roles. Each role is a superset of the
     previous role's permitted operations:
 
-    - reader can use the resource (e.g. tuned model) for inference
+    - reader can use the resource (e.g. tuned model, corpus) for
+      inference
     - writer has reader's permissions and additionally can edit and
       share
     - owner has writer's permissions and additionally can delete
@@ -51,12 +52,12 @@ class Permission(proto.Message):
 
     Attributes:
         name (str):
-            Output only. The permission name. A unique name will be
-            generated on create. Example:
-            tunedModels/{tuned_model}permssions/{permission} Output
-            only.
-        grantee_type (google.ai.generativelanguage_v1beta3.types.Permission.GranteeType):
-            Required. Immutable. The type of the grantee.
+            Output only. Identifier. The permission name. A unique name
+            will be generated on create. Examples:
+            tunedModels/{tuned_model}/permissions/{permission}
+            corpora/{corpus}/permissions/{permission} Output only.
+        grantee_type (google.ai.generativelanguage_v1beta.types.Permission.GranteeType):
+            Optional. Immutable. The type of the grantee.
 
             This field is a member of `oneof`_ ``_grantee_type``.
         email_address (str):
@@ -66,7 +67,7 @@ class Permission(proto.Message):
             is EVERYONE.
 
             This field is a member of `oneof`_ ``_email_address``.
-        role (google.ai.generativelanguage_v1beta3.types.Permission.Role):
+        role (google.ai.generativelanguage_v1beta.types.Permission.Role):
             Required. The role granted by this
             permission.
 

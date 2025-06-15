@@ -20,7 +20,7 @@ from typing import MutableMapping, MutableSequence
 import proto  # type: ignore
 
 __protobuf__ = proto.module(
-    package="google.ai.generativelanguage.v1beta3",
+    package="google.ai.generativelanguage.v1beta",
     manifest={
         "CitationMetadata",
         "CitationSource",
@@ -32,7 +32,7 @@ class CitationMetadata(proto.Message):
     r"""A collection of source attributions for a piece of content.
 
     Attributes:
-        citation_sources (MutableSequence[google.ai.generativelanguage_v1beta3.types.CitationSource]):
+        citation_sources (MutableSequence[google.ai.generativelanguage_v1beta.types.CitationSource]):
             Citations to sources for a specific response.
     """
 
