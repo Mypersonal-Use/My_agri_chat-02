@@ -13,29 +13,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-import inspect
 import json
 import logging as std_logging
 import pickle
-from typing import Awaitable, Callable, Dict, Optional, Sequence, Tuple, Union
+from typing import Callable, Dict, Optional, Sequence, Tuple, Union
 import warnings
 
-from google.api_core import exceptions as core_exceptions
-from google.api_core import gapic_v1, grpc_helpers_async
-from google.api_core import retry_async as retries
+from google.api_core import gapic_v1, grpc_helpers
+import google.auth  # type: ignore
 from google.auth import credentials as ga_credentials  # type: ignore
 from google.auth.transport.grpc import SslCredentials  # type: ignore
 from google.longrunning import operations_pb2  # type: ignore
 from google.protobuf.json_format import MessageToJson
 import google.protobuf.message
 import grpc  # type: ignore
-from grpc.experimental import aio  # type: ignore
 import proto  # type: ignore
 
-from google.ai.generativelanguage_v1.types import model, model_service
+from google.ai.generativelanguage_v1.types import generative_service
 
-from .base import DEFAULT_CLIENT_INFO, ModelServiceTransport
-from .grpc import ModelServiceGrpcTransport
+from .base import DEFAULT_CLIENT_INFO, GenerativeServiceTransport
 
 try:
     from google.api_core import client_logging  # type: ignore
@@ -47,10 +43,8 @@ except ImportError:  # pragma: NO COVER
 _LOGGER = std_logging.getLogger(__name__)
 
 
-class _LoggingClientAIOInterceptor(
-    grpc.aio.UnaryUnaryClientInterceptor
-):  # pragma: NO COVER
-    async def intercept_unary_unary(self, continuation, client_call_details, request):
+class _LoggingClientInterceptor(grpc.UnaryUnaryClientInterceptor):  # pragma: NO COVER
+    def intercept_unary_unary(self, continuation, client_call_details, request):
         logging_enabled = CLIENT_LOGGING_SUPPORTED and _LOGGER.isEnabledFor(
             std_logging.DEBUG
         )
@@ -75,22 +69,23 @@ class _LoggingClientAIOInterceptor(
             _LOGGER.debug(
                 f"Sending request for {client_call_details.method}",
                 extra={
-                    "serviceName": "google.ai.generativelanguage.v1.ModelService",
-                    "rpcName": str(client_call_details.method),
+                    "serviceName": "google.ai.generativelanguage.v1.GenerativeService",
+                    "rpcName": client_call_details.method,
                     "request": grpc_request,
                     "metadata": grpc_request["metadata"],
                 },
             )
-        response = await continuation(client_call_details, request)
+
+        response = continuation(client_call_details, request)
         if logging_enabled:  # pragma: NO COVER
-            response_metadata = await response.trailing_metadata()
+            response_metadata = response.trailing_metadata()
             # Convert gRPC metadata `<class 'grpc.aio._metadata.Metadata'>` to list of tuples
             metadata = (
                 dict([(k, str(v)) for k, v in response_metadata])
                 if response_metadata
                 else None
             )
-            result = await response
+            result = response.result()
             if isinstance(result, proto.Message):
                 response_payload = type(result).to_json(result)
             elif isinstance(result, google.protobuf.message.Message):
@@ -103,10 +98,10 @@ class _LoggingClientAIOInterceptor(
                 "status": "OK",
             }
             _LOGGER.debug(
-                f"Received response to rpc {client_call_details.method}.",
+                f"Received response for {client_call_details.method}.",
                 extra={
-                    "serviceName": "google.ai.generativelanguage.v1.ModelService",
-                    "rpcName": str(client_call_details.method),
+                    "serviceName": "google.ai.generativelanguage.v1.GenerativeService",
+                    "rpcName": client_call_details.method,
                     "response": grpc_response,
                     "metadata": grpc_response["metadata"],
                 },
@@ -114,11 +109,11 @@ class _LoggingClientAIOInterceptor(
         return response
 
 
-class ModelServiceGrpcAsyncIOTransport(ModelServiceTransport):
-    """gRPC AsyncIO backend transport for ModelService.
+class GenerativeServiceGrpcTransport(GenerativeServiceTransport):
+    """gRPC backend transport for GenerativeService.
 
-    Provides methods for getting metadata information about
-    Generative Models.
+    API for using Large Models that generate multimodal content
+    and have additional capabilities beyond text generation.
 
     This class defines the same methods as the primary client, so the
     primary client can load the underlying transport implementation
@@ -128,50 +123,7 @@ class ModelServiceGrpcAsyncIOTransport(ModelServiceTransport):
     top of HTTP/2); the ``grpcio`` package must be installed.
     """
 
-    _grpc_channel: aio.Channel
-    _stubs: Dict[str, Callable] = {}
-
-    @classmethod
-    def create_channel(
-        cls,
-        host: str = "generativelanguage.googleapis.com",
-        credentials: Optional[ga_credentials.Credentials] = None,
-        credentials_file: Optional[str] = None,
-        scopes: Optional[Sequence[str]] = None,
-        quota_project_id: Optional[str] = None,
-        **kwargs,
-    ) -> aio.Channel:
-        """Create and return a gRPC AsyncIO channel object.
-        Args:
-            host (Optional[str]): The host for the channel to use.
-            credentials (Optional[~.Credentials]): The
-                authorization credentials to attach to requests. These
-                credentials identify this application to the service. If
-                none are specified, the client will attempt to ascertain
-                the credentials from the environment.
-            credentials_file (Optional[str]): A file with credentials that can
-                be loaded with :func:`google.auth.load_credentials_from_file`.
-            scopes (Optional[Sequence[str]]): A optional list of scopes needed for this
-                service. These are only used when credentials are not specified and
-                are passed to :func:`google.auth.default`.
-            quota_project_id (Optional[str]): An optional project to use for billing
-                and quota.
-            kwargs (Optional[dict]): Keyword arguments, which are passed to the
-                channel creation.
-        Returns:
-            aio.Channel: A gRPC AsyncIO channel object.
-        """
-
-        return grpc_helpers_async.create_channel(
-            host,
-            credentials=credentials,
-            credentials_file=credentials_file,
-            quota_project_id=quota_project_id,
-            default_scopes=cls.AUTH_SCOPES,
-            scopes=scopes,
-            default_host=cls.DEFAULT_HOST,
-            **kwargs,
-        )
+    _stubs: Dict[str, Callable]
 
     def __init__(
         self,
@@ -180,7 +132,7 @@ class ModelServiceGrpcAsyncIOTransport(ModelServiceTransport):
         credentials: Optional[ga_credentials.Credentials] = None,
         credentials_file: Optional[str] = None,
         scopes: Optional[Sequence[str]] = None,
-        channel: Optional[Union[aio.Channel, Callable[..., aio.Channel]]] = None,
+        channel: Optional[Union[grpc.Channel, Callable[..., grpc.Channel]]] = None,
         api_mtls_endpoint: Optional[str] = None,
         client_cert_source: Optional[Callable[[], Tuple[bytes, bytes]]] = None,
         ssl_channel_credentials: Optional[grpc.ChannelCredentials] = None,
@@ -204,10 +156,9 @@ class ModelServiceGrpcAsyncIOTransport(ModelServiceTransport):
             credentials_file (Optional[str]): A file with credentials that can
                 be loaded with :func:`google.auth.load_credentials_from_file`.
                 This argument is ignored if a ``channel`` instance is provided.
-            scopes (Optional[Sequence[str]]): A optional list of scopes needed for this
-                service. These are only used when credentials are not specified and
-                are passed to :func:`google.auth.default`.
-            channel (Optional[Union[aio.Channel, Callable[..., aio.Channel]]]):
+            scopes (Optional(Sequence[str])): A list of scopes. This argument is
+                ignored if a ``channel`` instance is provided.
+            channel (Optional[Union[grpc.Channel, Callable[..., grpc.Channel]]]):
                 A ``Channel`` instance through which to make calls, or a Callable
                 that constructs and returns one. If set to None, ``self.create_channel``
                 is used to create the channel. If a Callable is given, it will be called
@@ -237,7 +188,7 @@ class ModelServiceGrpcAsyncIOTransport(ModelServiceTransport):
                 be used for service account credentials.
 
         Raises:
-            google.auth.exceptions.MutualTlsChannelError: If mutual TLS transport
+          google.auth.exceptions.MutualTLSChannelError: If mutual TLS transport
               creation failed for any reason.
           google.api_core.exceptions.DuplicateCredentialArgs: If both ``credentials``
               and ``credentials_file`` are passed.
@@ -251,13 +202,14 @@ class ModelServiceGrpcAsyncIOTransport(ModelServiceTransport):
         if client_cert_source:
             warnings.warn("client_cert_source is deprecated", DeprecationWarning)
 
-        if isinstance(channel, aio.Channel):
+        if isinstance(channel, grpc.Channel):
             # Ignore credentials if a channel was passed.
             credentials = None
             self._ignore_credentials = True
             # If a channel was explicitly provided, set it.
             self._grpc_channel = channel
             self._ssl_channel_credentials = None
+
         else:
             if api_mtls_endpoint:
                 host = api_mtls_endpoint
@@ -310,71 +262,88 @@ class ModelServiceGrpcAsyncIOTransport(ModelServiceTransport):
                 ],
             )
 
-        self._interceptor = _LoggingClientAIOInterceptor()
-        self._grpc_channel._unary_unary_interceptors.append(self._interceptor)
-        self._logged_channel = self._grpc_channel
-        self._wrap_with_kind = (
-            "kind" in inspect.signature(gapic_v1.method_async.wrap_method).parameters
+        self._interceptor = _LoggingClientInterceptor()
+        self._logged_channel = grpc.intercept_channel(
+            self._grpc_channel, self._interceptor
         )
+
         # Wrap messages. This must be done after self._logged_channel exists
         self._prep_wrapped_messages(client_info)
 
-    @property
-    def grpc_channel(self) -> aio.Channel:
-        """Create the channel designed to connect to this service.
+    @classmethod
+    def create_channel(
+        cls,
+        host: str = "generativelanguage.googleapis.com",
+        credentials: Optional[ga_credentials.Credentials] = None,
+        credentials_file: Optional[str] = None,
+        scopes: Optional[Sequence[str]] = None,
+        quota_project_id: Optional[str] = None,
+        **kwargs,
+    ) -> grpc.Channel:
+        """Create and return a gRPC channel object.
+        Args:
+            host (Optional[str]): The host for the channel to use.
+            credentials (Optional[~.Credentials]): The
+                authorization credentials to attach to requests. These
+                credentials identify this application to the service. If
+                none are specified, the client will attempt to ascertain
+                the credentials from the environment.
+            credentials_file (Optional[str]): A file with credentials that can
+                be loaded with :func:`google.auth.load_credentials_from_file`.
+                This argument is mutually exclusive with credentials.
+            scopes (Optional[Sequence[str]]): A optional list of scopes needed for this
+                service. These are only used when credentials are not specified and
+                are passed to :func:`google.auth.default`.
+            quota_project_id (Optional[str]): An optional project to use for billing
+                and quota.
+            kwargs (Optional[dict]): Keyword arguments, which are passed to the
+                channel creation.
+        Returns:
+            grpc.Channel: A gRPC channel object.
 
-        This property caches on the instance; repeated calls return
-        the same channel.
+        Raises:
+            google.api_core.exceptions.DuplicateCredentialArgs: If both ``credentials``
+              and ``credentials_file`` are passed.
         """
-        # Return the channel from cache.
+
+        return grpc_helpers.create_channel(
+            host,
+            credentials=credentials,
+            credentials_file=credentials_file,
+            quota_project_id=quota_project_id,
+            default_scopes=cls.AUTH_SCOPES,
+            scopes=scopes,
+            default_host=cls.DEFAULT_HOST,
+            **kwargs,
+        )
+
+    @property
+    def grpc_channel(self) -> grpc.Channel:
+        """Return the channel designed to connect to this service."""
         return self._grpc_channel
 
     @property
-    def get_model(
-        self,
-    ) -> Callable[[model_service.GetModelRequest], Awaitable[model.Model]]:
-        r"""Return a callable for the get model method over gRPC.
-
-        Gets information about a specific ``Model`` such as its version
-        number, token limits,
-        `parameters <https://ai.google.dev/gemini-api/docs/models/generative-models#model-parameters>`__
-        and other metadata. Refer to the `Gemini models
-        guide <https://ai.google.dev/gemini-api/docs/models/gemini>`__
-        for detailed model information.
-
-        Returns:
-            Callable[[~.GetModelRequest],
-                    Awaitable[~.Model]]:
-                A function that, when called, will call the underlying RPC
-                on the server.
-        """
-        # Generate a "stub function" on-the-fly which will actually make
-        # the request.
-        # gRPC handles serialization and deserialization, so we just need
-        # to pass in the functions for each.
-        if "get_model" not in self._stubs:
-            self._stubs["get_model"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1.ModelService/GetModel",
-                request_serializer=model_service.GetModelRequest.serialize,
-                response_deserializer=model.Model.deserialize,
-            )
-        return self._stubs["get_model"]
-
-    @property
-    def list_models(
+    def generate_content(
         self,
     ) -> Callable[
-        [model_service.ListModelsRequest], Awaitable[model_service.ListModelsResponse]
+        [generative_service.GenerateContentRequest],
+        generative_service.GenerateContentResponse,
     ]:
-        r"""Return a callable for the list models method over gRPC.
+        r"""Return a callable for the generate content method over gRPC.
 
-        Lists the
-        ```Model``\ s <https://ai.google.dev/gemini-api/docs/models/gemini>`__
-        available through the Gemini API.
+        Generates a model response given an input
+        ``GenerateContentRequest``. Refer to the `text generation
+        guide <https://ai.google.dev/gemini-api/docs/text-generation>`__
+        for detailed usage information. Input capabilities differ
+        between models, including tuned models. Refer to the `model
+        guide <https://ai.google.dev/gemini-api/docs/models/gemini>`__
+        and `tuning
+        guide <https://ai.google.dev/gemini-api/docs/model-tuning>`__
+        for details.
 
         Returns:
-            Callable[[~.ListModelsRequest],
-                    Awaitable[~.ListModelsResponse]]:
+            Callable[[~.GenerateContentRequest],
+                    ~.GenerateContentResponse]:
                 A function that, when called, will call the underlying RPC
                 on the server.
         """
@@ -382,55 +351,140 @@ class ModelServiceGrpcAsyncIOTransport(ModelServiceTransport):
         # the request.
         # gRPC handles serialization and deserialization, so we just need
         # to pass in the functions for each.
-        if "list_models" not in self._stubs:
-            self._stubs["list_models"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1.ModelService/ListModels",
-                request_serializer=model_service.ListModelsRequest.serialize,
-                response_deserializer=model_service.ListModelsResponse.deserialize,
+        if "generate_content" not in self._stubs:
+            self._stubs["generate_content"] = self._logged_channel.unary_unary(
+                "/google.ai.generativelanguage.v1.GenerativeService/GenerateContent",
+                request_serializer=generative_service.GenerateContentRequest.serialize,
+                response_deserializer=generative_service.GenerateContentResponse.deserialize,
             )
-        return self._stubs["list_models"]
-
-    def _prep_wrapped_messages(self, client_info):
-        """Precompute the wrapped methods, overriding the base class method to use async wrappers."""
-        self._wrapped_methods = {
-            self.get_model: self._wrap_method(
-                self.get_model,
-                default_timeout=None,
-                client_info=client_info,
-            ),
-            self.list_models: self._wrap_method(
-                self.list_models,
-                default_timeout=None,
-                client_info=client_info,
-            ),
-            self.cancel_operation: self._wrap_method(
-                self.cancel_operation,
-                default_timeout=None,
-                client_info=client_info,
-            ),
-            self.get_operation: self._wrap_method(
-                self.get_operation,
-                default_timeout=None,
-                client_info=client_info,
-            ),
-            self.list_operations: self._wrap_method(
-                self.list_operations,
-                default_timeout=None,
-                client_info=client_info,
-            ),
-        }
-
-    def _wrap_method(self, func, *args, **kwargs):
-        if self._wrap_with_kind:  # pragma: NO COVER
-            kwargs["kind"] = self.kind
-        return gapic_v1.method_async.wrap_method(func, *args, **kwargs)
-
-    def close(self):
-        return self._logged_channel.close()
+        return self._stubs["generate_content"]
 
     @property
-    def kind(self) -> str:
-        return "grpc_asyncio"
+    def stream_generate_content(
+        self,
+    ) -> Callable[
+        [generative_service.GenerateContentRequest],
+        generative_service.GenerateContentResponse,
+    ]:
+        r"""Return a callable for the stream generate content method over gRPC.
+
+        Generates a `streamed
+        response <https://ai.google.dev/gemini-api/docs/text-generation?lang=python#generate-a-text-stream>`__
+        from the model given an input ``GenerateContentRequest``.
+
+        Returns:
+            Callable[[~.GenerateContentRequest],
+                    ~.GenerateContentResponse]:
+                A function that, when called, will call the underlying RPC
+                on the server.
+        """
+        # Generate a "stub function" on-the-fly which will actually make
+        # the request.
+        # gRPC handles serialization and deserialization, so we just need
+        # to pass in the functions for each.
+        if "stream_generate_content" not in self._stubs:
+            self._stubs["stream_generate_content"] = self._logged_channel.unary_stream(
+                "/google.ai.generativelanguage.v1.GenerativeService/StreamGenerateContent",
+                request_serializer=generative_service.GenerateContentRequest.serialize,
+                response_deserializer=generative_service.GenerateContentResponse.deserialize,
+            )
+        return self._stubs["stream_generate_content"]
+
+    @property
+    def embed_content(
+        self,
+    ) -> Callable[
+        [generative_service.EmbedContentRequest],
+        generative_service.EmbedContentResponse,
+    ]:
+        r"""Return a callable for the embed content method over gRPC.
+
+        Generates a text embedding vector from the input ``Content``
+        using the specified `Gemini Embedding
+        model <https://ai.google.dev/gemini-api/docs/models/gemini#text-embedding>`__.
+
+        Returns:
+            Callable[[~.EmbedContentRequest],
+                    ~.EmbedContentResponse]:
+                A function that, when called, will call the underlying RPC
+                on the server.
+        """
+        # Generate a "stub function" on-the-fly which will actually make
+        # the request.
+        # gRPC handles serialization and deserialization, so we just need
+        # to pass in the functions for each.
+        if "embed_content" not in self._stubs:
+            self._stubs["embed_content"] = self._logged_channel.unary_unary(
+                "/google.ai.generativelanguage.v1.GenerativeService/EmbedContent",
+                request_serializer=generative_service.EmbedContentRequest.serialize,
+                response_deserializer=generative_service.EmbedContentResponse.deserialize,
+            )
+        return self._stubs["embed_content"]
+
+    @property
+    def batch_embed_contents(
+        self,
+    ) -> Callable[
+        [generative_service.BatchEmbedContentsRequest],
+        generative_service.BatchEmbedContentsResponse,
+    ]:
+        r"""Return a callable for the batch embed contents method over gRPC.
+
+        Generates multiple embedding vectors from the input ``Content``
+        which consists of a batch of strings represented as
+        ``EmbedContentRequest`` objects.
+
+        Returns:
+            Callable[[~.BatchEmbedContentsRequest],
+                    ~.BatchEmbedContentsResponse]:
+                A function that, when called, will call the underlying RPC
+                on the server.
+        """
+        # Generate a "stub function" on-the-fly which will actually make
+        # the request.
+        # gRPC handles serialization and deserialization, so we just need
+        # to pass in the functions for each.
+        if "batch_embed_contents" not in self._stubs:
+            self._stubs["batch_embed_contents"] = self._logged_channel.unary_unary(
+                "/google.ai.generativelanguage.v1.GenerativeService/BatchEmbedContents",
+                request_serializer=generative_service.BatchEmbedContentsRequest.serialize,
+                response_deserializer=generative_service.BatchEmbedContentsResponse.deserialize,
+            )
+        return self._stubs["batch_embed_contents"]
+
+    @property
+    def count_tokens(
+        self,
+    ) -> Callable[
+        [generative_service.CountTokensRequest], generative_service.CountTokensResponse
+    ]:
+        r"""Return a callable for the count tokens method over gRPC.
+
+        Runs a model's tokenizer on input ``Content`` and returns the
+        token count. Refer to the `tokens
+        guide <https://ai.google.dev/gemini-api/docs/tokens>`__ to learn
+        more about tokens.
+
+        Returns:
+            Callable[[~.CountTokensRequest],
+                    ~.CountTokensResponse]:
+                A function that, when called, will call the underlying RPC
+                on the server.
+        """
+        # Generate a "stub function" on-the-fly which will actually make
+        # the request.
+        # gRPC handles serialization and deserialization, so we just need
+        # to pass in the functions for each.
+        if "count_tokens" not in self._stubs:
+            self._stubs["count_tokens"] = self._logged_channel.unary_unary(
+                "/google.ai.generativelanguage.v1.GenerativeService/CountTokens",
+                request_serializer=generative_service.CountTokensRequest.serialize,
+                response_deserializer=generative_service.CountTokensResponse.deserialize,
+            )
+        return self._stubs["count_tokens"]
+
+    def close(self):
+        self._logged_channel.close()
 
     @property
     def cancel_operation(
@@ -485,5 +539,9 @@ class ModelServiceGrpcAsyncIOTransport(ModelServiceTransport):
             )
         return self._stubs["list_operations"]
 
+    @property
+    def kind(self) -> str:
+        return "grpc"
 
-__all__ = ("ModelServiceGrpcAsyncIOTransport",)
+
+__all__ = ("GenerativeServiceGrpcTransport",)

@@ -20,11 +20,9 @@ from typing import MutableMapping, MutableSequence
 import proto  # type: ignore
 
 __protobuf__ = proto.module(
-    package="google.ai.generativelanguage.v1alpha",
+    package="google.ai.generativelanguage.v1",
     manifest={
         "HarmCategory",
-        "ContentFilter",
-        "SafetyFeedback",
         "SafetyRating",
         "SafetySetting",
     },
@@ -82,83 +80,6 @@ class HarmCategory(proto.Enum):
     HARM_CATEGORY_CIVIC_INTEGRITY = 11
 
 
-class ContentFilter(proto.Message):
-    r"""Content filtering metadata associated with processing a
-    single request.
-    ContentFilter contains a reason and an optional supporting
-    string. The reason may be unspecified.
-
-
-    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
-
-    Attributes:
-        reason (google.ai.generativelanguage_v1alpha.types.ContentFilter.BlockedReason):
-            The reason content was blocked during request
-            processing.
-        message (str):
-            A string that describes the filtering
-            behavior in more detail.
-
-            This field is a member of `oneof`_ ``_message``.
-    """
-
-    class BlockedReason(proto.Enum):
-        r"""A list of reasons why content may have been blocked.
-
-        Values:
-            BLOCKED_REASON_UNSPECIFIED (0):
-                A blocked reason was not specified.
-            SAFETY (1):
-                Content was blocked by safety settings.
-            OTHER (2):
-                Content was blocked, but the reason is
-                uncategorized.
-        """
-        BLOCKED_REASON_UNSPECIFIED = 0
-        SAFETY = 1
-        OTHER = 2
-
-    reason: BlockedReason = proto.Field(
-        proto.ENUM,
-        number=1,
-        enum=BlockedReason,
-    )
-    message: str = proto.Field(
-        proto.STRING,
-        number=2,
-        optional=True,
-    )
-
-
-class SafetyFeedback(proto.Message):
-    r"""Safety feedback for an entire request.
-
-    This field is populated if content in the input and/or response
-    is blocked due to safety settings. SafetyFeedback may not exist
-    for every HarmCategory. Each SafetyFeedback will return the
-    safety settings used by the request as well as the lowest
-    HarmProbability that should be allowed in order to return a
-    result.
-
-    Attributes:
-        rating (google.ai.generativelanguage_v1alpha.types.SafetyRating):
-            Safety rating evaluated from content.
-        setting (google.ai.generativelanguage_v1alpha.types.SafetySetting):
-            Safety settings applied to the request.
-    """
-
-    rating: "SafetyRating" = proto.Field(
-        proto.MESSAGE,
-        number=1,
-        message="SafetyRating",
-    )
-    setting: "SafetySetting" = proto.Field(
-        proto.MESSAGE,
-        number=2,
-        message="SafetySetting",
-    )
-
-
 class SafetyRating(proto.Message):
     r"""Safety rating for a piece of content.
 
@@ -169,9 +90,9 @@ class SafetyRating(proto.Message):
     included here.
 
     Attributes:
-        category (google.ai.generativelanguage_v1alpha.types.HarmCategory):
+        category (google.ai.generativelanguage_v1.types.HarmCategory):
             Required. The category for this rating.
-        probability (google.ai.generativelanguage_v1alpha.types.SafetyRating.HarmProbability):
+        probability (google.ai.generativelanguage_v1.types.SafetyRating.HarmProbability):
             Required. The probability of harm for this
             content.
         blocked (bool):
@@ -228,9 +149,9 @@ class SafetySetting(proto.Message):
     probability that content is blocked.
 
     Attributes:
-        category (google.ai.generativelanguage_v1alpha.types.HarmCategory):
+        category (google.ai.generativelanguage_v1.types.HarmCategory):
             Required. The category for this setting.
-        threshold (google.ai.generativelanguage_v1alpha.types.SafetySetting.HarmBlockThreshold):
+        threshold (google.ai.generativelanguage_v1.types.SafetySetting.HarmBlockThreshold):
             Required. Controls the probability threshold
             at which harm is blocked.
     """

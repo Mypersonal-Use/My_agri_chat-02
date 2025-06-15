@@ -26,15 +26,15 @@ from google.longrunning import operations_pb2  # type: ignore
 from google.oauth2 import service_account  # type: ignore
 
 from google.ai.generativelanguage_v1 import gapic_version as package_version
-from google.ai.generativelanguage_v1.types import model, model_service
+from google.ai.generativelanguage_v1.types import generative_service
 
 DEFAULT_CLIENT_INFO = gapic_v1.client_info.ClientInfo(
     gapic_version=package_version.__version__
 )
 
 
-class ModelServiceTransport(abc.ABC):
-    """Abstract transport class for ModelService."""
+class GenerativeServiceTransport(abc.ABC):
+    """Abstract transport class for GenerativeService."""
 
     AUTH_SCOPES = ()
 
@@ -129,14 +129,74 @@ class ModelServiceTransport(abc.ABC):
     def _prep_wrapped_messages(self, client_info):
         # Precompute the wrapped methods.
         self._wrapped_methods = {
-            self.get_model: gapic_v1.method.wrap_method(
-                self.get_model,
-                default_timeout=None,
+            self.generate_content: gapic_v1.method.wrap_method(
+                self.generate_content,
+                default_retry=retries.Retry(
+                    initial=1.0,
+                    maximum=10.0,
+                    multiplier=1.3,
+                    predicate=retries.if_exception_type(
+                        core_exceptions.ServiceUnavailable,
+                    ),
+                    deadline=600.0,
+                ),
+                default_timeout=600.0,
                 client_info=client_info,
             ),
-            self.list_models: gapic_v1.method.wrap_method(
-                self.list_models,
-                default_timeout=None,
+            self.stream_generate_content: gapic_v1.method.wrap_method(
+                self.stream_generate_content,
+                default_retry=retries.Retry(
+                    initial=1.0,
+                    maximum=10.0,
+                    multiplier=1.3,
+                    predicate=retries.if_exception_type(
+                        core_exceptions.ServiceUnavailable,
+                    ),
+                    deadline=600.0,
+                ),
+                default_timeout=600.0,
+                client_info=client_info,
+            ),
+            self.embed_content: gapic_v1.method.wrap_method(
+                self.embed_content,
+                default_retry=retries.Retry(
+                    initial=1.0,
+                    maximum=10.0,
+                    multiplier=1.3,
+                    predicate=retries.if_exception_type(
+                        core_exceptions.ServiceUnavailable,
+                    ),
+                    deadline=60.0,
+                ),
+                default_timeout=60.0,
+                client_info=client_info,
+            ),
+            self.batch_embed_contents: gapic_v1.method.wrap_method(
+                self.batch_embed_contents,
+                default_retry=retries.Retry(
+                    initial=1.0,
+                    maximum=10.0,
+                    multiplier=1.3,
+                    predicate=retries.if_exception_type(
+                        core_exceptions.ServiceUnavailable,
+                    ),
+                    deadline=60.0,
+                ),
+                default_timeout=60.0,
+                client_info=client_info,
+            ),
+            self.count_tokens: gapic_v1.method.wrap_method(
+                self.count_tokens,
+                default_retry=retries.Retry(
+                    initial=1.0,
+                    maximum=10.0,
+                    multiplier=1.3,
+                    predicate=retries.if_exception_type(
+                        core_exceptions.ServiceUnavailable,
+                    ),
+                    deadline=60.0,
+                ),
+                default_timeout=60.0,
                 client_info=client_info,
             ),
             self.cancel_operation: gapic_v1.method.wrap_method(
@@ -166,21 +226,61 @@ class ModelServiceTransport(abc.ABC):
         raise NotImplementedError()
 
     @property
-    def get_model(
+    def generate_content(
         self,
     ) -> Callable[
-        [model_service.GetModelRequest], Union[model.Model, Awaitable[model.Model]]
+        [generative_service.GenerateContentRequest],
+        Union[
+            generative_service.GenerateContentResponse,
+            Awaitable[generative_service.GenerateContentResponse],
+        ],
     ]:
         raise NotImplementedError()
 
     @property
-    def list_models(
+    def stream_generate_content(
         self,
     ) -> Callable[
-        [model_service.ListModelsRequest],
+        [generative_service.GenerateContentRequest],
         Union[
-            model_service.ListModelsResponse,
-            Awaitable[model_service.ListModelsResponse],
+            generative_service.GenerateContentResponse,
+            Awaitable[generative_service.GenerateContentResponse],
+        ],
+    ]:
+        raise NotImplementedError()
+
+    @property
+    def embed_content(
+        self,
+    ) -> Callable[
+        [generative_service.EmbedContentRequest],
+        Union[
+            generative_service.EmbedContentResponse,
+            Awaitable[generative_service.EmbedContentResponse],
+        ],
+    ]:
+        raise NotImplementedError()
+
+    @property
+    def batch_embed_contents(
+        self,
+    ) -> Callable[
+        [generative_service.BatchEmbedContentsRequest],
+        Union[
+            generative_service.BatchEmbedContentsResponse,
+            Awaitable[generative_service.BatchEmbedContentsResponse],
+        ],
+    ]:
+        raise NotImplementedError()
+
+    @property
+    def count_tokens(
+        self,
+    ) -> Callable[
+        [generative_service.CountTokensRequest],
+        Union[
+            generative_service.CountTokensResponse,
+            Awaitable[generative_service.CountTokensResponse],
         ],
     ]:
         raise NotImplementedError()
@@ -217,4 +317,4 @@ class ModelServiceTransport(abc.ABC):
         raise NotImplementedError()
 
 
-__all__ = ("ModelServiceTransport",)
+__all__ = ("GenerativeServiceTransport",)

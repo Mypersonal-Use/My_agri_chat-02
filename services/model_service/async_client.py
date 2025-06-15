@@ -36,23 +36,17 @@ from google.api_core.client_options import ClientOptions
 from google.auth import credentials as ga_credentials  # type: ignore
 from google.oauth2 import service_account  # type: ignore
 
-from google.ai.generativelanguage_v1beta3 import gapic_version as package_version
+from google.ai.generativelanguage_v1 import gapic_version as package_version
 
 try:
     OptionalRetry = Union[retries.AsyncRetry, gapic_v1.method._MethodDefault, None]
 except AttributeError:  # pragma: NO COVER
     OptionalRetry = Union[retries.AsyncRetry, object, None]  # type: ignore
 
-from google.api_core import operation  # type: ignore
-from google.api_core import operation_async  # type: ignore
 from google.longrunning import operations_pb2  # type: ignore
-from google.protobuf import field_mask_pb2  # type: ignore
-from google.protobuf import timestamp_pb2  # type: ignore
 
-from google.ai.generativelanguage_v1beta3.services.model_service import pagers
-from google.ai.generativelanguage_v1beta3.types import tuned_model as gag_tuned_model
-from google.ai.generativelanguage_v1beta3.types import model, model_service
-from google.ai.generativelanguage_v1beta3.types import tuned_model
+from google.ai.generativelanguage_v1.services.model_service import pagers
+from google.ai.generativelanguage_v1.types import model, model_service
 
 from .client import ModelServiceClient
 from .transports.base import DEFAULT_CLIENT_INFO, ModelServiceTransport
@@ -84,8 +78,6 @@ class ModelServiceAsyncClient:
 
     model_path = staticmethod(ModelServiceClient.model_path)
     parse_model_path = staticmethod(ModelServiceClient.parse_model_path)
-    tuned_model_path = staticmethod(ModelServiceClient.tuned_model_path)
-    parse_tuned_model_path = staticmethod(ModelServiceClient.parse_tuned_model_path)
     common_billing_account_path = staticmethod(
         ModelServiceClient.common_billing_account_path
     )
@@ -276,9 +268,9 @@ class ModelServiceAsyncClient:
             std_logging.DEBUG
         ):  # pragma: NO COVER
             _LOGGER.debug(
-                "Created client `google.ai.generativelanguage_v1beta3.ModelServiceAsyncClient`.",
+                "Created client `google.ai.generativelanguage_v1.ModelServiceAsyncClient`.",
                 extra={
-                    "serviceName": "google.ai.generativelanguage.v1beta3.ModelService",
+                    "serviceName": "google.ai.generativelanguage.v1.ModelService",
                     "universeDomain": getattr(
                         self._client._transport._credentials, "universe_domain", ""
                     ),
@@ -289,7 +281,7 @@ class ModelServiceAsyncClient:
                 }
                 if hasattr(self._client._transport, "_credentials")
                 else {
-                    "serviceName": "google.ai.generativelanguage.v1beta3.ModelService",
+                    "serviceName": "google.ai.generativelanguage.v1.ModelService",
                     "credentialsType": None,
                 },
             )
@@ -303,7 +295,12 @@ class ModelServiceAsyncClient:
         timeout: Union[float, object] = gapic_v1.method.DEFAULT,
         metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
     ) -> model.Model:
-        r"""Gets information about a specific Model.
+        r"""Gets information about a specific ``Model`` such as its version
+        number, token limits,
+        `parameters <https://ai.google.dev/gemini-api/docs/models/generative-models#model-parameters>`__
+        and other metadata. Refer to the `Gemini models
+        guide <https://ai.google.dev/gemini-api/docs/models/gemini>`__
+        for detailed model information.
 
         .. code-block:: python
 
@@ -314,14 +311,14 @@ class ModelServiceAsyncClient:
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta3
+            from google.ai import generativelanguage_v1
 
             async def sample_get_model():
                 # Create a client
-                client = generativelanguage_v1beta3.ModelServiceAsyncClient()
+                client = generativelanguage_v1.ModelServiceAsyncClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta3.GetModelRequest(
+                request = generativelanguage_v1.GetModelRequest(
                     name="name_value",
                 )
 
@@ -332,7 +329,7 @@ class ModelServiceAsyncClient:
                 print(response)
 
         Args:
-            request (Optional[Union[google.ai.generativelanguage_v1beta3.types.GetModelRequest, dict]]):
+            request (Optional[Union[google.ai.generativelanguage_v1.types.GetModelRequest, dict]]):
                 The request object. Request for getting information about
                 a specific Model.
             name (:class:`str`):
@@ -355,7 +352,7 @@ class ModelServiceAsyncClient:
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta3.types.Model:
+            google.ai.generativelanguage_v1.types.Model:
                 Information about a Generative
                 Language Model.
 
@@ -416,7 +413,9 @@ class ModelServiceAsyncClient:
         timeout: Union[float, object] = gapic_v1.method.DEFAULT,
         metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
     ) -> pagers.ListModelsAsyncPager:
-        r"""Lists models available through the API.
+        r"""Lists the
+        ```Model``\ s <https://ai.google.dev/gemini-api/docs/models/gemini>`__
+        available through the Gemini API.
 
         .. code-block:: python
 
@@ -427,14 +426,14 @@ class ModelServiceAsyncClient:
             # - It may require specifying regional endpoints when creating the service
             #   client as shown in:
             #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta3
+            from google.ai import generativelanguage_v1
 
             async def sample_list_models():
                 # Create a client
-                client = generativelanguage_v1beta3.ModelServiceAsyncClient()
+                client = generativelanguage_v1.ModelServiceAsyncClient()
 
                 # Initialize request argument(s)
-                request = generativelanguage_v1beta3.ListModelsRequest(
+                request = generativelanguage_v1.ListModelsRequest(
                 )
 
                 # Make the request
@@ -445,15 +444,14 @@ class ModelServiceAsyncClient:
                     print(response)
 
         Args:
-            request (Optional[Union[google.ai.generativelanguage_v1beta3.types.ListModelsRequest, dict]]):
+            request (Optional[Union[google.ai.generativelanguage_v1.types.ListModelsRequest, dict]]):
                 The request object. Request for listing all Models.
             page_size (:class:`int`):
                 The maximum number of ``Models`` to return (per page).
 
-                The service may return fewer models. If unspecified, at
-                most 50 models will be returned per page. This method
-                returns at most 1000 models per page, even if you pass a
-                larger page_size.
+                If unspecified, 50 models will be returned per page.
+                This method returns at most 1000 models per page, even
+                if you pass a larger page_size.
 
                 This corresponds to the ``page_size`` field
                 on the ``request`` instance; if ``request`` is provided, this
@@ -481,7 +479,7 @@ class ModelServiceAsyncClient:
                 be of type `bytes`.
 
         Returns:
-            google.ai.generativelanguage_v1beta3.services.model_service.pagers.ListModelsAsyncPager:
+            google.ai.generativelanguage_v1.services.model_service.pagers.ListModelsAsyncPager:
                 Response from ListModel containing a paginated list of
                 Models.
 
@@ -542,94 +540,40 @@ class ModelServiceAsyncClient:
         # Done; return the response.
         return response
 
-    async def get_tuned_model(
+    async def list_operations(
         self,
-        request: Optional[Union[model_service.GetTunedModelRequest, dict]] = None,
+        request: Optional[operations_pb2.ListOperationsRequest] = None,
         *,
-        name: Optional[str] = None,
         retry: OptionalRetry = gapic_v1.method.DEFAULT,
         timeout: Union[float, object] = gapic_v1.method.DEFAULT,
         metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
-    ) -> tuned_model.TunedModel:
-        r"""Gets information about a specific TunedModel.
-
-        .. code-block:: python
-
-            # This snippet has been automatically generated and should be regarded as a
-            # code template only.
-            # It will require modifications to work:
-            # - It may require correct/in-range values for request initialization.
-            # - It may require specifying regional endpoints when creating the service
-            #   client as shown in:
-            #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta3
-
-            async def sample_get_tuned_model():
-                # Create a client
-                client = generativelanguage_v1beta3.ModelServiceAsyncClient()
-
-                # Initialize request argument(s)
-                request = generativelanguage_v1beta3.GetTunedModelRequest(
-                    name="name_value",
-                )
-
-                # Make the request
-                response = await client.get_tuned_model(request=request)
-
-                # Handle the response
-                print(response)
+    ) -> operations_pb2.ListOperationsResponse:
+        r"""Lists operations that match the specified filter in the request.
 
         Args:
-            request (Optional[Union[google.ai.generativelanguage_v1beta3.types.GetTunedModelRequest, dict]]):
-                The request object. Request for getting information about
-                a specific Model.
-            name (:class:`str`):
-                Required. The resource name of the model.
-
-                Format: ``tunedModels/my-model-id``
-
-                This corresponds to the ``name`` field
-                on the ``request`` instance; if ``request`` is provided, this
-                should not be set.
-            retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any,
-                should be retried.
+            request (:class:`~.operations_pb2.ListOperationsRequest`):
+                The request object. Request message for
+                `ListOperations` method.
+            retry (google.api_core.retry_async.AsyncRetry): Designation of what errors,
+                    if any, should be retried.
             timeout (float): The timeout for this request.
             metadata (Sequence[Tuple[str, Union[str, bytes]]]): Key/value pairs which should be
                 sent along with the request as metadata. Normally, each value must be of type `str`,
                 but for metadata keys ending with the suffix `-bin`, the corresponding values must
                 be of type `bytes`.
-
         Returns:
-            google.ai.generativelanguage_v1beta3.types.TunedModel:
-                A fine-tuned model created using
-                ModelService.CreateTunedModel.
-
+            ~.operations_pb2.ListOperationsResponse:
+                Response message for ``ListOperations`` method.
         """
         # Create or coerce a protobuf request object.
-        # - Quick check: If we got a request object, we should *not* have
-        #   gotten any keyword arguments that map to the request.
-        has_flattened_params = any([name])
-        if request is not None and has_flattened_params:
-            raise ValueError(
-                "If the `request` argument is set, then none of "
-                "the individual field arguments should be set."
-            )
-
-        # - Use the request object if provided (there's no risk of modifying the input as
-        #   there are no flattened fields), or create one.
-        if not isinstance(request, model_service.GetTunedModelRequest):
-            request = model_service.GetTunedModelRequest(request)
-
-        # If we have keyword arguments corresponding to fields on the
-        # request, apply these.
-        if name is not None:
-            request.name = name
+        # The request isn't a proto-plus wrapped type,
+        # so it must be constructed via keyword expansion.
+        if isinstance(request, dict):
+            request = operations_pb2.ListOperationsRequest(**request)
 
         # Wrap the RPC method; this adds retry and timeout information,
         # and friendly error handling.
-        rpc = self._client._transport._wrapped_methods[
-            self._client._transport.get_tuned_model
-        ]
+        rpc = self.transport._wrapped_methods[self._client._transport.list_operations]
 
         # Certain fields should be provided within the metadata header;
         # add these here.
@@ -651,385 +595,45 @@ class ModelServiceAsyncClient:
         # Done; return the response.
         return response
 
-    async def list_tuned_models(
+    async def get_operation(
         self,
-        request: Optional[Union[model_service.ListTunedModelsRequest, dict]] = None,
+        request: Optional[operations_pb2.GetOperationRequest] = None,
         *,
-        page_size: Optional[int] = None,
-        page_token: Optional[str] = None,
         retry: OptionalRetry = gapic_v1.method.DEFAULT,
         timeout: Union[float, object] = gapic_v1.method.DEFAULT,
         metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
-    ) -> pagers.ListTunedModelsAsyncPager:
-        r"""Lists tuned models owned by the user.
-
-        .. code-block:: python
-
-            # This snippet has been automatically generated and should be regarded as a
-            # code template only.
-            # It will require modifications to work:
-            # - It may require correct/in-range values for request initialization.
-            # - It may require specifying regional endpoints when creating the service
-            #   client as shown in:
-            #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta3
-
-            async def sample_list_tuned_models():
-                # Create a client
-                client = generativelanguage_v1beta3.ModelServiceAsyncClient()
-
-                # Initialize request argument(s)
-                request = generativelanguage_v1beta3.ListTunedModelsRequest(
-                )
-
-                # Make the request
-                page_result = client.list_tuned_models(request=request)
-
-                # Handle the response
-                async for response in page_result:
-                    print(response)
+    ) -> operations_pb2.Operation:
+        r"""Gets the latest state of a long-running operation.
 
         Args:
-            request (Optional[Union[google.ai.generativelanguage_v1beta3.types.ListTunedModelsRequest, dict]]):
-                The request object. Request for listing TunedModels.
-            page_size (:class:`int`):
-                Optional. The maximum number of ``TunedModels`` to
-                return (per page). The service may return fewer tuned
-                models.
-
-                If unspecified, at most 10 tuned models will be
-                returned. This method returns at most 1000 models per
-                page, even if you pass a larger page_size.
-
-                This corresponds to the ``page_size`` field
-                on the ``request`` instance; if ``request`` is provided, this
-                should not be set.
-            page_token (:class:`str`):
-                Optional. A page token, received from a previous
-                ``ListTunedModels`` call.
-
-                Provide the ``page_token`` returned by one request as an
-                argument to the next request to retrieve the next page.
-
-                When paginating, all other parameters provided to
-                ``ListTunedModels`` must match the call that provided
-                the page token.
-
-                This corresponds to the ``page_token`` field
-                on the ``request`` instance; if ``request`` is provided, this
-                should not be set.
-            retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any,
-                should be retried.
+            request (:class:`~.operations_pb2.GetOperationRequest`):
+                The request object. Request message for
+                `GetOperation` method.
+            retry (google.api_core.retry_async.AsyncRetry): Designation of what errors,
+                    if any, should be retried.
             timeout (float): The timeout for this request.
             metadata (Sequence[Tuple[str, Union[str, bytes]]]): Key/value pairs which should be
                 sent along with the request as metadata. Normally, each value must be of type `str`,
                 but for metadata keys ending with the suffix `-bin`, the corresponding values must
                 be of type `bytes`.
-
         Returns:
-            google.ai.generativelanguage_v1beta3.services.model_service.pagers.ListTunedModelsAsyncPager:
-                Response from ListTunedModels containing a paginated
-                list of Models.
-
-                Iterating over this object will yield results and
-                resolve additional pages automatically.
-
+            ~.operations_pb2.Operation:
+                An ``Operation`` object.
         """
         # Create or coerce a protobuf request object.
-        # - Quick check: If we got a request object, we should *not* have
-        #   gotten any keyword arguments that map to the request.
-        has_flattened_params = any([page_size, page_token])
-        if request is not None and has_flattened_params:
-            raise ValueError(
-                "If the `request` argument is set, then none of "
-                "the individual field arguments should be set."
-            )
-
-        # - Use the request object if provided (there's no risk of modifying the input as
-        #   there are no flattened fields), or create one.
-        if not isinstance(request, model_service.ListTunedModelsRequest):
-            request = model_service.ListTunedModelsRequest(request)
-
-        # If we have keyword arguments corresponding to fields on the
-        # request, apply these.
-        if page_size is not None:
-            request.page_size = page_size
-        if page_token is not None:
-            request.page_token = page_token
+        # The request isn't a proto-plus wrapped type,
+        # so it must be constructed via keyword expansion.
+        if isinstance(request, dict):
+            request = operations_pb2.GetOperationRequest(**request)
 
         # Wrap the RPC method; this adds retry and timeout information,
         # and friendly error handling.
-        rpc = self._client._transport._wrapped_methods[
-            self._client._transport.list_tuned_models
-        ]
-
-        # Validate the universe domain.
-        self._client._validate_universe_domain()
-
-        # Send the request.
-        response = await rpc(
-            request,
-            retry=retry,
-            timeout=timeout,
-            metadata=metadata,
-        )
-
-        # This method is paged; wrap the response in a pager, which provides
-        # an `__aiter__` convenience method.
-        response = pagers.ListTunedModelsAsyncPager(
-            method=rpc,
-            request=request,
-            response=response,
-            retry=retry,
-            timeout=timeout,
-            metadata=metadata,
-        )
-
-        # Done; return the response.
-        return response
-
-    async def create_tuned_model(
-        self,
-        request: Optional[Union[model_service.CreateTunedModelRequest, dict]] = None,
-        *,
-        tuned_model: Optional[gag_tuned_model.TunedModel] = None,
-        tuned_model_id: Optional[str] = None,
-        retry: OptionalRetry = gapic_v1.method.DEFAULT,
-        timeout: Union[float, object] = gapic_v1.method.DEFAULT,
-        metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
-    ) -> operation_async.AsyncOperation:
-        r"""Creates a tuned model. Intermediate tuning progress (if any) is
-        accessed through the [google.longrunning.Operations] service.
-
-        Status and results can be accessed through the Operations
-        service. Example: GET
-        /v1/tunedModels/az2mb0bpw6i/operations/000-111-222
-
-        .. code-block:: python
-
-            # This snippet has been automatically generated and should be regarded as a
-            # code template only.
-            # It will require modifications to work:
-            # - It may require correct/in-range values for request initialization.
-            # - It may require specifying regional endpoints when creating the service
-            #   client as shown in:
-            #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta3
-
-            async def sample_create_tuned_model():
-                # Create a client
-                client = generativelanguage_v1beta3.ModelServiceAsyncClient()
-
-                # Initialize request argument(s)
-                tuned_model = generativelanguage_v1beta3.TunedModel()
-                tuned_model.tuning_task.training_data.examples.examples.text_input = "text_input_value"
-                tuned_model.tuning_task.training_data.examples.examples.output = "output_value"
-
-                request = generativelanguage_v1beta3.CreateTunedModelRequest(
-                    tuned_model=tuned_model,
-                )
-
-                # Make the request
-                operation = client.create_tuned_model(request=request)
-
-                print("Waiting for operation to complete...")
-
-                response = (await operation).result()
-
-                # Handle the response
-                print(response)
-
-        Args:
-            request (Optional[Union[google.ai.generativelanguage_v1beta3.types.CreateTunedModelRequest, dict]]):
-                The request object. Request to create a TunedModel.
-            tuned_model (:class:`google.ai.generativelanguage_v1beta3.types.TunedModel`):
-                Required. The tuned model to create.
-                This corresponds to the ``tuned_model`` field
-                on the ``request`` instance; if ``request`` is provided, this
-                should not be set.
-            tuned_model_id (:class:`str`):
-                Optional. The unique id for the tuned model if
-                specified. This value should be up to 40 characters, the
-                first character must be a letter, the last could be a
-                letter or a number. The id must match the regular
-                expression: `a-z <[a-z0-9-]{0,38}[a-z0-9]>`__?.
-
-                This corresponds to the ``tuned_model_id`` field
-                on the ``request`` instance; if ``request`` is provided, this
-                should not be set.
-            retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any,
-                should be retried.
-            timeout (float): The timeout for this request.
-            metadata (Sequence[Tuple[str, Union[str, bytes]]]): Key/value pairs which should be
-                sent along with the request as metadata. Normally, each value must be of type `str`,
-                but for metadata keys ending with the suffix `-bin`, the corresponding values must
-                be of type `bytes`.
-
-        Returns:
-            google.api_core.operation_async.AsyncOperation:
-                An object representing a long-running operation.
-
-                The result type for the operation will be
-                :class:`google.ai.generativelanguage_v1beta3.types.TunedModel`
-                A fine-tuned model created using
-                ModelService.CreateTunedModel.
-
-        """
-        # Create or coerce a protobuf request object.
-        # - Quick check: If we got a request object, we should *not* have
-        #   gotten any keyword arguments that map to the request.
-        has_flattened_params = any([tuned_model, tuned_model_id])
-        if request is not None and has_flattened_params:
-            raise ValueError(
-                "If the `request` argument is set, then none of "
-                "the individual field arguments should be set."
-            )
-
-        # - Use the request object if provided (there's no risk of modifying the input as
-        #   there are no flattened fields), or create one.
-        if not isinstance(request, model_service.CreateTunedModelRequest):
-            request = model_service.CreateTunedModelRequest(request)
-
-        # If we have keyword arguments corresponding to fields on the
-        # request, apply these.
-        if tuned_model is not None:
-            request.tuned_model = tuned_model
-        if tuned_model_id is not None:
-            request.tuned_model_id = tuned_model_id
-
-        # Wrap the RPC method; this adds retry and timeout information,
-        # and friendly error handling.
-        rpc = self._client._transport._wrapped_methods[
-            self._client._transport.create_tuned_model
-        ]
-
-        # Validate the universe domain.
-        self._client._validate_universe_domain()
-
-        # Send the request.
-        response = await rpc(
-            request,
-            retry=retry,
-            timeout=timeout,
-            metadata=metadata,
-        )
-
-        # Wrap the response in an operation future.
-        response = operation_async.from_gapic(
-            response,
-            self._client._transport.operations_client,
-            gag_tuned_model.TunedModel,
-            metadata_type=model_service.CreateTunedModelMetadata,
-        )
-
-        # Done; return the response.
-        return response
-
-    async def update_tuned_model(
-        self,
-        request: Optional[Union[model_service.UpdateTunedModelRequest, dict]] = None,
-        *,
-        tuned_model: Optional[gag_tuned_model.TunedModel] = None,
-        update_mask: Optional[field_mask_pb2.FieldMask] = None,
-        retry: OptionalRetry = gapic_v1.method.DEFAULT,
-        timeout: Union[float, object] = gapic_v1.method.DEFAULT,
-        metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
-    ) -> gag_tuned_model.TunedModel:
-        r"""Updates a tuned model.
-
-        .. code-block:: python
-
-            # This snippet has been automatically generated and should be regarded as a
-            # code template only.
-            # It will require modifications to work:
-            # - It may require correct/in-range values for request initialization.
-            # - It may require specifying regional endpoints when creating the service
-            #   client as shown in:
-            #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta3
-
-            async def sample_update_tuned_model():
-                # Create a client
-                client = generativelanguage_v1beta3.ModelServiceAsyncClient()
-
-                # Initialize request argument(s)
-                tuned_model = generativelanguage_v1beta3.TunedModel()
-                tuned_model.tuning_task.training_data.examples.examples.text_input = "text_input_value"
-                tuned_model.tuning_task.training_data.examples.examples.output = "output_value"
-
-                request = generativelanguage_v1beta3.UpdateTunedModelRequest(
-                    tuned_model=tuned_model,
-                )
-
-                # Make the request
-                response = await client.update_tuned_model(request=request)
-
-                # Handle the response
-                print(response)
-
-        Args:
-            request (Optional[Union[google.ai.generativelanguage_v1beta3.types.UpdateTunedModelRequest, dict]]):
-                The request object. Request to update a TunedModel.
-            tuned_model (:class:`google.ai.generativelanguage_v1beta3.types.TunedModel`):
-                Required. The tuned model to update.
-                This corresponds to the ``tuned_model`` field
-                on the ``request`` instance; if ``request`` is provided, this
-                should not be set.
-            update_mask (:class:`google.protobuf.field_mask_pb2.FieldMask`):
-                Required. The list of fields to
-                update.
-
-                This corresponds to the ``update_mask`` field
-                on the ``request`` instance; if ``request`` is provided, this
-                should not be set.
-            retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any,
-                should be retried.
-            timeout (float): The timeout for this request.
-            metadata (Sequence[Tuple[str, Union[str, bytes]]]): Key/value pairs which should be
-                sent along with the request as metadata. Normally, each value must be of type `str`,
-                but for metadata keys ending with the suffix `-bin`, the corresponding values must
-                be of type `bytes`.
-
-        Returns:
-            google.ai.generativelanguage_v1beta3.types.TunedModel:
-                A fine-tuned model created using
-                ModelService.CreateTunedModel.
-
-        """
-        # Create or coerce a protobuf request object.
-        # - Quick check: If we got a request object, we should *not* have
-        #   gotten any keyword arguments that map to the request.
-        has_flattened_params = any([tuned_model, update_mask])
-        if request is not None and has_flattened_params:
-            raise ValueError(
-                "If the `request` argument is set, then none of "
-                "the individual field arguments should be set."
-            )
-
-        # - Use the request object if provided (there's no risk of modifying the input as
-        #   there are no flattened fields), or create one.
-        if not isinstance(request, model_service.UpdateTunedModelRequest):
-            request = model_service.UpdateTunedModelRequest(request)
-
-        # If we have keyword arguments corresponding to fields on the
-        # request, apply these.
-        if tuned_model is not None:
-            request.tuned_model = tuned_model
-        if update_mask is not None:
-            request.update_mask = update_mask
-
-        # Wrap the RPC method; this adds retry and timeout information,
-        # and friendly error handling.
-        rpc = self._client._transport._wrapped_methods[
-            self._client._transport.update_tuned_model
-        ]
+        rpc = self.transport._wrapped_methods[self._client._transport.get_operation]
 
         # Certain fields should be provided within the metadata header;
         # add these here.
         metadata = tuple(metadata) + (
-            gapic_v1.routing_header.to_grpc_metadata(
-                (("tuned_model.name", request.tuned_model.name),)
-            ),
+            gapic_v1.routing_header.to_grpc_metadata((("name", request.name),)),
         )
 
         # Validate the universe domain.
@@ -1046,83 +650,43 @@ class ModelServiceAsyncClient:
         # Done; return the response.
         return response
 
-    async def delete_tuned_model(
+    async def cancel_operation(
         self,
-        request: Optional[Union[model_service.DeleteTunedModelRequest, dict]] = None,
+        request: Optional[operations_pb2.CancelOperationRequest] = None,
         *,
-        name: Optional[str] = None,
         retry: OptionalRetry = gapic_v1.method.DEFAULT,
         timeout: Union[float, object] = gapic_v1.method.DEFAULT,
         metadata: Sequence[Tuple[str, Union[str, bytes]]] = (),
     ) -> None:
-        r"""Deletes a tuned model.
+        r"""Starts asynchronous cancellation on a long-running operation.
 
-        .. code-block:: python
-
-            # This snippet has been automatically generated and should be regarded as a
-            # code template only.
-            # It will require modifications to work:
-            # - It may require correct/in-range values for request initialization.
-            # - It may require specifying regional endpoints when creating the service
-            #   client as shown in:
-            #   https://googleapis.dev/python/google-api-core/latest/client_options.html
-            from google.ai import generativelanguage_v1beta3
-
-            async def sample_delete_tuned_model():
-                # Create a client
-                client = generativelanguage_v1beta3.ModelServiceAsyncClient()
-
-                # Initialize request argument(s)
-                request = generativelanguage_v1beta3.DeleteTunedModelRequest(
-                    name="name_value",
-                )
-
-                # Make the request
-                await client.delete_tuned_model(request=request)
+        The server makes a best effort to cancel the operation, but success
+        is not guaranteed.  If the server doesn't support this method, it returns
+        `google.rpc.Code.UNIMPLEMENTED`.
 
         Args:
-            request (Optional[Union[google.ai.generativelanguage_v1beta3.types.DeleteTunedModelRequest, dict]]):
-                The request object. Request to delete a TunedModel.
-            name (:class:`str`):
-                Required. The resource name of the model. Format:
-                ``tunedModels/my-model-id``
-
-                This corresponds to the ``name`` field
-                on the ``request`` instance; if ``request`` is provided, this
-                should not be set.
-            retry (google.api_core.retry_async.AsyncRetry): Designation of what errors, if any,
-                should be retried.
+            request (:class:`~.operations_pb2.CancelOperationRequest`):
+                The request object. Request message for
+                `CancelOperation` method.
+            retry (google.api_core.retry_async.AsyncRetry): Designation of what errors,
+                    if any, should be retried.
             timeout (float): The timeout for this request.
             metadata (Sequence[Tuple[str, Union[str, bytes]]]): Key/value pairs which should be
                 sent along with the request as metadata. Normally, each value must be of type `str`,
                 but for metadata keys ending with the suffix `-bin`, the corresponding values must
                 be of type `bytes`.
+        Returns:
+            None
         """
         # Create or coerce a protobuf request object.
-        # - Quick check: If we got a request object, we should *not* have
-        #   gotten any keyword arguments that map to the request.
-        has_flattened_params = any([name])
-        if request is not None and has_flattened_params:
-            raise ValueError(
-                "If the `request` argument is set, then none of "
-                "the individual field arguments should be set."
-            )
-
-        # - Use the request object if provided (there's no risk of modifying the input as
-        #   there are no flattened fields), or create one.
-        if not isinstance(request, model_service.DeleteTunedModelRequest):
-            request = model_service.DeleteTunedModelRequest(request)
-
-        # If we have keyword arguments corresponding to fields on the
-        # request, apply these.
-        if name is not None:
-            request.name = name
+        # The request isn't a proto-plus wrapped type,
+        # so it must be constructed via keyword expansion.
+        if isinstance(request, dict):
+            request = operations_pb2.CancelOperationRequest(**request)
 
         # Wrap the RPC method; this adds retry and timeout information,
         # and friendly error handling.
-        rpc = self._client._transport._wrapped_methods[
-            self._client._transport.delete_tuned_model
-        ]
+        rpc = self.transport._wrapped_methods[self._client._transport.cancel_operation]
 
         # Certain fields should be provided within the metadata header;
         # add these here.

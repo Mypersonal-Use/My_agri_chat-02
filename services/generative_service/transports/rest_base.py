@@ -21,13 +21,13 @@ from google.api_core import gapic_v1, path_template
 from google.longrunning import operations_pb2  # type: ignore
 from google.protobuf import json_format
 
-from google.ai.generativelanguage_v1.types import model, model_service
+from google.ai.generativelanguage_v1.types import generative_service
 
-from .base import DEFAULT_CLIENT_INFO, ModelServiceTransport
+from .base import DEFAULT_CLIENT_INFO, GenerativeServiceTransport
 
 
-class _BaseModelServiceRestTransport(ModelServiceTransport):
-    """Base REST backend transport for ModelService.
+class _BaseGenerativeServiceRestTransport(GenerativeServiceTransport):
+    """Base REST backend transport for GenerativeService.
 
     Note: This class is not meant to be used directly. Use its sync and
     async sub-classes instead.
@@ -88,7 +88,7 @@ class _BaseModelServiceRestTransport(ModelServiceTransport):
             api_audience=api_audience,
         )
 
-    class _BaseGetModel:
+    class _BaseBatchEmbedContents:
         def __hash__(self):  # pragma: NO COVER
             return NotImplementedError("__hash__ must be implemented.")
 
@@ -106,17 +106,27 @@ class _BaseModelServiceRestTransport(ModelServiceTransport):
         def _get_http_options():
             http_options: List[Dict[str, str]] = [
                 {
-                    "method": "get",
-                    "uri": "/v1/{name=models/*}",
+                    "method": "post",
+                    "uri": "/v1/{model=models/*}:batchEmbedContents",
+                    "body": "*",
                 },
             ]
             return http_options
 
         @staticmethod
         def _get_transcoded_request(http_options, request):
-            pb_request = model_service.GetModelRequest.pb(request)
+            pb_request = generative_service.BatchEmbedContentsRequest.pb(request)
             transcoded_request = path_template.transcode(http_options, pb_request)
             return transcoded_request
+
+        @staticmethod
+        def _get_request_body_json(transcoded_request):
+            # Jsonify the request body
+
+            body = json_format.MessageToJson(
+                transcoded_request["body"], use_integers_for_enums=True
+            )
+            return body
 
         @staticmethod
         def _get_query_params_json(transcoded_request):
@@ -127,7 +137,7 @@ class _BaseModelServiceRestTransport(ModelServiceTransport):
                 )
             )
             query_params.update(
-                _BaseModelServiceRestTransport._BaseGetModel._get_unset_required_fields(
+                _BaseGenerativeServiceRestTransport._BaseBatchEmbedContents._get_unset_required_fields(
                     query_params
                 )
             )
@@ -135,25 +145,45 @@ class _BaseModelServiceRestTransport(ModelServiceTransport):
             query_params["$alt"] = "json;enum-encoding=int"
             return query_params
 
-    class _BaseListModels:
+    class _BaseCountTokens:
         def __hash__(self):  # pragma: NO COVER
             return NotImplementedError("__hash__ must be implemented.")
+
+        __REQUIRED_FIELDS_DEFAULT_VALUES: Dict[str, Any] = {}
+
+        @classmethod
+        def _get_unset_required_fields(cls, message_dict):
+            return {
+                k: v
+                for k, v in cls.__REQUIRED_FIELDS_DEFAULT_VALUES.items()
+                if k not in message_dict
+            }
 
         @staticmethod
         def _get_http_options():
             http_options: List[Dict[str, str]] = [
                 {
-                    "method": "get",
-                    "uri": "/v1/models",
+                    "method": "post",
+                    "uri": "/v1/{model=models/*}:countTokens",
+                    "body": "*",
                 },
             ]
             return http_options
 
         @staticmethod
         def _get_transcoded_request(http_options, request):
-            pb_request = model_service.ListModelsRequest.pb(request)
+            pb_request = generative_service.CountTokensRequest.pb(request)
             transcoded_request = path_template.transcode(http_options, pb_request)
             return transcoded_request
+
+        @staticmethod
+        def _get_request_body_json(transcoded_request):
+            # Jsonify the request body
+
+            body = json_format.MessageToJson(
+                transcoded_request["body"], use_integers_for_enums=True
+            )
+            return body
 
         @staticmethod
         def _get_query_params_json(transcoded_request):
@@ -161,6 +191,192 @@ class _BaseModelServiceRestTransport(ModelServiceTransport):
                 json_format.MessageToJson(
                     transcoded_request["query_params"],
                     use_integers_for_enums=True,
+                )
+            )
+            query_params.update(
+                _BaseGenerativeServiceRestTransport._BaseCountTokens._get_unset_required_fields(
+                    query_params
+                )
+            )
+
+            query_params["$alt"] = "json;enum-encoding=int"
+            return query_params
+
+    class _BaseEmbedContent:
+        def __hash__(self):  # pragma: NO COVER
+            return NotImplementedError("__hash__ must be implemented.")
+
+        __REQUIRED_FIELDS_DEFAULT_VALUES: Dict[str, Any] = {}
+
+        @classmethod
+        def _get_unset_required_fields(cls, message_dict):
+            return {
+                k: v
+                for k, v in cls.__REQUIRED_FIELDS_DEFAULT_VALUES.items()
+                if k not in message_dict
+            }
+
+        @staticmethod
+        def _get_http_options():
+            http_options: List[Dict[str, str]] = [
+                {
+                    "method": "post",
+                    "uri": "/v1/{model=models/*}:embedContent",
+                    "body": "*",
+                },
+            ]
+            return http_options
+
+        @staticmethod
+        def _get_transcoded_request(http_options, request):
+            pb_request = generative_service.EmbedContentRequest.pb(request)
+            transcoded_request = path_template.transcode(http_options, pb_request)
+            return transcoded_request
+
+        @staticmethod
+        def _get_request_body_json(transcoded_request):
+            # Jsonify the request body
+
+            body = json_format.MessageToJson(
+                transcoded_request["body"], use_integers_for_enums=True
+            )
+            return body
+
+        @staticmethod
+        def _get_query_params_json(transcoded_request):
+            query_params = json.loads(
+                json_format.MessageToJson(
+                    transcoded_request["query_params"],
+                    use_integers_for_enums=True,
+                )
+            )
+            query_params.update(
+                _BaseGenerativeServiceRestTransport._BaseEmbedContent._get_unset_required_fields(
+                    query_params
+                )
+            )
+
+            query_params["$alt"] = "json;enum-encoding=int"
+            return query_params
+
+    class _BaseGenerateContent:
+        def __hash__(self):  # pragma: NO COVER
+            return NotImplementedError("__hash__ must be implemented.")
+
+        __REQUIRED_FIELDS_DEFAULT_VALUES: Dict[str, Any] = {}
+
+        @classmethod
+        def _get_unset_required_fields(cls, message_dict):
+            return {
+                k: v
+                for k, v in cls.__REQUIRED_FIELDS_DEFAULT_VALUES.items()
+                if k not in message_dict
+            }
+
+        @staticmethod
+        def _get_http_options():
+            http_options: List[Dict[str, str]] = [
+                {
+                    "method": "post",
+                    "uri": "/v1/{model=models/*}:generateContent",
+                    "body": "*",
+                },
+                {
+                    "method": "post",
+                    "uri": "/v1/{model=tunedModels/*}:generateContent",
+                    "body": "*",
+                },
+            ]
+            return http_options
+
+        @staticmethod
+        def _get_transcoded_request(http_options, request):
+            pb_request = generative_service.GenerateContentRequest.pb(request)
+            transcoded_request = path_template.transcode(http_options, pb_request)
+            return transcoded_request
+
+        @staticmethod
+        def _get_request_body_json(transcoded_request):
+            # Jsonify the request body
+
+            body = json_format.MessageToJson(
+                transcoded_request["body"], use_integers_for_enums=True
+            )
+            return body
+
+        @staticmethod
+        def _get_query_params_json(transcoded_request):
+            query_params = json.loads(
+                json_format.MessageToJson(
+                    transcoded_request["query_params"],
+                    use_integers_for_enums=True,
+                )
+            )
+            query_params.update(
+                _BaseGenerativeServiceRestTransport._BaseGenerateContent._get_unset_required_fields(
+                    query_params
+                )
+            )
+
+            query_params["$alt"] = "json;enum-encoding=int"
+            return query_params
+
+    class _BaseStreamGenerateContent:
+        def __hash__(self):  # pragma: NO COVER
+            return NotImplementedError("__hash__ must be implemented.")
+
+        __REQUIRED_FIELDS_DEFAULT_VALUES: Dict[str, Any] = {}
+
+        @classmethod
+        def _get_unset_required_fields(cls, message_dict):
+            return {
+                k: v
+                for k, v in cls.__REQUIRED_FIELDS_DEFAULT_VALUES.items()
+                if k not in message_dict
+            }
+
+        @staticmethod
+        def _get_http_options():
+            http_options: List[Dict[str, str]] = [
+                {
+                    "method": "post",
+                    "uri": "/v1/{model=models/*}:streamGenerateContent",
+                    "body": "*",
+                },
+                {
+                    "method": "post",
+                    "uri": "/v1/{model=tunedModels/*}:streamGenerateContent",
+                    "body": "*",
+                },
+            ]
+            return http_options
+
+        @staticmethod
+        def _get_transcoded_request(http_options, request):
+            pb_request = generative_service.GenerateContentRequest.pb(request)
+            transcoded_request = path_template.transcode(http_options, pb_request)
+            return transcoded_request
+
+        @staticmethod
+        def _get_request_body_json(transcoded_request):
+            # Jsonify the request body
+
+            body = json_format.MessageToJson(
+                transcoded_request["body"], use_integers_for_enums=True
+            )
+            return body
+
+        @staticmethod
+        def _get_query_params_json(transcoded_request):
+            query_params = json.loads(
+                json_format.MessageToJson(
+                    transcoded_request["query_params"],
+                    use_integers_for_enums=True,
+                )
+            )
+            query_params.update(
+                _BaseGenerativeServiceRestTransport._BaseStreamGenerateContent._get_unset_required_fields(
+                    query_params
                 )
             )
 
@@ -265,4 +481,4 @@ class _BaseModelServiceRestTransport(ModelServiceTransport):
             return query_params
 
 
-__all__ = ("_BaseModelServiceRestTransport",)
+__all__ = ("_BaseGenerativeServiceRestTransport",)

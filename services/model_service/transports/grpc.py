@@ -19,20 +19,17 @@ import pickle
 from typing import Callable, Dict, Optional, Sequence, Tuple, Union
 import warnings
 
-from google.api_core import gapic_v1, grpc_helpers, operations_v1
+from google.api_core import gapic_v1, grpc_helpers
 import google.auth  # type: ignore
 from google.auth import credentials as ga_credentials  # type: ignore
 from google.auth.transport.grpc import SslCredentials  # type: ignore
 from google.longrunning import operations_pb2  # type: ignore
-from google.protobuf import empty_pb2  # type: ignore
 from google.protobuf.json_format import MessageToJson
 import google.protobuf.message
 import grpc  # type: ignore
 import proto  # type: ignore
 
-from google.ai.generativelanguage_v1beta3.types import tuned_model as gag_tuned_model
-from google.ai.generativelanguage_v1beta3.types import model, model_service
-from google.ai.generativelanguage_v1beta3.types import tuned_model
+from google.ai.generativelanguage_v1.types import model, model_service
 
 from .base import DEFAULT_CLIENT_INFO, ModelServiceTransport
 
@@ -72,7 +69,7 @@ class _LoggingClientInterceptor(grpc.UnaryUnaryClientInterceptor):  # pragma: NO
             _LOGGER.debug(
                 f"Sending request for {client_call_details.method}",
                 extra={
-                    "serviceName": "google.ai.generativelanguage.v1beta3.ModelService",
+                    "serviceName": "google.ai.generativelanguage.v1.ModelService",
                     "rpcName": client_call_details.method,
                     "request": grpc_request,
                     "metadata": grpc_request["metadata"],
@@ -103,7 +100,7 @@ class _LoggingClientInterceptor(grpc.UnaryUnaryClientInterceptor):  # pragma: NO
             _LOGGER.debug(
                 f"Received response for {client_call_details.method}.",
                 extra={
-                    "serviceName": "google.ai.generativelanguage.v1beta3.ModelService",
+                    "serviceName": "google.ai.generativelanguage.v1.ModelService",
                     "rpcName": client_call_details.method,
                     "response": grpc_response,
                     "metadata": grpc_response["metadata"],
@@ -199,7 +196,6 @@ class ModelServiceGrpcTransport(ModelServiceTransport):
         self._grpc_channel = None
         self._ssl_channel_credentials = ssl_channel_credentials
         self._stubs: Dict[str, Callable] = {}
-        self._operations_client: Optional[operations_v1.OperationsClient] = None
 
         if api_mtls_endpoint:
             warnings.warn("api_mtls_endpoint is deprecated", DeprecationWarning)
@@ -327,26 +323,15 @@ class ModelServiceGrpcTransport(ModelServiceTransport):
         return self._grpc_channel
 
     @property
-    def operations_client(self) -> operations_v1.OperationsClient:
-        """Create the client designed to process long-running operations.
-
-        This property caches on the instance; repeated calls return the same
-        client.
-        """
-        # Quick check: Only create a new client if we do not already have one.
-        if self._operations_client is None:
-            self._operations_client = operations_v1.OperationsClient(
-                self._logged_channel
-            )
-
-        # Return the client from cache.
-        return self._operations_client
-
-    @property
     def get_model(self) -> Callable[[model_service.GetModelRequest], model.Model]:
         r"""Return a callable for the get model method over gRPC.
 
-        Gets information about a specific Model.
+        Gets information about a specific ``Model`` such as its version
+        number, token limits,
+        `parameters <https://ai.google.dev/gemini-api/docs/models/generative-models#model-parameters>`__
+        and other metadata. Refer to the `Gemini models
+        guide <https://ai.google.dev/gemini-api/docs/models/gemini>`__
+        for detailed model information.
 
         Returns:
             Callable[[~.GetModelRequest],
@@ -360,7 +345,7 @@ class ModelServiceGrpcTransport(ModelServiceTransport):
         # to pass in the functions for each.
         if "get_model" not in self._stubs:
             self._stubs["get_model"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta3.ModelService/GetModel",
+                "/google.ai.generativelanguage.v1.ModelService/GetModel",
                 request_serializer=model_service.GetModelRequest.serialize,
                 response_deserializer=model.Model.deserialize,
             )
@@ -372,7 +357,9 @@ class ModelServiceGrpcTransport(ModelServiceTransport):
     ) -> Callable[[model_service.ListModelsRequest], model_service.ListModelsResponse]:
         r"""Return a callable for the list models method over gRPC.
 
-        Lists models available through the API.
+        Lists the
+        ```Model``\ s <https://ai.google.dev/gemini-api/docs/models/gemini>`__
+        available through the Gemini API.
 
         Returns:
             Callable[[~.ListModelsRequest],
@@ -386,151 +373,67 @@ class ModelServiceGrpcTransport(ModelServiceTransport):
         # to pass in the functions for each.
         if "list_models" not in self._stubs:
             self._stubs["list_models"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta3.ModelService/ListModels",
+                "/google.ai.generativelanguage.v1.ModelService/ListModels",
                 request_serializer=model_service.ListModelsRequest.serialize,
                 response_deserializer=model_service.ListModelsResponse.deserialize,
             )
         return self._stubs["list_models"]
 
-    @property
-    def get_tuned_model(
-        self,
-    ) -> Callable[[model_service.GetTunedModelRequest], tuned_model.TunedModel]:
-        r"""Return a callable for the get tuned model method over gRPC.
-
-        Gets information about a specific TunedModel.
-
-        Returns:
-            Callable[[~.GetTunedModelRequest],
-                    ~.TunedModel]:
-                A function that, when called, will call the underlying RPC
-                on the server.
-        """
-        # Generate a "stub function" on-the-fly which will actually make
-        # the request.
-        # gRPC handles serialization and deserialization, so we just need
-        # to pass in the functions for each.
-        if "get_tuned_model" not in self._stubs:
-            self._stubs["get_tuned_model"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta3.ModelService/GetTunedModel",
-                request_serializer=model_service.GetTunedModelRequest.serialize,
-                response_deserializer=tuned_model.TunedModel.deserialize,
-            )
-        return self._stubs["get_tuned_model"]
-
-    @property
-    def list_tuned_models(
-        self,
-    ) -> Callable[
-        [model_service.ListTunedModelsRequest], model_service.ListTunedModelsResponse
-    ]:
-        r"""Return a callable for the list tuned models method over gRPC.
-
-        Lists tuned models owned by the user.
-
-        Returns:
-            Callable[[~.ListTunedModelsRequest],
-                    ~.ListTunedModelsResponse]:
-                A function that, when called, will call the underlying RPC
-                on the server.
-        """
-        # Generate a "stub function" on-the-fly which will actually make
-        # the request.
-        # gRPC handles serialization and deserialization, so we just need
-        # to pass in the functions for each.
-        if "list_tuned_models" not in self._stubs:
-            self._stubs["list_tuned_models"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta3.ModelService/ListTunedModels",
-                request_serializer=model_service.ListTunedModelsRequest.serialize,
-                response_deserializer=model_service.ListTunedModelsResponse.deserialize,
-            )
-        return self._stubs["list_tuned_models"]
-
-    @property
-    def create_tuned_model(
-        self,
-    ) -> Callable[[model_service.CreateTunedModelRequest], operations_pb2.Operation]:
-        r"""Return a callable for the create tuned model method over gRPC.
-
-        Creates a tuned model. Intermediate tuning progress (if any) is
-        accessed through the [google.longrunning.Operations] service.
-
-        Status and results can be accessed through the Operations
-        service. Example: GET
-        /v1/tunedModels/az2mb0bpw6i/operations/000-111-222
-
-        Returns:
-            Callable[[~.CreateTunedModelRequest],
-                    ~.Operation]:
-                A function that, when called, will call the underlying RPC
-                on the server.
-        """
-        # Generate a "stub function" on-the-fly which will actually make
-        # the request.
-        # gRPC handles serialization and deserialization, so we just need
-        # to pass in the functions for each.
-        if "create_tuned_model" not in self._stubs:
-            self._stubs["create_tuned_model"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta3.ModelService/CreateTunedModel",
-                request_serializer=model_service.CreateTunedModelRequest.serialize,
-                response_deserializer=operations_pb2.Operation.FromString,
-            )
-        return self._stubs["create_tuned_model"]
-
-    @property
-    def update_tuned_model(
-        self,
-    ) -> Callable[[model_service.UpdateTunedModelRequest], gag_tuned_model.TunedModel]:
-        r"""Return a callable for the update tuned model method over gRPC.
-
-        Updates a tuned model.
-
-        Returns:
-            Callable[[~.UpdateTunedModelRequest],
-                    ~.TunedModel]:
-                A function that, when called, will call the underlying RPC
-                on the server.
-        """
-        # Generate a "stub function" on-the-fly which will actually make
-        # the request.
-        # gRPC handles serialization and deserialization, so we just need
-        # to pass in the functions for each.
-        if "update_tuned_model" not in self._stubs:
-            self._stubs["update_tuned_model"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta3.ModelService/UpdateTunedModel",
-                request_serializer=model_service.UpdateTunedModelRequest.serialize,
-                response_deserializer=gag_tuned_model.TunedModel.deserialize,
-            )
-        return self._stubs["update_tuned_model"]
-
-    @property
-    def delete_tuned_model(
-        self,
-    ) -> Callable[[model_service.DeleteTunedModelRequest], empty_pb2.Empty]:
-        r"""Return a callable for the delete tuned model method over gRPC.
-
-        Deletes a tuned model.
-
-        Returns:
-            Callable[[~.DeleteTunedModelRequest],
-                    ~.Empty]:
-                A function that, when called, will call the underlying RPC
-                on the server.
-        """
-        # Generate a "stub function" on-the-fly which will actually make
-        # the request.
-        # gRPC handles serialization and deserialization, so we just need
-        # to pass in the functions for each.
-        if "delete_tuned_model" not in self._stubs:
-            self._stubs["delete_tuned_model"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1beta3.ModelService/DeleteTunedModel",
-                request_serializer=model_service.DeleteTunedModelRequest.serialize,
-                response_deserializer=empty_pb2.Empty.FromString,
-            )
-        return self._stubs["delete_tuned_model"]
-
     def close(self):
         self._logged_channel.close()
+
+    @property
+    def cancel_operation(
+        self,
+    ) -> Callable[[operations_pb2.CancelOperationRequest], None]:
+        r"""Return a callable for the cancel_operation method over gRPC."""
+        # Generate a "stub function" on-the-fly which will actually make
+        # the request.
+        # gRPC handles serialization and deserialization, so we just need
+        # to pass in the functions for each.
+        if "cancel_operation" not in self._stubs:
+            self._stubs["cancel_operation"] = self._logged_channel.unary_unary(
+                "/google.longrunning.Operations/CancelOperation",
+                request_serializer=operations_pb2.CancelOperationRequest.SerializeToString,
+                response_deserializer=None,
+            )
+        return self._stubs["cancel_operation"]
+
+    @property
+    def get_operation(
+        self,
+    ) -> Callable[[operations_pb2.GetOperationRequest], operations_pb2.Operation]:
+        r"""Return a callable for the get_operation method over gRPC."""
+        # Generate a "stub function" on-the-fly which will actually make
+        # the request.
+        # gRPC handles serialization and deserialization, so we just need
+        # to pass in the functions for each.
+        if "get_operation" not in self._stubs:
+            self._stubs["get_operation"] = self._logged_channel.unary_unary(
+                "/google.longrunning.Operations/GetOperation",
+                request_serializer=operations_pb2.GetOperationRequest.SerializeToString,
+                response_deserializer=operations_pb2.Operation.FromString,
+            )
+        return self._stubs["get_operation"]
+
+    @property
+    def list_operations(
+        self,
+    ) -> Callable[
+        [operations_pb2.ListOperationsRequest], operations_pb2.ListOperationsResponse
+    ]:
+        r"""Return a callable for the list_operations method over gRPC."""
+        # Generate a "stub function" on-the-fly which will actually make
+        # the request.
+        # gRPC handles serialization and deserialization, so we just need
+        # to pass in the functions for each.
+        if "list_operations" not in self._stubs:
+            self._stubs["list_operations"] = self._logged_channel.unary_unary(
+                "/google.longrunning.Operations/ListOperations",
+                request_serializer=operations_pb2.ListOperationsRequest.SerializeToString,
+                response_deserializer=operations_pb2.ListOperationsResponse.FromString,
+            )
+        return self._stubs["list_operations"]
 
     @property
     def kind(self) -> str:

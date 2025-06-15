@@ -32,10 +32,10 @@ import grpc  # type: ignore
 from grpc.experimental import aio  # type: ignore
 import proto  # type: ignore
 
-from google.ai.generativelanguage_v1.types import model, model_service
+from google.ai.generativelanguage_v1.types import generative_service
 
-from .base import DEFAULT_CLIENT_INFO, ModelServiceTransport
-from .grpc import ModelServiceGrpcTransport
+from .base import DEFAULT_CLIENT_INFO, GenerativeServiceTransport
+from .grpc import GenerativeServiceGrpcTransport
 
 try:
     from google.api_core import client_logging  # type: ignore
@@ -75,7 +75,7 @@ class _LoggingClientAIOInterceptor(
             _LOGGER.debug(
                 f"Sending request for {client_call_details.method}",
                 extra={
-                    "serviceName": "google.ai.generativelanguage.v1.ModelService",
+                    "serviceName": "google.ai.generativelanguage.v1.GenerativeService",
                     "rpcName": str(client_call_details.method),
                     "request": grpc_request,
                     "metadata": grpc_request["metadata"],
@@ -105,7 +105,7 @@ class _LoggingClientAIOInterceptor(
             _LOGGER.debug(
                 f"Received response to rpc {client_call_details.method}.",
                 extra={
-                    "serviceName": "google.ai.generativelanguage.v1.ModelService",
+                    "serviceName": "google.ai.generativelanguage.v1.GenerativeService",
                     "rpcName": str(client_call_details.method),
                     "response": grpc_response,
                     "metadata": grpc_response["metadata"],
@@ -114,11 +114,11 @@ class _LoggingClientAIOInterceptor(
         return response
 
 
-class ModelServiceGrpcAsyncIOTransport(ModelServiceTransport):
-    """gRPC AsyncIO backend transport for ModelService.
+class GenerativeServiceGrpcAsyncIOTransport(GenerativeServiceTransport):
+    """gRPC AsyncIO backend transport for GenerativeService.
 
-    Provides methods for getting metadata information about
-    Generative Models.
+    API for using Large Models that generate multimodal content
+    and have additional capabilities beyond text generation.
 
     This class defines the same methods as the primary client, so the
     primary client can load the underlying transport implementation
@@ -330,51 +330,27 @@ class ModelServiceGrpcAsyncIOTransport(ModelServiceTransport):
         return self._grpc_channel
 
     @property
-    def get_model(
-        self,
-    ) -> Callable[[model_service.GetModelRequest], Awaitable[model.Model]]:
-        r"""Return a callable for the get model method over gRPC.
-
-        Gets information about a specific ``Model`` such as its version
-        number, token limits,
-        `parameters <https://ai.google.dev/gemini-api/docs/models/generative-models#model-parameters>`__
-        and other metadata. Refer to the `Gemini models
-        guide <https://ai.google.dev/gemini-api/docs/models/gemini>`__
-        for detailed model information.
-
-        Returns:
-            Callable[[~.GetModelRequest],
-                    Awaitable[~.Model]]:
-                A function that, when called, will call the underlying RPC
-                on the server.
-        """
-        # Generate a "stub function" on-the-fly which will actually make
-        # the request.
-        # gRPC handles serialization and deserialization, so we just need
-        # to pass in the functions for each.
-        if "get_model" not in self._stubs:
-            self._stubs["get_model"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1.ModelService/GetModel",
-                request_serializer=model_service.GetModelRequest.serialize,
-                response_deserializer=model.Model.deserialize,
-            )
-        return self._stubs["get_model"]
-
-    @property
-    def list_models(
+    def generate_content(
         self,
     ) -> Callable[
-        [model_service.ListModelsRequest], Awaitable[model_service.ListModelsResponse]
+        [generative_service.GenerateContentRequest],
+        Awaitable[generative_service.GenerateContentResponse],
     ]:
-        r"""Return a callable for the list models method over gRPC.
+        r"""Return a callable for the generate content method over gRPC.
 
-        Lists the
-        ```Model``\ s <https://ai.google.dev/gemini-api/docs/models/gemini>`__
-        available through the Gemini API.
+        Generates a model response given an input
+        ``GenerateContentRequest``. Refer to the `text generation
+        guide <https://ai.google.dev/gemini-api/docs/text-generation>`__
+        for detailed usage information. Input capabilities differ
+        between models, including tuned models. Refer to the `model
+        guide <https://ai.google.dev/gemini-api/docs/models/gemini>`__
+        and `tuning
+        guide <https://ai.google.dev/gemini-api/docs/model-tuning>`__
+        for details.
 
         Returns:
-            Callable[[~.ListModelsRequest],
-                    Awaitable[~.ListModelsResponse]]:
+            Callable[[~.GenerateContentRequest],
+                    Awaitable[~.GenerateContentResponse]]:
                 A function that, when called, will call the underlying RPC
                 on the server.
         """
@@ -382,25 +358,210 @@ class ModelServiceGrpcAsyncIOTransport(ModelServiceTransport):
         # the request.
         # gRPC handles serialization and deserialization, so we just need
         # to pass in the functions for each.
-        if "list_models" not in self._stubs:
-            self._stubs["list_models"] = self._logged_channel.unary_unary(
-                "/google.ai.generativelanguage.v1.ModelService/ListModels",
-                request_serializer=model_service.ListModelsRequest.serialize,
-                response_deserializer=model_service.ListModelsResponse.deserialize,
+        if "generate_content" not in self._stubs:
+            self._stubs["generate_content"] = self._logged_channel.unary_unary(
+                "/google.ai.generativelanguage.v1.GenerativeService/GenerateContent",
+                request_serializer=generative_service.GenerateContentRequest.serialize,
+                response_deserializer=generative_service.GenerateContentResponse.deserialize,
             )
-        return self._stubs["list_models"]
+        return self._stubs["generate_content"]
+
+    @property
+    def stream_generate_content(
+        self,
+    ) -> Callable[
+        [generative_service.GenerateContentRequest],
+        Awaitable[generative_service.GenerateContentResponse],
+    ]:
+        r"""Return a callable for the stream generate content method over gRPC.
+
+        Generates a `streamed
+        response <https://ai.google.dev/gemini-api/docs/text-generation?lang=python#generate-a-text-stream>`__
+        from the model given an input ``GenerateContentRequest``.
+
+        Returns:
+            Callable[[~.GenerateContentRequest],
+                    Awaitable[~.GenerateContentResponse]]:
+                A function that, when called, will call the underlying RPC
+                on the server.
+        """
+        # Generate a "stub function" on-the-fly which will actually make
+        # the request.
+        # gRPC handles serialization and deserialization, so we just need
+        # to pass in the functions for each.
+        if "stream_generate_content" not in self._stubs:
+            self._stubs["stream_generate_content"] = self._logged_channel.unary_stream(
+                "/google.ai.generativelanguage.v1.GenerativeService/StreamGenerateContent",
+                request_serializer=generative_service.GenerateContentRequest.serialize,
+                response_deserializer=generative_service.GenerateContentResponse.deserialize,
+            )
+        return self._stubs["stream_generate_content"]
+
+    @property
+    def embed_content(
+        self,
+    ) -> Callable[
+        [generative_service.EmbedContentRequest],
+        Awaitable[generative_service.EmbedContentResponse],
+    ]:
+        r"""Return a callable for the embed content method over gRPC.
+
+        Generates a text embedding vector from the input ``Content``
+        using the specified `Gemini Embedding
+        model <https://ai.google.dev/gemini-api/docs/models/gemini#text-embedding>`__.
+
+        Returns:
+            Callable[[~.EmbedContentRequest],
+                    Awaitable[~.EmbedContentResponse]]:
+                A function that, when called, will call the underlying RPC
+                on the server.
+        """
+        # Generate a "stub function" on-the-fly which will actually make
+        # the request.
+        # gRPC handles serialization and deserialization, so we just need
+        # to pass in the functions for each.
+        if "embed_content" not in self._stubs:
+            self._stubs["embed_content"] = self._logged_channel.unary_unary(
+                "/google.ai.generativelanguage.v1.GenerativeService/EmbedContent",
+                request_serializer=generative_service.EmbedContentRequest.serialize,
+                response_deserializer=generative_service.EmbedContentResponse.deserialize,
+            )
+        return self._stubs["embed_content"]
+
+    @property
+    def batch_embed_contents(
+        self,
+    ) -> Callable[
+        [generative_service.BatchEmbedContentsRequest],
+        Awaitable[generative_service.BatchEmbedContentsResponse],
+    ]:
+        r"""Return a callable for the batch embed contents method over gRPC.
+
+        Generates multiple embedding vectors from the input ``Content``
+        which consists of a batch of strings represented as
+        ``EmbedContentRequest`` objects.
+
+        Returns:
+            Callable[[~.BatchEmbedContentsRequest],
+                    Awaitable[~.BatchEmbedContentsResponse]]:
+                A function that, when called, will call the underlying RPC
+                on the server.
+        """
+        # Generate a "stub function" on-the-fly which will actually make
+        # the request.
+        # gRPC handles serialization and deserialization, so we just need
+        # to pass in the functions for each.
+        if "batch_embed_contents" not in self._stubs:
+            self._stubs["batch_embed_contents"] = self._logged_channel.unary_unary(
+                "/google.ai.generativelanguage.v1.GenerativeService/BatchEmbedContents",
+                request_serializer=generative_service.BatchEmbedContentsRequest.serialize,
+                response_deserializer=generative_service.BatchEmbedContentsResponse.deserialize,
+            )
+        return self._stubs["batch_embed_contents"]
+
+    @property
+    def count_tokens(
+        self,
+    ) -> Callable[
+        [generative_service.CountTokensRequest],
+        Awaitable[generative_service.CountTokensResponse],
+    ]:
+        r"""Return a callable for the count tokens method over gRPC.
+
+        Runs a model's tokenizer on input ``Content`` and returns the
+        token count. Refer to the `tokens
+        guide <https://ai.google.dev/gemini-api/docs/tokens>`__ to learn
+        more about tokens.
+
+        Returns:
+            Callable[[~.CountTokensRequest],
+                    Awaitable[~.CountTokensResponse]]:
+                A function that, when called, will call the underlying RPC
+                on the server.
+        """
+        # Generate a "stub function" on-the-fly which will actually make
+        # the request.
+        # gRPC handles serialization and deserialization, so we just need
+        # to pass in the functions for each.
+        if "count_tokens" not in self._stubs:
+            self._stubs["count_tokens"] = self._logged_channel.unary_unary(
+                "/google.ai.generativelanguage.v1.GenerativeService/CountTokens",
+                request_serializer=generative_service.CountTokensRequest.serialize,
+                response_deserializer=generative_service.CountTokensResponse.deserialize,
+            )
+        return self._stubs["count_tokens"]
 
     def _prep_wrapped_messages(self, client_info):
         """Precompute the wrapped methods, overriding the base class method to use async wrappers."""
         self._wrapped_methods = {
-            self.get_model: self._wrap_method(
-                self.get_model,
-                default_timeout=None,
+            self.generate_content: self._wrap_method(
+                self.generate_content,
+                default_retry=retries.AsyncRetry(
+                    initial=1.0,
+                    maximum=10.0,
+                    multiplier=1.3,
+                    predicate=retries.if_exception_type(
+                        core_exceptions.ServiceUnavailable,
+                    ),
+                    deadline=600.0,
+                ),
+                default_timeout=600.0,
                 client_info=client_info,
             ),
-            self.list_models: self._wrap_method(
-                self.list_models,
-                default_timeout=None,
+            self.stream_generate_content: self._wrap_method(
+                self.stream_generate_content,
+                default_retry=retries.AsyncRetry(
+                    initial=1.0,
+                    maximum=10.0,
+                    multiplier=1.3,
+                    predicate=retries.if_exception_type(
+                        core_exceptions.ServiceUnavailable,
+                    ),
+                    deadline=600.0,
+                ),
+                default_timeout=600.0,
+                client_info=client_info,
+            ),
+            self.embed_content: self._wrap_method(
+                self.embed_content,
+                default_retry=retries.AsyncRetry(
+                    initial=1.0,
+                    maximum=10.0,
+                    multiplier=1.3,
+                    predicate=retries.if_exception_type(
+                        core_exceptions.ServiceUnavailable,
+                    ),
+                    deadline=60.0,
+                ),
+                default_timeout=60.0,
+                client_info=client_info,
+            ),
+            self.batch_embed_contents: self._wrap_method(
+                self.batch_embed_contents,
+                default_retry=retries.AsyncRetry(
+                    initial=1.0,
+                    maximum=10.0,
+                    multiplier=1.3,
+                    predicate=retries.if_exception_type(
+                        core_exceptions.ServiceUnavailable,
+                    ),
+                    deadline=60.0,
+                ),
+                default_timeout=60.0,
+                client_info=client_info,
+            ),
+            self.count_tokens: self._wrap_method(
+                self.count_tokens,
+                default_retry=retries.AsyncRetry(
+                    initial=1.0,
+                    maximum=10.0,
+                    multiplier=1.3,
+                    predicate=retries.if_exception_type(
+                        core_exceptions.ServiceUnavailable,
+                    ),
+                    deadline=60.0,
+                ),
+                default_timeout=60.0,
                 client_info=client_info,
             ),
             self.cancel_operation: self._wrap_method(
@@ -486,4 +647,4 @@ class ModelServiceGrpcAsyncIOTransport(ModelServiceTransport):
         return self._stubs["list_operations"]
 
 
-__all__ = ("ModelServiceGrpcAsyncIOTransport",)
+__all__ = ("GenerativeServiceGrpcAsyncIOTransport",)
