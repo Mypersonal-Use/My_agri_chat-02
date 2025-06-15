@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriConnect - Agricultural Assistant</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .bot-message ul, .bot-message ol {
+            margin-left: 1.5em;
+            margin-bottom: 0.5em;
+        }
+        .bot-message strong {
+            font-weight: bold;
+        }
+        .bot-message em {
+            font-style: italic;
+        }
+        :root {
+            --primary-color: #2E7D32;
+            --secondary-color: #81C784;
+            --accent-color: #FFA000;
+            --background-color: #F1F8E9;
+            --text-color: #1B5E20;
+        }
+
+        body {
+            background-color: #f0f8f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-color);
+            background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            min-height: 100vh;
+        }
+
+        .chat-container {
+            max-width: 1000px;
+            min-width: 400px;
+            margin: 30px auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            padding: 32px 32px 24px 32px;
+            position: relative;
+        }
+
+        .chat-header {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2c5530;
+        }
+
+        .chat-messages {
+            height: 520px;
+            overflow-y: auto;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+
+        .user-message {
+            background-color: #e3f2fd;
+            margin-left: auto;
+        }
+
+        .bot-message {
+            background-color: #f5f5f5;
+            margin-right: auto;
+        }
+
+        .input-group {
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            background-color: #2c5530;
+            border-color: #2c5530;
+        }
+
+        .btn-primary:hover {
+            background-color: #1e3c21;
+            border-color: #1e3c21;
+        }
+
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .audio-controls button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #2c5530;
+            color: white;
+            cursor: pointer;
+        }
+
+        .audio-controls button:hover {
+            background-color: #1e3c21;
+        }
+
+        .audio-controls button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .voice-input {
+            margin-right: 10px;
+        }
+
+        .voice-input button {
+            background-color: #2c5530;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 15px;
+            cursor: pointer;
+        }
+
+        .voice-input button:hover {
+            background-color: #1e3c21;
+        }
+
+        .voice-input button.recording {
+            background-color: #dc3545;
+        }
+
+        .language-selector {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            z-index: 1000;
+        }
+
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid var(--primary-color);
+            border-radius: 20px;
+            padding: 0.3rem 0.8rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--primary-color);
+        }
+
+        .lang-btn.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .lang-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .change-api-key-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 1100;
+            background-color: #2E7D32;
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            padding: 0.4em 1.2em;
+            font-size: 1em;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .change-api-key-btn:hover {
+            background-color: #388e3c;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <!-- Gemini API Key Modal -->
+    <div id="apiKeyModal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.4); z-index:9999; align-items:center; justify-content:center;">
+        <div style="background:white; padding:2em; border-radius:10px; max-width:90vw; margin:auto;">
+            <h5>Enter your Gemini API Key</h5>
+            <input type="password" id="api-key-input" class="form-control" placeholder="Gemini API Key" style="margin-bottom:1em;">
+            <button class="btn btn-success" onclick="saveApiKey()">Save & Start Chatting</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="chat-container">
+            <div class="language-selector">
+                <button class="lang-btn active" data-lang="en">English</button>
+                <button class="lang-btn" data-lang="hi">हिंदी</button>
+                <button class="lang-btn" data-lang="kn">ಕನ್ನಡ</button>
+            </div>
+            <div class="chat-header">
+                <h1>🌾 AgriConnect</h1>
+                <p>Your Agricultural Assistant</p>
+            </div>
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="input-group">
+                <div class="voice-input">
+                    <button id="voiceInputBtn" title="Voice Input">
+                        🎤
+                    </button>
+                </div>
+                <input type="text" id="userInput" class="form-control" placeholder="Ask about agriculture...">
+                <button class="btn btn-primary" id="sendBtn">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Marked.js for Markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        let geminiApiKey = null;
+        const chatMessages = document.getElementById('chatMessages');
+        const userInput = document.getElementById('userInput');
+        const apiKeyModal = document.getElementById('apiKeyModal');
+        const apiKeyInput = document.getElementById('api-key-input');
+        const sendBtn = document.getElementById('sendBtn');
+        const voiceInputBtn = document.getElementById('voiceInputBtn');
+        let recognition = null;
+        let currentAudio = null;
+
+        // Add language-related variables
+        let currentLang = 'en';
+        const translations = {
+            en: {
+                welcome: "Your Smart Agriculture Assistant",
+                placeholder: "Ask me anything about agriculture...",
+                listening: "Listening...",
+                voiceReceived: "Voice input received",
+                voiceEnded: "Voice input ended",
+                error: "Error: ",
+                send: "Send",
+                save: "Save & Start Chatting",
+                apiKeyPlaceholder: "Gemini API Key",
+                enterApiKey: "Enter your Gemini API Key",
+                apiKeyError: "Please enter a valid API key",
+                apiKeyInvalid: "Invalid API key. Please try again."
+            },
+            hi: {
+                welcome: "आपका स्मार्ट कृषि सहायक",
+                placeholder: "कृषि के बारे में कुछ भी पूछें...",
+                listening: "सुन रहा हूं...",
+                voiceReceived: "आवाज़ प्राप्त हुई",
+                voiceEnded: "आवाज़ समाप्त हुई",
+                error: "त्रुटि: ",
+                send: "भेजें",
+                save: "सहेजें और चैट शुरू करें",
+                apiKeyPlaceholder: "जेमिनी API कुंजी",
+                enterApiKey: "अपनी जेमिनी API कुंजी दर्ज करें",
+                apiKeyError: "कृपया एक वैध API कुंजी दर्ज करें",
+                apiKeyInvalid: "अमान्य API कुंजी। कृपया पुनः प्रयास करें।"
+            },
+            kn: {
+                welcome: "ನಿಮ್ಮ ಸ್ಮಾರ್ಟ್ ಕೃಷಿ ಸಹಾಯಕ",
+                placeholder: "ಕೃಷಿಯ ಬಗ್ಗೆ ಏನಾದರೂ ಕೇಳಿ...",
+                listening: "ಕೇಳುತ್ತಿದ್ದೇನೆ...",
+                voiceReceived: "ಧ್ವನಿ ಇನ್‌ಪುಟ್ ಸ್ವೀಕರಿಸಲಾಗಿದೆ",
+                voiceEnded: "ಧ್ವನಿ ಇನ್‌ಪುಟ್ ಕೊನೆಗೊಂಡಿದೆ",
+                error: "ದೋಷ: ",
+                send: "ಕಳುಹಿಸಿ",
+                save: "ಉಳಿಸಿ ಮತ್ತು ಚಾಟ್ ಪ್ರಾರಂಭಿಸಿ",
+                apiKeyPlaceholder: "ಜೆಮಿನಿ API ಕೀ",
+                enterApiKey: "ನಿಮ್ಮ ಜೆಮಿನಿ API ಕೀ ನಮೂದಿಸಿ",
+                apiKeyError: "ಮಾನ್ಯ API ಕೀ ನಮೂದಿಸಿ",
+                apiKeyInvalid: "ಅಮಾನ್ಯ API ಕೀ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ."
+            }
+        };
+
+        // Function to update UI text based on selected language
+        function updateUILanguage(lang) {
+            currentLang = lang;
+            document.querySelector('.welcome-text').textContent = translations[lang].welcome;
+            document.getElementById('userInput').placeholder = translations[lang].placeholder;
+            document.querySelector('.btn-primary').innerHTML = `<i class="fas fa-paper-plane"></i> ${translations[lang].send}`;
+            document.querySelector('.modal-content h5').innerHTML = `<i class="fas fa-key"></i> ${translations[lang].enterApiKey}`;
+            document.getElementById('api-key-input').placeholder = translations[lang].apiKeyPlaceholder;
+            document.querySelector('.modal-content button').innerHTML = `<i class="fas fa-check"></i> ${translations[lang].save}`;
+        }
+
+        // Add language selection event listeners
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                updateUILanguage(this.dataset.lang);
+                
+                // Update speech recognition language
+                if (recognition) {
+                    recognition.lang = this.dataset.lang === 'en' ? 'en-IN' : 
+                                     this.dataset.lang === 'hi' ? 'hi-IN' : 'kn-IN';
+                }
+            });
+        });
+
+        // Show modal on load if no API key
+        window.onload = function() {
+            geminiApiKey = sessionStorage.getItem('geminiApiKey');
+            if (!geminiApiKey) {
+                apiKeyModal.style.display = 'flex';
+            }
+        };
+
+        function saveApiKey() {
+            const key = apiKeyInput.value.trim();
+            if (key) {
+                geminiApiKey = key;
+                sessionStorage.setItem('geminiApiKey', key);
+                apiKeyModal.style.display = 'none';
+            } else {
+                alert(translations[currentLang].apiKeyError);
+            }
+        }
+
+        // Add a function to clear API key
+        function clearApiKey() {
+            sessionStorage.removeItem('geminiApiKey');
+            geminiApiKey = null;
+            apiKeyModal.style.display = 'flex';
+        }
+
+        // Add a button to clear API key in the top-right corner of the chat container
+        const chatContainer = document.querySelector('.chat-container');
+        const clearKeyBtn = document.createElement('button');
+        clearKeyBtn.className = 'btn btn-sm btn-primary change-api-key-btn';
+        clearKeyBtn.innerHTML = '<i class="fas fa-key"></i> Click here to change API Key';
+        clearKeyBtn.onclick = clearApiKey;
+        chatContainer.appendChild(clearKeyBtn);
+
+        function createAudioControls(audioData) {
+            const audio = new Audio('data:audio/wav;base64,' + audioData);
+            currentAudio = audio;
+            
+            const controls = document.createElement('div');
+            controls.className = 'audio-controls';
+            
+            const playBtn = document.createElement('button');
+            playBtn.innerHTML = '▶️ Play';
+            playBtn.onclick = () => audio.play();
+            
+            const pauseBtn = document.createElement('button');
+            pauseBtn.innerHTML = '⏸️ Pause';
+            pauseBtn.onclick = () => audio.pause();
+            
+            const stopBtn = document.createElement('button');
+            stopBtn.innerHTML = '⏹️ Stop';
+            stopBtn.onclick = () => {
+                audio.pause();
+                audio.currentTime = 0;
+            };
+            
+            controls.appendChild(playBtn);
+            controls.appendChild(pauseBtn);
+            controls.appendChild(stopBtn);
+            
+            return controls;
+        }
+
+        function addMessage(message, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+            
+            if (isUser) {
+                messageDiv.textContent = message;
+            } else {
+                // For bot messages, we expect an object with text and audio
+                const textDiv = document.createElement('div');
+                textDiv.innerHTML = marked.parse(message.text); // This will render Markdown as HTML
+                messageDiv.appendChild(textDiv);
+                
+                if (message.audio) {
+                    const audioControls = createAudioControls(message.audio);
+                    messageDiv.appendChild(audioControls);
+                }
+            }
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            addMessage(message, true);
+            userInput.value = '';
+
+            if (!geminiApiKey) {
+                apiKeyModal.style.display = 'flex';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message, api_key: geminiApiKey }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                if (data.error) {
+                    if (data.error.includes('API key')) {
+                        // If API key is invalid, clear it and show the modal
+                        clearApiKey();
+                        addMessage({ text: translations[currentLang].apiKeyInvalid });
+                    } else {
+                        addMessage({ text: data.error });
+                    }
+                } else {
+                    addMessage(data);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                addMessage({ text: translations[currentLang].error + error.message });
+            }
+        }
+
+        // Initialize speech recognition
+        if ('webkitSpeechRecognition' in window) {
+            recognition = new webkitSpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-IN';
+
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                userInput.value = transcript;
+                sendMessage();
+            };
+
+            recognition.onerror = function(event) {
+                console.error('Speech recognition error:', event.error);
+                voiceInputBtn.classList.remove('recording');
+            };
+
+            recognition.onend = function() {
+                voiceInputBtn.classList.remove('recording');
+            };
+        } else {
+            voiceInputBtn.style.display = 'none';
+        }
+
+        voiceInputBtn.addEventListener('click', function() {
+            if (recognition) {
+                if (voiceInputBtn.classList.contains('recording')) {
+                    recognition.stop();
+                } else {
+                    recognition.start();
+                    voiceInputBtn.classList.add('recording');
+                }
+            }
+        });
+
+        sendBtn.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,171 @@
+version: "3.1"
+
+nlu:
+- intent: greet
+  examples: |
+    - hey
+    - hello
+    - hi
+    - hello there
+    - good morning
+    - good evening
+    - hey there
+    - let's go
+    - hey dude
+    - goodmorning
+    - goodevening
+    - good afternoon
+
+- intent: goodbye
+  examples: |
+    - cu
+    - good by
+    - cee you later
+    - good night
+    - bye
+    - goodbye
+    - see you around
+    - bye bye
+    - see you later
+
+- intent: out_of_scope
+  examples: |
+    - what's the weather like
+    - tell me a joke
+    - what's your favorite movie
+    - who won the last football match
+    - what's the capital of France
+    - tell me about politics
+    - what's the stock market doing
+    - how to make a cake
+    - what's the latest news
+
+- intent: ask_crop_cultivation
+  examples: |
+    - how do I grow [rice](crop_type)
+    - what are the best practices for [wheat](crop_type) cultivation
+    - tell me about growing [corn](crop_type)
+    - how to cultivate [sugarcane](crop_type)
+    - what's the best way to grow [cotton](crop_type)
+    - how do I plant [soybeans](crop_type)
+    - what are the steps for [potato](crop_type) farming
+    - how to grow [vegetables](crop_type)
+    - what's the process for [fruit](crop_type) cultivation
+    - how do I start [organic farming](crop_type)
+
+- intent: ask_soil_management
+  examples: |
+    - how to improve soil quality
+    - what type of soil is best for [rice](crop_type)
+    - how to test soil pH
+    - what are good soil management practices
+    - how to maintain soil fertility
+    - what's the best way to prepare soil for planting
+    - how to deal with [clay](soil_type) soil
+    - what are soil conservation methods
+    - how to improve [sandy](soil_type) soil
+    - what's the best soil for [vegetables](crop_type)
+
+- intent: ask_pest_control
+  examples: |
+    - how to control [aphids](pest_name)
+    - what's the best way to deal with [fungal diseases](disease_name)
+    - how to prevent [pest](pest_name) infestation
+    - what are natural pest control methods
+    - how to identify [plant diseases](disease_name)
+    - what's the treatment for [leaf spot](disease_name)
+    - how to control [weeds](pest_name)
+    - what are organic pest control methods
+    - how to deal with [insect](pest_name) problems
+    - what's the best way to prevent [diseases](disease_name)
+
+- intent: ask_fertilizer
+  examples: |
+    - what fertilizer should I use for [rice](crop_type)
+    - how to apply organic fertilizer
+    - what's the best fertilizer for [vegetables](crop_type)
+    - how often should I fertilize
+    - what are natural fertilizers
+    - how to make compost
+    - what's the NPK ratio for [wheat](crop_type)
+    - how to use manure properly
+    - what are the safety measures for chemical fertilizers
+    - how to choose the right fertilizer
+
+- intent: ask_weather
+  examples: |
+    - what's the weather forecast for farming
+    - how will the weather affect my crops
+    - what's the best time to plant in [spring](season)
+    - how to protect crops from [rain](weather)
+    - what's the weather like for farming in [summer](season)
+    - how to deal with [drought](weather) conditions
+    - what's the best time to harvest in [autumn](season)
+    - how to protect crops from [frost](weather)
+    - what's the weather forecast for [next week](time)
+    - how to prepare for [extreme weather](weather)
+
+- intent: ask_government_schemes
+  examples: |
+    - what government schemes are available for farmers
+    - how to apply for PM-KISAN
+    - what subsidies are available for farming equipment
+    - how to get a Kisan Credit Card
+    - what are the latest government schemes for farmers
+    - how to apply for agricultural loans
+    - what insurance schemes are available for crops
+    - how to get farming subsidies
+    - what are the benefits of PM-KISAN
+    - how to apply for agricultural grants
+
+- intent: ask_market_info
+  examples: |
+    - what's the current price of [rice](crop_type)
+    - how to find the best market for my produce
+    - what's the market trend for [wheat](crop_type)
+    - how to get better prices for my crops
+    - what's the demand for [organic produce](crop_type)
+    - how to sell my produce online
+    - what's the best time to sell [vegetables](crop_type)
+    - how to find buyers for my crops
+    - what's the export market like for [spices](crop_type)
+    - how to get better market prices
+
+- intent: ask_crop_health
+  examples: |
+    - my [rice](crop_type) plants are turning yellow
+    - how to identify [disease](disease_name) in crops
+    - what's wrong with my [wheat](crop_type) plants
+    - how to treat [leaf spot](disease_name)
+    - my [vegetables](crop_type) are not growing well
+    - how to diagnose [plant problems](disease_name)
+    - what's causing [yellow leaves](disease_name)
+    - how to improve crop health
+    - my [fruits](crop_type) are not developing properly
+    - how to prevent [crop diseases](disease_name)
+
+- intent: ask_smart_farming
+  examples: |
+    - what is smart farming
+    - how to implement IoT in farming
+    - what are modern farming techniques
+    - how to use drones in agriculture
+    - what is precision farming
+    - how to implement sustainable farming
+    - what are smart irrigation systems
+    - how to use technology in farming
+    - what is vertical farming
+    - how to implement organic farming
+
+- intent: ask_education
+  examples: |
+    - how to learn farming
+    - what are the best farming practices
+    - how to start farming
+    - what are farming tutorials available
+    - how to learn organic farming
+    - what are the basics of farming
+    - how to improve farming skills
+    - what are farming courses available
+    - how to learn modern farming
+    - what are farming best practices 

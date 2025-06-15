@@ -1,0 +1,99 @@
+version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - out_of_scope
+  - ask_crop_cultivation
+  - ask_soil_management
+  - ask_pest_control
+  - ask_fertilizer
+  - ask_weather
+  - ask_government_schemes
+  - ask_market_info
+  - ask_crop_health
+  - ask_smart_farming
+  - ask_education
+
+entities:
+  - crop_type
+  - soil_type
+  - pest_name
+  - disease_name
+  - region
+  - season
+
+slots:
+  crop_type:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: crop_type
+  soil_type:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: soil_type
+  region:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: region
+
+responses:
+  utter_greet:
+    - text: "Hello! I'm AgriConnect, your agriculture assistant. How can I help you with farming today?"
+
+  utter_goodbye:
+    - text: "Goodbye! Feel free to return if you have more farming questions."
+
+  utter_out_of_scope:
+    - text: "I can only answer questions related to agriculture and farming. Please ask me about crops, soil, pests, or other farming-related topics."
+
+  utter_ask_crop_cultivation:
+    - text: "I can help you with crop cultivation. Please specify which crop you're interested in, and I'll provide detailed information about its cultivation practices."
+
+  utter_ask_soil_management:
+    - text: "I can guide you on soil management. Would you like to know about soil types, testing, or improvement techniques?"
+
+  utter_ask_pest_control:
+    - text: "I can help you with pest control. Please let me know which pest or disease you're dealing with, and I'll provide appropriate solutions."
+
+  utter_ask_fertilizer:
+    - text: "I can provide information about fertilizers. Would you like to know about organic or chemical fertilizers, their usage, or safety measures?"
+
+  utter_ask_weather:
+    - text: "I can help you with weather-related farming decisions. Please specify your region for localized weather information."
+
+  utter_ask_government_schemes:
+    - text: "I can inform you about various government schemes for farmers. Would you like to know about subsidies, loans, or insurance schemes?"
+
+  utter_ask_market_info:
+    - text: "I can provide market information. Would you like to know about current prices, market trends, or trading advice?"
+
+  utter_ask_crop_health:
+    - text: "I can help with crop health issues. Please describe the symptoms you're seeing, and I'll guide you on diagnosis and treatment."
+
+  utter_ask_smart_farming:
+    - text: "I can provide information about smart farming techniques. Would you like to know about IoT applications, sustainable practices, or modern farming methods?"
+
+  utter_ask_education:
+    - text: "I can help you learn about farming. Would you like tutorials, best practices, or information about specific farming techniques?"
+
+actions:
+  - action_validate_agriculture_query
+  - action_provide_crop_info
+  - action_provide_soil_info
+  - action_provide_pest_info
+  - action_provide_weather_info
+  - action_provide_scheme_info
+  - action_provide_market_info
+  - action_provide_crop_health_info
+  - action_provide_smart_farming_info
+  - action_provide_education_info
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true 
