@@ -19,10 +19,10 @@ from typing import MutableMapping, MutableSequence
 
 import proto  # type: ignore
 
-from google.ai.generativelanguage_v1beta.types import citation, safety
+from google.ai.generativelanguage_v1alpha.types import citation, safety
 
 __protobuf__ = proto.module(
-    package="google.ai.generativelanguage.v1beta",
+    package="google.ai.generativelanguage.v1alpha",
     manifest={
         "GenerateTextRequest",
         "GenerateTextResponse",
@@ -51,7 +51,7 @@ class GenerateTextRequest(proto.Message):
             Required. The name of the ``Model`` or ``TunedModel`` to use
             for generating the completion. Examples:
             models/text-bison-001 tunedModels/sentence-translator-u3b7m
-        prompt (google.ai.generativelanguage_v1beta.types.TextPrompt):
+        prompt (google.ai.generativelanguage_v1alpha.types.TextPrompt):
             Required. The free-form input text given to
             the model as a prompt.
             Given a prompt, the model will generate a
@@ -115,7 +115,7 @@ class GenerateTextRequest(proto.Message):
             ``getModel`` function.
 
             This field is a member of `oneof`_ ``_top_k``.
-        safety_settings (MutableSequence[google.ai.generativelanguage_v1beta.types.SafetySetting]):
+        safety_settings (MutableSequence[google.ai.generativelanguage_v1alpha.types.SafetySetting]):
             Optional. A list of unique ``SafetySetting`` instances for
             blocking unsafe content.
 
@@ -189,9 +189,9 @@ class GenerateTextResponse(proto.Message):
     r"""The response from the model, including candidate completions.
 
     Attributes:
-        candidates (MutableSequence[google.ai.generativelanguage_v1beta.types.TextCompletion]):
+        candidates (MutableSequence[google.ai.generativelanguage_v1alpha.types.TextCompletion]):
             Candidate responses from the model.
-        filters (MutableSequence[google.ai.generativelanguage_v1beta.types.ContentFilter]):
+        filters (MutableSequence[google.ai.generativelanguage_v1alpha.types.ContentFilter]):
             A set of content filtering metadata for the prompt and
             response text.
 
@@ -204,7 +204,7 @@ class GenerateTextResponse(proto.Message):
 
             The blocking is configured by the ``SafetySettings`` in the
             request (or the default ``SafetySettings`` of the API).
-        safety_feedback (MutableSequence[google.ai.generativelanguage_v1beta.types.SafetyFeedback]):
+        safety_feedback (MutableSequence[google.ai.generativelanguage_v1alpha.types.SafetyFeedback]):
             Returns any safety feedback related to
             content filtering.
     """
@@ -252,11 +252,11 @@ class TextCompletion(proto.Message):
         output (str):
             Output only. The generated text returned from
             the model.
-        safety_ratings (MutableSequence[google.ai.generativelanguage_v1beta.types.SafetyRating]):
+        safety_ratings (MutableSequence[google.ai.generativelanguage_v1alpha.types.SafetyRating]):
             Ratings for the safety of a response.
 
             There is at most one rating per category.
-        citation_metadata (google.ai.generativelanguage_v1beta.types.CitationMetadata):
+        citation_metadata (google.ai.generativelanguage_v1alpha.types.CitationMetadata):
             Output only. Citation information for model-generated
             ``output`` in this ``TextCompletion``.
 
@@ -311,7 +311,7 @@ class EmbedTextResponse(proto.Message):
     .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
 
     Attributes:
-        embedding (google.ai.generativelanguage_v1beta.types.Embedding):
+        embedding (google.ai.generativelanguage_v1alpha.types.Embedding):
             Output only. The embedding generated from the
             input text.
 
@@ -338,7 +338,7 @@ class BatchEmbedTextRequest(proto.Message):
             model will turn into an embedding. The current
             limit is 100 texts, over which an error will be
             thrown.
-        requests (MutableSequence[google.ai.generativelanguage_v1beta.types.EmbedTextRequest]):
+        requests (MutableSequence[google.ai.generativelanguage_v1alpha.types.EmbedTextRequest]):
             Optional. Embed requests for the batch. Only one of
             ``texts`` or ``requests`` can be set.
     """
@@ -362,7 +362,7 @@ class BatchEmbedTextResponse(proto.Message):
     r"""The response to a EmbedTextRequest.
 
     Attributes:
-        embeddings (MutableSequence[google.ai.generativelanguage_v1beta.types.Embedding]):
+        embeddings (MutableSequence[google.ai.generativelanguage_v1alpha.types.Embedding]):
             Output only. The embeddings generated from
             the input text.
     """
@@ -403,7 +403,7 @@ class CountTextTokensRequest(proto.Message):
             ``ListModels`` method.
 
             Format: ``models/{model}``
-        prompt (google.ai.generativelanguage_v1beta.types.TextPrompt):
+        prompt (google.ai.generativelanguage_v1alpha.types.TextPrompt):
             Required. The free-form input text given to
             the model as a prompt.
     """

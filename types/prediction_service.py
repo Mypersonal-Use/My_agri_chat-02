@@ -21,7 +21,7 @@ from google.protobuf import struct_pb2  # type: ignore
 import proto  # type: ignore
 
 __protobuf__ = proto.module(
-    package="google.ai.generativelanguage.v1beta",
+    package="google.ai.generativelanguage.v1alpha",
     manifest={
         "PredictRequest",
         "PredictResponse",
@@ -31,7 +31,7 @@ __protobuf__ = proto.module(
 
 class PredictRequest(proto.Message):
     r"""Request message for
-    [PredictionService.Predict][google.ai.generativelanguage.v1beta.PredictionService.Predict].
+    [PredictionService.Predict][google.ai.generativelanguage.v1alpha.PredictionService.Predict].
 
     Attributes:
         model (str):

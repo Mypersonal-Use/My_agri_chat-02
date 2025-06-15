@@ -21,10 +21,10 @@ from google.protobuf import duration_pb2  # type: ignore
 from google.protobuf import timestamp_pb2  # type: ignore
 import proto  # type: ignore
 
-from google.ai.generativelanguage_v1beta.types import content
+from google.ai.generativelanguage_v1alpha.types import content
 
 __protobuf__ = proto.module(
-    package="google.ai.generativelanguage.v1beta",
+    package="google.ai.generativelanguage.v1alpha",
     manifest={
         "CachedContent",
     },
@@ -72,18 +72,18 @@ class CachedContent(proto.Message):
             cached content Format: ``models/{model}``
 
             This field is a member of `oneof`_ ``_model``.
-        system_instruction (google.ai.generativelanguage_v1beta.types.Content):
+        system_instruction (google.ai.generativelanguage_v1alpha.types.Content):
             Optional. Input only. Immutable. Developer
             set system instruction. Currently text only.
 
             This field is a member of `oneof`_ ``_system_instruction``.
-        contents (MutableSequence[google.ai.generativelanguage_v1beta.types.Content]):
+        contents (MutableSequence[google.ai.generativelanguage_v1alpha.types.Content]):
             Optional. Input only. Immutable. The content
             to cache.
-        tools (MutableSequence[google.ai.generativelanguage_v1beta.types.Tool]):
+        tools (MutableSequence[google.ai.generativelanguage_v1alpha.types.Tool]):
             Optional. Input only. Immutable. A list of ``Tools`` the
             model may use to generate the next response
-        tool_config (google.ai.generativelanguage_v1beta.types.ToolConfig):
+        tool_config (google.ai.generativelanguage_v1alpha.types.ToolConfig):
             Optional. Input only. Immutable. Tool config.
             This config is shared for all tools.
 
@@ -94,7 +94,7 @@ class CachedContent(proto.Message):
         update_time (google.protobuf.timestamp_pb2.Timestamp):
             Output only. When the cache entry was last
             updated in UTC time.
-        usage_metadata (google.ai.generativelanguage_v1beta.types.CachedContent.UsageMetadata):
+        usage_metadata (google.ai.generativelanguage_v1alpha.types.CachedContent.UsageMetadata):
             Output only. Metadata on the usage of the
             cached content.
     """

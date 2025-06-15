@@ -23,7 +23,7 @@ from google.rpc import status_pb2  # type: ignore
 import proto  # type: ignore
 
 __protobuf__ = proto.module(
-    package="google.ai.generativelanguage.v1beta",
+    package="google.ai.generativelanguage.v1alpha",
     manifest={
         "File",
         "VideoMetadata",
@@ -39,7 +39,7 @@ class File(proto.Message):
     .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
 
     Attributes:
-        video_metadata (google.ai.generativelanguage_v1beta.types.VideoMetadata):
+        video_metadata (google.ai.generativelanguage_v1alpha.types.VideoMetadata):
             Output only. Metadata for a video.
 
             This field is a member of `oneof`_ ``metadata``.
@@ -71,7 +71,7 @@ class File(proto.Message):
             bytes.
         uri (str):
             Output only. The uri of the ``File``.
-        state (google.ai.generativelanguage_v1beta.types.File.State):
+        state (google.ai.generativelanguage_v1alpha.types.File.State):
             Output only. Processing state of the File.
         error (google.rpc.status_pb2.Status):
             Output only. Error status if File processing

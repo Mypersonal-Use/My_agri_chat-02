@@ -21,7 +21,7 @@ from google.protobuf import timestamp_pb2  # type: ignore
 import proto  # type: ignore
 
 __protobuf__ = proto.module(
-    package="google.ai.generativelanguage.v1beta",
+    package="google.ai.generativelanguage.v1alpha",
     manifest={
         "TunedModel",
         "TunedModelSource",
@@ -29,6 +29,9 @@ __protobuf__ = proto.module(
         "Hyperparameters",
         "Dataset",
         "TuningExamples",
+        "TuningPart",
+        "TuningContent",
+        "TuningMultiturnExample",
         "TuningExample",
         "TuningSnapshot",
     },
@@ -47,7 +50,7 @@ class TunedModel(proto.Message):
     .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
 
     Attributes:
-        tuned_model_source (google.ai.generativelanguage_v1beta.types.TunedModelSource):
+        tuned_model_source (google.ai.generativelanguage_v1alpha.types.TunedModelSource):
             Optional. TunedModel to use as the starting
             point for training the new model.
 
@@ -107,7 +110,7 @@ class TunedModel(proto.Message):
             model while creating the model.
 
             This field is a member of `oneof`_ ``_top_k``.
-        state (google.ai.generativelanguage_v1beta.types.TunedModel.State):
+        state (google.ai.generativelanguage_v1alpha.types.TunedModel.State):
             Output only. The state of the tuned model.
         create_time (google.protobuf.timestamp_pb2.Timestamp):
             Output only. The timestamp when this model
@@ -115,7 +118,7 @@ class TunedModel(proto.Message):
         update_time (google.protobuf.timestamp_pb2.Timestamp):
             Output only. The timestamp when this model
             was updated.
-        tuning_task (google.ai.generativelanguage_v1beta.types.TuningTask):
+        tuning_task (google.ai.generativelanguage_v1alpha.types.TuningTask):
             Required. The tuning task that creates the
             tuned model.
         reader_project_numbers (MutableSequence[int]):
@@ -239,12 +242,12 @@ class TuningTask(proto.Message):
         complete_time (google.protobuf.timestamp_pb2.Timestamp):
             Output only. The timestamp when tuning this
             model completed.
-        snapshots (MutableSequence[google.ai.generativelanguage_v1beta.types.TuningSnapshot]):
+        snapshots (MutableSequence[google.ai.generativelanguage_v1alpha.types.TuningSnapshot]):
             Output only. Metrics collected during tuning.
-        training_data (google.ai.generativelanguage_v1beta.types.Dataset):
+        training_data (google.ai.generativelanguage_v1alpha.types.Dataset):
             Required. Input only. Immutable. The model
             training data.
-        hyperparameters (google.ai.generativelanguage_v1beta.types.Hyperparameters):
+        hyperparameters (google.ai.generativelanguage_v1alpha.types.Hyperparameters):
             Immutable. Hyperparameters controlling the
             tuning process. If not provided, default values
             will be used.
@@ -347,7 +350,7 @@ class Dataset(proto.Message):
     .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
 
     Attributes:
-        examples (google.ai.generativelanguage_v1beta.types.TuningExamples):
+        examples (google.ai.generativelanguage_v1alpha.types.TuningExamples):
             Optional. Inline examples with simple
             input/output text.
 
@@ -366,16 +369,113 @@ class TuningExamples(proto.Message):
     r"""A set of tuning examples. Can be training or validation data.
 
     Attributes:
-        examples (MutableSequence[google.ai.generativelanguage_v1beta.types.TuningExample]):
+        examples (MutableSequence[google.ai.generativelanguage_v1alpha.types.TuningExample]):
             The examples. Example input can be for text
             or discuss, but all examples in a set must be of
             the same type.
+        multiturn_examples (MutableSequence[google.ai.generativelanguage_v1alpha.types.TuningMultiturnExample]):
+            Content examples. For multiturn
+            conversations.
     """
 
     examples: MutableSequence["TuningExample"] = proto.RepeatedField(
         proto.MESSAGE,
         number=1,
         message="TuningExample",
+    )
+    multiturn_examples: MutableSequence["TuningMultiturnExample"] = proto.RepeatedField(
+        proto.MESSAGE,
+        number=2,
+        message="TuningMultiturnExample",
+    )
+
+
+class TuningPart(proto.Message):
+    r"""A datatype containing data that is part of a multi-part
+    ``TuningContent`` message.
+
+    This is a subset of the Part used for model inference, with limited
+    type support.
+
+    A ``Part`` consists of data which has an associated datatype. A
+    ``Part`` can only contain one of the accepted types in
+    ``Part.data``.
+
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        text (str):
+            Inline text.
+
+            This field is a member of `oneof`_ ``data``.
+    """
+
+    text: str = proto.Field(
+        proto.STRING,
+        number=2,
+        oneof="data",
+    )
+
+
+class TuningContent(proto.Message):
+    r"""The structured datatype containing multi-part content of an example
+    message.
+
+    This is a subset of the Content proto used during model inference
+    with limited type support. A ``Content`` includes a ``role`` field
+    designating the producer of the ``Content`` and a ``parts`` field
+    containing multi-part data that contains the content of the message
+    turn.
+
+    Attributes:
+        parts (MutableSequence[google.ai.generativelanguage_v1alpha.types.TuningPart]):
+            Ordered ``Parts`` that constitute a single message. Parts
+            may have different MIME types.
+        role (str):
+            Optional. The producer of the content. Must
+            be either 'user' or 'model'.
+            Useful to set for multi-turn conversations,
+            otherwise can be left blank or unset.
+    """
+
+    parts: MutableSequence["TuningPart"] = proto.RepeatedField(
+        proto.MESSAGE,
+        number=1,
+        message="TuningPart",
+    )
+    role: str = proto.Field(
+        proto.STRING,
+        number=2,
+    )
+
+
+class TuningMultiturnExample(proto.Message):
+    r"""A tuning example with multiturn input.
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        system_instruction (google.ai.generativelanguage_v1alpha.types.TuningContent):
+            Optional. Developer set system instructions.
+            Currently, text only.
+
+            This field is a member of `oneof`_ ``_system_instruction``.
+        contents (MutableSequence[google.ai.generativelanguage_v1alpha.types.TuningContent]):
+            Each Content represents a turn in the
+            conversation.
+    """
+
+    system_instruction: "TuningContent" = proto.Field(
+        proto.MESSAGE,
+        number=8,
+        optional=True,
+        message="TuningContent",
+    )
+    contents: MutableSequence["TuningContent"] = proto.RepeatedField(
+        proto.MESSAGE,
+        number=1,
+        message="TuningContent",
     )
 
 

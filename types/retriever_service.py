@@ -20,10 +20,10 @@ from typing import MutableMapping, MutableSequence
 from google.protobuf import field_mask_pb2  # type: ignore
 import proto  # type: ignore
 
-from google.ai.generativelanguage_v1beta.types import retriever
+from google.ai.generativelanguage_v1alpha.types import retriever
 
 __protobuf__ = proto.module(
-    package="google.ai.generativelanguage.v1beta",
+    package="google.ai.generativelanguage.v1alpha",
     manifest={
         "CreateCorpusRequest",
         "GetCorpusRequest",
@@ -61,7 +61,7 @@ class CreateCorpusRequest(proto.Message):
     r"""Request to create a ``Corpus``.
 
     Attributes:
-        corpus (google.ai.generativelanguage_v1beta.types.Corpus):
+        corpus (google.ai.generativelanguage_v1alpha.types.Corpus):
             Required. The ``Corpus`` to create.
     """
 
@@ -91,7 +91,7 @@ class UpdateCorpusRequest(proto.Message):
     r"""Request to update a ``Corpus``.
 
     Attributes:
-        corpus (google.ai.generativelanguage_v1beta.types.Corpus):
+        corpus (google.ai.generativelanguage_v1alpha.types.Corpus):
             Required. The ``Corpus`` to update.
         update_mask (google.protobuf.field_mask_pb2.FieldMask):
             Required. The list of fields to update. Currently, this only
@@ -173,7 +173,7 @@ class ListCorporaResponse(proto.Message):
     ``corpus.create_time``.
 
     Attributes:
-        corpora (MutableSequence[google.ai.generativelanguage_v1beta.types.Corpus]):
+        corpora (MutableSequence[google.ai.generativelanguage_v1alpha.types.Corpus]):
             The returned corpora.
         next_page_token (str):
             A token, which can be sent as ``page_token`` to retrieve the
@@ -206,7 +206,7 @@ class QueryCorpusRequest(proto.Message):
         query (str):
             Required. Query string to perform semantic
             search.
-        metadata_filters (MutableSequence[google.ai.generativelanguage_v1beta.types.MetadataFilter]):
+        metadata_filters (MutableSequence[google.ai.generativelanguage_v1alpha.types.MetadataFilter]):
             Optional. Filter for ``Chunk`` and ``Document`` metadata.
             Each ``MetadataFilter`` object should correspond to a unique
             key. Multiple ``MetadataFilter`` objects are joined by
@@ -267,7 +267,7 @@ class QueryCorpusResponse(proto.Message):
     r"""Response from ``QueryCorpus`` containing a list of relevant chunks.
 
     Attributes:
-        relevant_chunks (MutableSequence[google.ai.generativelanguage_v1beta.types.RelevantChunk]):
+        relevant_chunks (MutableSequence[google.ai.generativelanguage_v1alpha.types.RelevantChunk]):
             The relevant chunks.
     """
 
@@ -284,7 +284,7 @@ class RelevantChunk(proto.Message):
     Attributes:
         chunk_relevance_score (float):
             ``Chunk`` relevance to the query.
-        chunk (google.ai.generativelanguage_v1beta.types.Chunk):
+        chunk (google.ai.generativelanguage_v1alpha.types.Chunk):
             ``Chunk`` associated with the query.
     """
 
@@ -306,7 +306,7 @@ class CreateDocumentRequest(proto.Message):
         parent (str):
             Required. The name of the ``Corpus`` where this ``Document``
             will be created. Example: ``corpora/my-corpus-123``
-        document (google.ai.generativelanguage_v1beta.types.Document):
+        document (google.ai.generativelanguage_v1alpha.types.Document):
             Required. The ``Document`` to create.
     """
 
@@ -340,7 +340,7 @@ class UpdateDocumentRequest(proto.Message):
     r"""Request to update a ``Document``.
 
     Attributes:
-        document (google.ai.generativelanguage_v1beta.types.Document):
+        document (google.ai.generativelanguage_v1alpha.types.Document):
             Required. The ``Document`` to update.
         update_mask (google.protobuf.field_mask_pb2.FieldMask):
             Required. The list of fields to update. Currently, this only
@@ -429,7 +429,7 @@ class ListDocumentsResponse(proto.Message):
     ``document.create_time``.
 
     Attributes:
-        documents (MutableSequence[google.ai.generativelanguage_v1beta.types.Document]):
+        documents (MutableSequence[google.ai.generativelanguage_v1alpha.types.Document]):
             The returned ``Document``\ s.
         next_page_token (str):
             A token, which can be sent as ``page_token`` to retrieve the
@@ -468,7 +468,7 @@ class QueryDocumentRequest(proto.Message):
 
             If unspecified, at most 10 ``Chunk``\ s will be returned.
             The maximum specified result count is 100.
-        metadata_filters (MutableSequence[google.ai.generativelanguage_v1beta.types.MetadataFilter]):
+        metadata_filters (MutableSequence[google.ai.generativelanguage_v1alpha.types.MetadataFilter]):
             Optional. Filter for ``Chunk`` metadata. Each
             ``MetadataFilter`` object should correspond to a unique key.
             Multiple ``MetadataFilter`` objects are joined by logical
@@ -524,7 +524,7 @@ class QueryDocumentResponse(proto.Message):
     chunks.
 
     Attributes:
-        relevant_chunks (MutableSequence[google.ai.generativelanguage_v1beta.types.RelevantChunk]):
+        relevant_chunks (MutableSequence[google.ai.generativelanguage_v1alpha.types.RelevantChunk]):
             The returned relevant chunks.
     """
 
@@ -543,7 +543,7 @@ class CreateChunkRequest(proto.Message):
             Required. The name of the ``Document`` where this ``Chunk``
             will be created. Example:
             ``corpora/my-corpus-123/documents/the-doc-abc``
-        chunk (google.ai.generativelanguage_v1beta.types.Chunk):
+        chunk (google.ai.generativelanguage_v1alpha.types.Chunk):
             Required. The ``Chunk`` to create.
     """
 
@@ -567,7 +567,7 @@ class BatchCreateChunksRequest(proto.Message):
             ``Chunk``\ s will be created. The parent field in every
             ``CreateChunkRequest`` must match this value. Example:
             ``corpora/my-corpus-123/documents/the-doc-abc``
-        requests (MutableSequence[google.ai.generativelanguage_v1beta.types.CreateChunkRequest]):
+        requests (MutableSequence[google.ai.generativelanguage_v1alpha.types.CreateChunkRequest]):
             Required. The request messages specifying the ``Chunk``\ s
             to create. A maximum of 100 ``Chunk``\ s can be created in a
             batch.
@@ -589,7 +589,7 @@ class BatchCreateChunksResponse(proto.Message):
     ``Chunk``\ s.
 
     Attributes:
-        chunks (MutableSequence[google.ai.generativelanguage_v1beta.types.Chunk]):
+        chunks (MutableSequence[google.ai.generativelanguage_v1alpha.types.Chunk]):
             ``Chunk``\ s created.
     """
 
@@ -619,7 +619,7 @@ class UpdateChunkRequest(proto.Message):
     r"""Request to update a ``Chunk``.
 
     Attributes:
-        chunk (google.ai.generativelanguage_v1beta.types.Chunk):
+        chunk (google.ai.generativelanguage_v1alpha.types.Chunk):
             Required. The ``Chunk`` to update.
         update_mask (google.protobuf.field_mask_pb2.FieldMask):
             Required. The list of fields to update. Currently, this only
@@ -647,7 +647,7 @@ class BatchUpdateChunksRequest(proto.Message):
             ``Chunk``\ s to update. The parent field in every
             ``UpdateChunkRequest`` must match this value. Example:
             ``corpora/my-corpus-123/documents/the-doc-abc``
-        requests (MutableSequence[google.ai.generativelanguage_v1beta.types.UpdateChunkRequest]):
+        requests (MutableSequence[google.ai.generativelanguage_v1alpha.types.UpdateChunkRequest]):
             Required. The request messages specifying the ``Chunk``\ s
             to update. A maximum of 100 ``Chunk``\ s can be updated in a
             batch.
@@ -669,7 +669,7 @@ class BatchUpdateChunksResponse(proto.Message):
     ``Chunk``\ s.
 
     Attributes:
-        chunks (MutableSequence[google.ai.generativelanguage_v1beta.types.Chunk]):
+        chunks (MutableSequence[google.ai.generativelanguage_v1alpha.types.Chunk]):
             ``Chunk``\ s updated.
     """
 
@@ -705,7 +705,7 @@ class BatchDeleteChunksRequest(proto.Message):
             ``Chunk``\ s to delete. The parent field in every
             ``DeleteChunkRequest`` must match this value. Example:
             ``corpora/my-corpus-123/documents/the-doc-abc``
-        requests (MutableSequence[google.ai.generativelanguage_v1beta.types.DeleteChunkRequest]):
+        requests (MutableSequence[google.ai.generativelanguage_v1alpha.types.DeleteChunkRequest]):
             Required. The request messages specifying the ``Chunk``\ s
             to delete.
     """
@@ -767,7 +767,7 @@ class ListChunksResponse(proto.Message):
     ``chunk.create_time``.
 
     Attributes:
-        chunks (MutableSequence[google.ai.generativelanguage_v1beta.types.Chunk]):
+        chunks (MutableSequence[google.ai.generativelanguage_v1alpha.types.Chunk]):
             The returned ``Chunk``\ s.
         next_page_token (str):
             A token, which can be sent as ``page_token`` to retrieve the

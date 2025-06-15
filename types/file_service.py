@@ -19,10 +19,10 @@ from typing import MutableMapping, MutableSequence
 
 import proto  # type: ignore
 
-from google.ai.generativelanguage_v1beta.types import file as gag_file
+from google.ai.generativelanguage_v1alpha.types import file as gag_file
 
 __protobuf__ = proto.module(
-    package="google.ai.generativelanguage.v1beta",
+    package="google.ai.generativelanguage.v1alpha",
     manifest={
         "CreateFileRequest",
         "CreateFileResponse",
@@ -38,7 +38,7 @@ class CreateFileRequest(proto.Message):
     r"""Request for ``CreateFile``.
 
     Attributes:
-        file (google.ai.generativelanguage_v1beta.types.File):
+        file (google.ai.generativelanguage_v1alpha.types.File):
             Optional. Metadata for the file to create.
     """
 
@@ -53,7 +53,7 @@ class CreateFileResponse(proto.Message):
     r"""Response for ``CreateFile``.
 
     Attributes:
-        file (google.ai.generativelanguage_v1beta.types.File):
+        file (google.ai.generativelanguage_v1alpha.types.File):
             Metadata for the created file.
     """
 
@@ -90,7 +90,7 @@ class ListFilesResponse(proto.Message):
     r"""Response for ``ListFiles``.
 
     Attributes:
-        files (MutableSequence[google.ai.generativelanguage_v1beta.types.File]):
+        files (MutableSequence[google.ai.generativelanguage_v1alpha.types.File]):
             The list of ``File``\ s.
         next_page_token (str):
             A token that can be sent as a ``page_token`` into a

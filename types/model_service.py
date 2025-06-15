@@ -20,11 +20,11 @@ from typing import MutableMapping, MutableSequence
 from google.protobuf import field_mask_pb2  # type: ignore
 import proto  # type: ignore
 
-from google.ai.generativelanguage_v1beta.types import tuned_model as gag_tuned_model
-from google.ai.generativelanguage_v1beta.types import model
+from google.ai.generativelanguage_v1alpha.types import tuned_model as gag_tuned_model
+from google.ai.generativelanguage_v1alpha.types import model
 
 __protobuf__ = proto.module(
-    package="google.ai.generativelanguage.v1beta",
+    package="google.ai.generativelanguage.v1alpha",
     manifest={
         "GetModelRequest",
         "ListModelsRequest",
@@ -94,7 +94,7 @@ class ListModelsResponse(proto.Message):
     r"""Response from ``ListModel`` containing a paginated list of Models.
 
     Attributes:
-        models (MutableSequence[google.ai.generativelanguage_v1beta.types.Model]):
+        models (MutableSequence[google.ai.generativelanguage_v1alpha.types.Model]):
             The returned Models.
         next_page_token (str):
             A token, which can be sent as ``page_token`` to retrieve the
@@ -196,7 +196,7 @@ class ListTunedModelsResponse(proto.Message):
     Models.
 
     Attributes:
-        tuned_models (MutableSequence[google.ai.generativelanguage_v1beta.types.TunedModel]):
+        tuned_models (MutableSequence[google.ai.generativelanguage_v1alpha.types.TunedModel]):
             The returned Models.
         next_page_token (str):
             A token, which can be sent as ``page_token`` to retrieve the
@@ -234,7 +234,7 @@ class CreateTunedModelRequest(proto.Message):
             ``[a-z]([a-z0-9-]{0,38}[a-z0-9])?``.
 
             This field is a member of `oneof`_ ``_tuned_model_id``.
-        tuned_model (google.ai.generativelanguage_v1beta.types.TunedModel):
+        tuned_model (google.ai.generativelanguage_v1alpha.types.TunedModel):
             Required. The tuned model to create.
     """
 
@@ -265,7 +265,7 @@ class CreateTunedModelMetadata(proto.Message):
         completed_percent (float):
             The completed percentage for the tuning
             operation.
-        snapshots (MutableSequence[google.ai.generativelanguage_v1beta.types.TuningSnapshot]):
+        snapshots (MutableSequence[google.ai.generativelanguage_v1alpha.types.TuningSnapshot]):
             Metrics collected during tuning.
     """
 
@@ -296,7 +296,7 @@ class UpdateTunedModelRequest(proto.Message):
     r"""Request to update a TunedModel.
 
     Attributes:
-        tuned_model (google.ai.generativelanguage_v1beta.types.TunedModel):
+        tuned_model (google.ai.generativelanguage_v1alpha.types.TunedModel):
             Required. The tuned model to update.
         update_mask (google.protobuf.field_mask_pb2.FieldMask):
             Optional. The list of fields to update.

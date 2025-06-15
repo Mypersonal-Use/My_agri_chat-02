@@ -1,8 +1,8 @@
  {
   "comment": "This file maps proto services/RPCs to the corresponding library clients/methods",
   "language": "python",
-  "libraryPackage": "google.ai.generativelanguage_v1beta",
-  "protoPackage": "google.ai.generativelanguage.v1beta",
+  "libraryPackage": "google.ai.generativelanguage_v1alpha",
+  "protoPackage": "google.ai.generativelanguage.v1alpha",
   "schema": "1.0",
   "services": {
     "CacheService": {
@@ -237,6 +237,11 @@
                 "batch_embed_contents"
               ]
             },
+            "BidiGenerateContent": {
+              "methods": [
+                "bidi_generate_content"
+              ]
+            },
             "CountTokens": {
               "methods": [
                 "count_tokens"
@@ -272,6 +277,11 @@
                 "batch_embed_contents"
               ]
             },
+            "BidiGenerateContent": {
+              "methods": [
+                "bidi_generate_content"
+              ]
+            },
             "CountTokens": {
               "methods": [
                 "count_tokens"
@@ -305,6 +315,11 @@
             "BatchEmbedContents": {
               "methods": [
                 "batch_embed_contents"
+              ]
+            },
+            "BidiGenerateContent": {
+              "methods": [
+                "bidi_generate_content"
               ]
             },
             "CountTokens": {

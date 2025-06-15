@@ -20,7 +20,7 @@ from typing import MutableMapping, MutableSequence
 import proto  # type: ignore
 
 __protobuf__ = proto.module(
-    package="google.ai.generativelanguage.v1beta",
+    package="google.ai.generativelanguage.v1alpha",
     manifest={
         "HarmCategory",
         "ContentFilter",
@@ -92,7 +92,7 @@ class ContentFilter(proto.Message):
     .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
 
     Attributes:
-        reason (google.ai.generativelanguage_v1beta.types.ContentFilter.BlockedReason):
+        reason (google.ai.generativelanguage_v1alpha.types.ContentFilter.BlockedReason):
             The reason content was blocked during request
             processing.
         message (str):
@@ -141,9 +141,9 @@ class SafetyFeedback(proto.Message):
     result.
 
     Attributes:
-        rating (google.ai.generativelanguage_v1beta.types.SafetyRating):
+        rating (google.ai.generativelanguage_v1alpha.types.SafetyRating):
             Safety rating evaluated from content.
-        setting (google.ai.generativelanguage_v1beta.types.SafetySetting):
+        setting (google.ai.generativelanguage_v1alpha.types.SafetySetting):
             Safety settings applied to the request.
     """
 
@@ -169,9 +169,9 @@ class SafetyRating(proto.Message):
     included here.
 
     Attributes:
-        category (google.ai.generativelanguage_v1beta.types.HarmCategory):
+        category (google.ai.generativelanguage_v1alpha.types.HarmCategory):
             Required. The category for this rating.
-        probability (google.ai.generativelanguage_v1beta.types.SafetyRating.HarmProbability):
+        probability (google.ai.generativelanguage_v1alpha.types.SafetyRating.HarmProbability):
             Required. The probability of harm for this
             content.
         blocked (bool):
@@ -228,9 +228,9 @@ class SafetySetting(proto.Message):
     probability that content is blocked.
 
     Attributes:
-        category (google.ai.generativelanguage_v1beta.types.HarmCategory):
+        category (google.ai.generativelanguage_v1alpha.types.HarmCategory):
             Required. The category for this setting.
-        threshold (google.ai.generativelanguage_v1beta.types.SafetySetting.HarmBlockThreshold):
+        threshold (google.ai.generativelanguage_v1alpha.types.SafetySetting.HarmBlockThreshold):
             Required. Controls the probability threshold
             at which harm is blocked.
     """

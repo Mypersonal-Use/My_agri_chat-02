@@ -19,12 +19,12 @@ from typing import MutableMapping, MutableSequence
 
 import proto  # type: ignore
 
-from google.ai.generativelanguage_v1beta.types import citation
-from google.ai.generativelanguage_v1beta.types import content as gag_content
-from google.ai.generativelanguage_v1beta.types import retriever, safety
+from google.ai.generativelanguage_v1alpha.types import citation
+from google.ai.generativelanguage_v1alpha.types import content as gag_content
+from google.ai.generativelanguage_v1alpha.types import retriever, safety
 
 __protobuf__ = proto.module(
-    package="google.ai.generativelanguage.v1beta",
+    package="google.ai.generativelanguage.v1alpha",
     manifest={
         "TaskType",
         "GenerateContentRequest",
@@ -53,6 +53,16 @@ __protobuf__ = proto.module(
         "BatchEmbedContentsResponse",
         "CountTokensRequest",
         "CountTokensResponse",
+        "BidiGenerateContentSetup",
+        "BidiGenerateContentClientContent",
+        "BidiGenerateContentRealtimeInput",
+        "BidiGenerateContentToolResponse",
+        "BidiGenerateContentClientMessage",
+        "BidiGenerateContentSetupComplete",
+        "BidiGenerateContentServerContent",
+        "BidiGenerateContentToolCall",
+        "BidiGenerateContentToolCallCancellation",
+        "BidiGenerateContentServerMessage",
     },
 )
 
@@ -107,13 +117,13 @@ class GenerateContentRequest(proto.Message):
             the completion.
 
             Format: ``models/{model}``.
-        system_instruction (google.ai.generativelanguage_v1beta.types.Content):
+        system_instruction (google.ai.generativelanguage_v1alpha.types.Content):
             Optional. Developer set `system
             instruction(s) <https://ai.google.dev/gemini-api/docs/system-instructions>`__.
             Currently, text only.
 
             This field is a member of `oneof`_ ``_system_instruction``.
-        contents (MutableSequence[google.ai.generativelanguage_v1beta.types.Content]):
+        contents (MutableSequence[google.ai.generativelanguage_v1alpha.types.Content]):
             Required. The content of the current conversation with the
             model.
 
@@ -122,7 +132,7 @@ class GenerateContentRequest(proto.Message):
             `chat <https://ai.google.dev/gemini-api/docs/text-generation#chat>`__,
             this is a repeated field that contains the conversation
             history and the latest request.
-        tools (MutableSequence[google.ai.generativelanguage_v1beta.types.Tool]):
+        tools (MutableSequence[google.ai.generativelanguage_v1alpha.types.Tool]):
             Optional. A list of ``Tools`` the ``Model`` may use to
             generate the next response.
 
@@ -135,12 +145,12 @@ class GenerateContentRequest(proto.Message):
             and the `Code
             execution <https://ai.google.dev/gemini-api/docs/code-execution>`__
             guides to learn more.
-        tool_config (google.ai.generativelanguage_v1beta.types.ToolConfig):
+        tool_config (google.ai.generativelanguage_v1alpha.types.ToolConfig):
             Optional. Tool configuration for any ``Tool`` specified in
             the request. Refer to the `Function calling
             guide <https://ai.google.dev/gemini-api/docs/function-calling#function_calling_mode>`__
             for a usage example.
-        safety_settings (MutableSequence[google.ai.generativelanguage_v1beta.types.SafetySetting]):
+        safety_settings (MutableSequence[google.ai.generativelanguage_v1alpha.types.SafetySetting]):
             Optional. A list of unique ``SafetySetting`` instances for
             blocking unsafe content.
 
@@ -164,7 +174,7 @@ class GenerateContentRequest(proto.Message):
             guidance <https://ai.google.dev/gemini-api/docs/safety-guidance>`__
             to learn how to incorporate safety considerations in your AI
             applications.
-        generation_config (google.ai.generativelanguage_v1beta.types.GenerationConfig):
+        generation_config (google.ai.generativelanguage_v1alpha.types.GenerationConfig):
             Optional. Configuration options for model
             generation and outputs.
 
@@ -246,7 +256,7 @@ class VoiceConfig(proto.Message):
     .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
 
     Attributes:
-        prebuilt_voice_config (google.ai.generativelanguage_v1beta.types.PrebuiltVoiceConfig):
+        prebuilt_voice_config (google.ai.generativelanguage_v1alpha.types.PrebuiltVoiceConfig):
             The configuration for the prebuilt voice to
             use.
 
@@ -265,7 +275,7 @@ class SpeechConfig(proto.Message):
     r"""The speech generation config.
 
     Attributes:
-        voice_config (google.ai.generativelanguage_v1beta.types.VoiceConfig):
+        voice_config (google.ai.generativelanguage_v1alpha.types.VoiceConfig):
             The configuration for the speaker to use.
     """
 
@@ -358,7 +368,7 @@ class GenerationConfig(proto.Message):
             the response candidates. Refer to the
             `docs <https://ai.google.dev/gemini-api/docs/prompting_with_media#plain_text_formats>`__
             for a list of all supported text MIME types.
-        response_schema (google.ai.generativelanguage_v1beta.types.Schema):
+        response_schema (google.ai.generativelanguage_v1alpha.types.Schema):
             Optional. Output schema of the generated candidate text.
             Schemas must be a subset of the `OpenAPI
             schema <https://spec.openapis.org/oas/v3.0.3#schema>`__ and
@@ -375,7 +385,7 @@ class GenerationConfig(proto.Message):
 
             This penalty is binary on/off and not dependant on the
             number of times the token is used (after the first). Use
-            [frequency_penalty][google.ai.generativelanguage.v1beta.GenerationConfig.frequency_penalty]
+            [frequency_penalty][google.ai.generativelanguage.v1alpha.GenerationConfig.frequency_penalty]
             for a penalty that increases with each use.
 
             A positive penalty will discourage the use of tokens that
@@ -404,7 +414,7 @@ class GenerationConfig(proto.Message):
             vocabulary of a response. Larger negative values will cause
             the model to start repeating a common token until it hits
             the
-            [max_output_tokens][google.ai.generativelanguage.v1beta.GenerationConfig.max_output_tokens]
+            [max_output_tokens][google.ai.generativelanguage.v1alpha.GenerationConfig.max_output_tokens]
             limit.
 
             This field is a member of `oneof`_ ``_frequency_penalty``.
@@ -415,10 +425,10 @@ class GenerationConfig(proto.Message):
             This field is a member of `oneof`_ ``_response_logprobs``.
         logprobs (int):
             Optional. Only valid if
-            [response_logprobs=True][google.ai.generativelanguage.v1beta.GenerationConfig.response_logprobs].
+            [response_logprobs=True][google.ai.generativelanguage.v1alpha.GenerationConfig.response_logprobs].
             This sets the number of top logprobs to return at each
             decoding step in the
-            [Candidate.logprobs_result][google.ai.generativelanguage.v1beta.Candidate.logprobs_result].
+            [Candidate.logprobs_result][google.ai.generativelanguage.v1alpha.Candidate.logprobs_result].
 
             This field is a member of `oneof`_ ``_logprobs``.
         enable_enhanced_civic_answers (bool):
@@ -426,7 +436,7 @@ class GenerationConfig(proto.Message):
             may not be available for all models.
 
             This field is a member of `oneof`_ ``_enable_enhanced_civic_answers``.
-        response_modalities (MutableSequence[google.ai.generativelanguage_v1beta.types.GenerationConfig.Modality]):
+        response_modalities (MutableSequence[google.ai.generativelanguage_v1alpha.types.GenerationConfig.Modality]):
             Optional. The requested modalities of the
             response. Represents the set of modalities that
             the model can return, and should be expected in
@@ -440,7 +450,7 @@ class GenerationConfig(proto.Message):
 
             An empty list is equivalent to requesting only
             text.
-        speech_config (google.ai.generativelanguage_v1beta.types.SpeechConfig):
+        speech_config (google.ai.generativelanguage_v1alpha.types.SpeechConfig):
             Optional. The speech generation config.
 
             This field is a member of `oneof`_ ``_speech_config``.
@@ -551,10 +561,10 @@ class SemanticRetrieverConfig(proto.Message):
         source (str):
             Required. Name of the resource for retrieval. Example:
             ``corpora/123`` or ``corpora/123/documents/abc``.
-        query (google.ai.generativelanguage_v1beta.types.Content):
+        query (google.ai.generativelanguage_v1alpha.types.Content):
             Required. Query to use for matching ``Chunk``\ s in the
             given resource by similarity.
-        metadata_filters (MutableSequence[google.ai.generativelanguage_v1beta.types.MetadataFilter]):
+        metadata_filters (MutableSequence[google.ai.generativelanguage_v1alpha.types.MetadataFilter]):
             Optional. Filters for selecting ``Document``\ s and/or
             ``Chunk``\ s from the resource.
         max_chunks_count (int):
@@ -609,12 +619,12 @@ class GenerateContentResponse(proto.Message):
        ``safety_ratings``.
 
     Attributes:
-        candidates (MutableSequence[google.ai.generativelanguage_v1beta.types.Candidate]):
+        candidates (MutableSequence[google.ai.generativelanguage_v1alpha.types.Candidate]):
             Candidate responses from the model.
-        prompt_feedback (google.ai.generativelanguage_v1beta.types.GenerateContentResponse.PromptFeedback):
+        prompt_feedback (google.ai.generativelanguage_v1alpha.types.GenerateContentResponse.PromptFeedback):
             Returns the prompt's feedback related to the
             content filters.
-        usage_metadata (google.ai.generativelanguage_v1beta.types.GenerateContentResponse.UsageMetadata):
+        usage_metadata (google.ai.generativelanguage_v1alpha.types.GenerateContentResponse.UsageMetadata):
             Output only. Metadata on the generation
             requests' token usage.
         model_version (str):
@@ -627,10 +637,10 @@ class GenerateContentResponse(proto.Message):
         ``GenerateContentRequest.content``.
 
         Attributes:
-            block_reason (google.ai.generativelanguage_v1beta.types.GenerateContentResponse.PromptFeedback.BlockReason):
+            block_reason (google.ai.generativelanguage_v1alpha.types.GenerateContentResponse.PromptFeedback.BlockReason):
                 Optional. If set, the prompt was blocked and
                 no candidates are returned. Rephrase the prompt.
-            safety_ratings (MutableSequence[google.ai.generativelanguage_v1beta.types.SafetyRating]):
+            safety_ratings (MutableSequence[google.ai.generativelanguage_v1alpha.types.SafetyRating]):
                 Ratings for safety of the prompt.
                 There is at most one rating per category.
         """
@@ -744,19 +754,19 @@ class Candidate(proto.Message):
             list of response candidates.
 
             This field is a member of `oneof`_ ``_index``.
-        content (google.ai.generativelanguage_v1beta.types.Content):
+        content (google.ai.generativelanguage_v1alpha.types.Content):
             Output only. Generated content returned from
             the model.
-        finish_reason (google.ai.generativelanguage_v1beta.types.Candidate.FinishReason):
+        finish_reason (google.ai.generativelanguage_v1alpha.types.Candidate.FinishReason):
             Optional. Output only. The reason why the
             model stopped generating tokens.
             If empty, the model has not stopped generating
             tokens.
-        safety_ratings (MutableSequence[google.ai.generativelanguage_v1beta.types.SafetyRating]):
+        safety_ratings (MutableSequence[google.ai.generativelanguage_v1alpha.types.SafetyRating]):
             List of ratings for the safety of a response
             candidate.
             There is at most one rating per category.
-        citation_metadata (google.ai.generativelanguage_v1beta.types.CitationMetadata):
+        citation_metadata (google.ai.generativelanguage_v1alpha.types.CitationMetadata):
             Output only. Citation information for model-generated
             candidate.
 
@@ -766,19 +776,19 @@ class Candidate(proto.Message):
             foundational LLM's training data.
         token_count (int):
             Output only. Token count for this candidate.
-        grounding_attributions (MutableSequence[google.ai.generativelanguage_v1beta.types.GroundingAttribution]):
+        grounding_attributions (MutableSequence[google.ai.generativelanguage_v1alpha.types.GroundingAttribution]):
             Output only. Attribution information for sources that
             contributed to a grounded answer.
 
             This field is populated for ``GenerateAnswer`` calls.
-        grounding_metadata (google.ai.generativelanguage_v1beta.types.GroundingMetadata):
+        grounding_metadata (google.ai.generativelanguage_v1alpha.types.GroundingMetadata):
             Output only. Grounding metadata for the candidate.
 
             This field is populated for ``GenerateContent`` calls.
         avg_logprobs (float):
             Output only. Average log probability score of
             the candidate.
-        logprobs_result (google.ai.generativelanguage_v1beta.types.LogprobsResult):
+        logprobs_result (google.ai.generativelanguage_v1alpha.types.LogprobsResult):
             Output only. Log-likelihood scores for the
             response tokens and top tokens
     """
@@ -892,9 +902,9 @@ class LogprobsResult(proto.Message):
     r"""Logprobs Result
 
     Attributes:
-        top_candidates (MutableSequence[google.ai.generativelanguage_v1beta.types.LogprobsResult.TopCandidates]):
+        top_candidates (MutableSequence[google.ai.generativelanguage_v1alpha.types.LogprobsResult.TopCandidates]):
             Length = total number of decoding steps.
-        chosen_candidates (MutableSequence[google.ai.generativelanguage_v1beta.types.LogprobsResult.Candidate]):
+        chosen_candidates (MutableSequence[google.ai.generativelanguage_v1alpha.types.LogprobsResult.Candidate]):
             Length = total number of decoding steps. The chosen
             candidates may or may not be in top_candidates.
     """
@@ -939,7 +949,7 @@ class LogprobsResult(proto.Message):
         r"""Candidates with top log probabilities at each decoding step.
 
         Attributes:
-            candidates (MutableSequence[google.ai.generativelanguage_v1beta.types.LogprobsResult.Candidate]):
+            candidates (MutableSequence[google.ai.generativelanguage_v1alpha.types.LogprobsResult.Candidate]):
                 Sorted by log probability in descending
                 order.
         """
@@ -973,11 +983,11 @@ class AttributionSourceId(proto.Message):
     .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
 
     Attributes:
-        grounding_passage (google.ai.generativelanguage_v1beta.types.AttributionSourceId.GroundingPassageId):
+        grounding_passage (google.ai.generativelanguage_v1alpha.types.AttributionSourceId.GroundingPassageId):
             Identifier for an inline passage.
 
             This field is a member of `oneof`_ ``source``.
-        semantic_retriever_chunk (google.ai.generativelanguage_v1beta.types.AttributionSourceId.SemanticRetrieverChunk):
+        semantic_retriever_chunk (google.ai.generativelanguage_v1alpha.types.AttributionSourceId.SemanticRetrieverChunk):
             Identifier for a ``Chunk`` fetched via Semantic Retriever.
 
             This field is a member of `oneof`_ ``source``.
@@ -1046,10 +1056,10 @@ class GroundingAttribution(proto.Message):
     r"""Attribution for a source that contributed to an answer.
 
     Attributes:
-        source_id (google.ai.generativelanguage_v1beta.types.AttributionSourceId):
+        source_id (google.ai.generativelanguage_v1alpha.types.AttributionSourceId):
             Output only. Identifier for the source
             contributing to this attribution.
-        content (google.ai.generativelanguage_v1beta.types.Content):
+        content (google.ai.generativelanguage_v1alpha.types.Content):
             Grounding source content that makes up this
             attribution.
     """
@@ -1092,17 +1102,17 @@ class GroundingMetadata(proto.Message):
     .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
 
     Attributes:
-        search_entry_point (google.ai.generativelanguage_v1beta.types.SearchEntryPoint):
+        search_entry_point (google.ai.generativelanguage_v1alpha.types.SearchEntryPoint):
             Optional. Google search entry for the
             following-up web searches.
 
             This field is a member of `oneof`_ ``_search_entry_point``.
-        grounding_chunks (MutableSequence[google.ai.generativelanguage_v1beta.types.GroundingChunk]):
+        grounding_chunks (MutableSequence[google.ai.generativelanguage_v1alpha.types.GroundingChunk]):
             List of supporting references retrieved from
             specified grounding source.
-        grounding_supports (MutableSequence[google.ai.generativelanguage_v1beta.types.GroundingSupport]):
+        grounding_supports (MutableSequence[google.ai.generativelanguage_v1alpha.types.GroundingSupport]):
             List of grounding support.
-        retrieval_metadata (google.ai.generativelanguage_v1beta.types.RetrievalMetadata):
+        retrieval_metadata (google.ai.generativelanguage_v1alpha.types.RetrievalMetadata):
             Metadata related to retrieval in the
             grounding flow.
 
@@ -1168,7 +1178,7 @@ class GroundingChunk(proto.Message):
     .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
 
     Attributes:
-        web (google.ai.generativelanguage_v1beta.types.GroundingChunk.Web):
+        web (google.ai.generativelanguage_v1alpha.types.GroundingChunk.Web):
             Grounding chunk from the web.
 
             This field is a member of `oneof`_ ``chunk_type``.
@@ -1253,7 +1263,7 @@ class GroundingSupport(proto.Message):
     .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
 
     Attributes:
-        segment (google.ai.generativelanguage_v1beta.types.Segment):
+        segment (google.ai.generativelanguage_v1alpha.types.Segment):
             Segment of the content this support belongs
             to.
 
@@ -1297,11 +1307,11 @@ class GenerateAnswerRequest(proto.Message):
     .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
 
     Attributes:
-        inline_passages (google.ai.generativelanguage_v1beta.types.GroundingPassages):
+        inline_passages (google.ai.generativelanguage_v1alpha.types.GroundingPassages):
             Passages provided inline with the request.
 
             This field is a member of `oneof`_ ``grounding_source``.
-        semantic_retriever (google.ai.generativelanguage_v1beta.types.SemanticRetrieverConfig):
+        semantic_retriever (google.ai.generativelanguage_v1alpha.types.SemanticRetrieverConfig):
             Content retrieved from resources created via
             the Semantic Retriever API.
 
@@ -1311,7 +1321,7 @@ class GenerateAnswerRequest(proto.Message):
             the grounded response.
 
             Format: ``model=models/{model}``.
-        contents (MutableSequence[google.ai.generativelanguage_v1beta.types.Content]):
+        contents (MutableSequence[google.ai.generativelanguage_v1alpha.types.Content]):
             Required. The content of the current conversation with the
             ``Model``. For single-turn queries, this is a single
             question to answer. For multi-turn queries, this is a
@@ -1319,10 +1329,10 @@ class GenerateAnswerRequest(proto.Message):
             last ``Content`` in the list containing the question.
 
             Note: ``GenerateAnswer`` only supports queries in English.
-        answer_style (google.ai.generativelanguage_v1beta.types.GenerateAnswerRequest.AnswerStyle):
+        answer_style (google.ai.generativelanguage_v1alpha.types.GenerateAnswerRequest.AnswerStyle):
             Required. Style in which answers should be
             returned.
-        safety_settings (MutableSequence[google.ai.generativelanguage_v1beta.types.SafetySetting]):
+        safety_settings (MutableSequence[google.ai.generativelanguage_v1alpha.types.SafetySetting]):
             Optional. A list of unique ``SafetySetting`` instances for
             blocking unsafe content.
 
@@ -1424,7 +1434,7 @@ class GenerateAnswerResponse(proto.Message):
     .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
 
     Attributes:
-        answer (google.ai.generativelanguage_v1beta.types.Candidate):
+        answer (google.ai.generativelanguage_v1alpha.types.Candidate):
             Candidate answer from the model.
 
             Note: The model *always* attempts to provide a grounded
@@ -1449,7 +1459,7 @@ class GenerateAnswerResponse(proto.Message):
                ``0.5`` is a good starting threshold.
 
             This field is a member of `oneof`_ ``_answerable_probability``.
-        input_feedback (google.ai.generativelanguage_v1beta.types.GenerateAnswerResponse.InputFeedback):
+        input_feedback (google.ai.generativelanguage_v1alpha.types.GenerateAnswerResponse.InputFeedback):
             Output only. Feedback related to the input data used to
             answer the question, as opposed to the model-generated
             response to the question.
@@ -1476,12 +1486,12 @@ class GenerateAnswerResponse(proto.Message):
         .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
 
         Attributes:
-            block_reason (google.ai.generativelanguage_v1beta.types.GenerateAnswerResponse.InputFeedback.BlockReason):
+            block_reason (google.ai.generativelanguage_v1alpha.types.GenerateAnswerResponse.InputFeedback.BlockReason):
                 Optional. If set, the input was blocked and
                 no candidates are returned. Rephrase the input.
 
                 This field is a member of `oneof`_ ``_block_reason``.
-            safety_ratings (MutableSequence[google.ai.generativelanguage_v1beta.types.SafetyRating]):
+            safety_ratings (MutableSequence[google.ai.generativelanguage_v1alpha.types.SafetyRating]):
                 Ratings for safety of the input.
                 There is at most one rating per category.
         """
@@ -1547,10 +1557,10 @@ class EmbedContentRequest(proto.Message):
             ``ListModels`` method.
 
             Format: ``models/{model}``
-        content (google.ai.generativelanguage_v1beta.types.Content):
+        content (google.ai.generativelanguage_v1alpha.types.Content):
             Required. The content to embed. Only the ``parts.text``
             fields will be counted.
-        task_type (google.ai.generativelanguage_v1beta.types.TaskType):
+        task_type (google.ai.generativelanguage_v1alpha.types.TaskType):
             Optional. Optional task type for which the embeddings will
             be used. Can only be set for ``models/embedding-001``.
 
@@ -1618,7 +1628,7 @@ class EmbedContentResponse(proto.Message):
     r"""The response to an ``EmbedContentRequest``.
 
     Attributes:
-        embedding (google.ai.generativelanguage_v1beta.types.ContentEmbedding):
+        embedding (google.ai.generativelanguage_v1alpha.types.ContentEmbedding):
             Output only. The embedding generated from the
             input content.
     """
@@ -1643,7 +1653,7 @@ class BatchEmbedContentsRequest(proto.Message):
             ``ListModels`` method.
 
             Format: ``models/{model}``
-        requests (MutableSequence[google.ai.generativelanguage_v1beta.types.EmbedContentRequest]):
+        requests (MutableSequence[google.ai.generativelanguage_v1alpha.types.EmbedContentRequest]):
             Required. Embed requests for the batch. The model in each of
             these requests must match the model specified
             ``BatchEmbedContentsRequest.model``.
@@ -1664,7 +1674,7 @@ class BatchEmbedContentsResponse(proto.Message):
     r"""The response to a ``BatchEmbedContentsRequest``.
 
     Attributes:
-        embeddings (MutableSequence[google.ai.generativelanguage_v1beta.types.ContentEmbedding]):
+        embeddings (MutableSequence[google.ai.generativelanguage_v1alpha.types.ContentEmbedding]):
             Output only. The embeddings for each request,
             in the same order as provided in the batch
             request.
@@ -1692,10 +1702,10 @@ class CountTokensRequest(proto.Message):
             ``ListModels`` method.
 
             Format: ``models/{model}``
-        contents (MutableSequence[google.ai.generativelanguage_v1beta.types.Content]):
+        contents (MutableSequence[google.ai.generativelanguage_v1alpha.types.Content]):
             Optional. The input given to the model as a prompt. This
             field is ignored when ``generate_content_request`` is set.
-        generate_content_request (google.ai.generativelanguage_v1beta.types.GenerateContentRequest):
+        generate_content_request (google.ai.generativelanguage_v1alpha.types.GenerateContentRequest):
             Optional. The overall input given to the ``Model``. This
             includes the prompt as well as other model steering
             information like `system
@@ -1745,6 +1755,384 @@ class CountTokensResponse(proto.Message):
     cached_content_token_count: int = proto.Field(
         proto.INT32,
         number=5,
+    )
+
+
+class BidiGenerateContentSetup(proto.Message):
+    r"""Message to be sent in the first and only first
+    ``BidiGenerateContentClientMessage``. Contains configuration that
+    will apply for the duration of the streaming RPC.
+
+    Clients should wait for a ``BidiGenerateContentSetupComplete``
+    message before sending any additional messages.
+
+    Attributes:
+        model (str):
+            Required. The model's resource name. This serves as an ID
+            for the Model to use.
+
+            Format: ``models/{model}``
+        generation_config (google.ai.generativelanguage_v1alpha.types.GenerationConfig):
+            Optional. Generation config.
+
+            The following fields are not supported:
+
+            -  ``response_logprobs``
+            -  ``response_mime_type``
+            -  ``logprobs``
+            -  ``response_schema``
+            -  ``stop_sequence``
+            -  ``routing_config``
+            -  ``audio_timestamp``
+        system_instruction (google.ai.generativelanguage_v1alpha.types.Content):
+            Optional. The user provided system
+            instructions for the model.
+            Note: Only text should be used in parts and
+            content in each part will be in a separate
+            paragraph.
+        tools (MutableSequence[google.ai.generativelanguage_v1alpha.types.Tool]):
+            Optional. A list of ``Tools`` the model may use to generate
+            the next response.
+
+            A ``Tool`` is a piece of code that enables the system to
+            interact with external systems to perform an action, or set
+            of actions, outside of knowledge and scope of the model.
+    """
+
+    model: str = proto.Field(
+        proto.STRING,
+        number=1,
+    )
+    generation_config: "GenerationConfig" = proto.Field(
+        proto.MESSAGE,
+        number=2,
+        message="GenerationConfig",
+    )
+    system_instruction: gag_content.Content = proto.Field(
+        proto.MESSAGE,
+        number=3,
+        message=gag_content.Content,
+    )
+    tools: MutableSequence[gag_content.Tool] = proto.RepeatedField(
+        proto.MESSAGE,
+        number=4,
+        message=gag_content.Tool,
+    )
+
+
+class BidiGenerateContentClientContent(proto.Message):
+    r"""Incremental update of the current conversation delivered from
+    the client. All of the content here is unconditionally appended
+    to the conversation history and used as part of the prompt to
+    the model to generate content.
+
+    A message here will interrupt any current model generation.
+
+    Attributes:
+        turns (MutableSequence[google.ai.generativelanguage_v1alpha.types.Content]):
+            Optional. The content appended to the current
+            conversation with the model.
+            For single-turn queries, this is a single
+            instance. For multi-turn queries, this is a
+            repeated field that contains conversation
+            history and the latest request.
+        turn_complete (bool):
+            Optional. If true, indicates that the server
+            content generation should start with the
+            currently accumulated prompt. Otherwise, the
+            server awaits additional messages before
+            starting generation.
+    """
+
+    turns: MutableSequence[gag_content.Content] = proto.RepeatedField(
+        proto.MESSAGE,
+        number=1,
+        message=gag_content.Content,
+    )
+    turn_complete: bool = proto.Field(
+        proto.BOOL,
+        number=2,
+    )
+
+
+class BidiGenerateContentRealtimeInput(proto.Message):
+    r"""User input that is sent in real time.
+
+    This is different from
+    [BidiGenerateContentClientContent][google.ai.generativelanguage.v1alpha.BidiGenerateContentClientContent]
+    in a few ways:
+
+    -  Can be sent continuously without interruption to model
+       generation.
+    -  If there is a need to mix data interleaved across the
+       [BidiGenerateContentClientContent][google.ai.generativelanguage.v1alpha.BidiGenerateContentClientContent]
+       and the
+       [BidiGenerateContentRealtimeInput][google.ai.generativelanguage.v1alpha.BidiGenerateContentRealtimeInput],
+       the server attempts to optimize for best response, but there are
+       no guarantees.
+    -  End of turn is not explicitly specified, but is rather derived
+       from user activity (for example, end of speech).
+    -  Even before the end of turn, the data is processed incrementally
+       to optimize for a fast start of the response from the model.
+    -  Is always direct user input that is sent in real time. Can be
+       sent continuously without interruptions. The model automatically
+       detects the beginning and the end of user speech and starts or
+       terminates streaming the response accordingly. Data is processed
+       incrementally as it arrives, minimizing latency.
+
+    Attributes:
+        media_chunks (MutableSequence[google.ai.generativelanguage_v1alpha.types.Blob]):
+            Optional. Inlined bytes data for media input.
+    """
+
+    media_chunks: MutableSequence[gag_content.Blob] = proto.RepeatedField(
+        proto.MESSAGE,
+        number=1,
+        message=gag_content.Blob,
+    )
+
+
+class BidiGenerateContentToolResponse(proto.Message):
+    r"""Client generated response to a ``ToolCall`` received from the
+    server. Individual ``FunctionResponse`` objects are matched to the
+    respective ``FunctionCall`` objects by the ``id`` field.
+
+    Note that in the unary and server-streaming GenerateContent APIs
+    function calling happens by exchanging the ``Content`` parts, while
+    in the bidi GenerateContent APIs function calling happens over these
+    dedicated set of messages.
+
+    Attributes:
+        function_responses (MutableSequence[google.ai.generativelanguage_v1alpha.types.FunctionResponse]):
+            Optional. The response to the function calls.
+    """
+
+    function_responses: MutableSequence[
+        gag_content.FunctionResponse
+    ] = proto.RepeatedField(
+        proto.MESSAGE,
+        number=1,
+        message=gag_content.FunctionResponse,
+    )
+
+
+class BidiGenerateContentClientMessage(proto.Message):
+    r"""Messages sent by the client in the BidiGenerateContent call.
+
+    This message has `oneof`_ fields (mutually exclusive fields).
+    For each oneof, at most one member field can be set at the same time.
+    Setting any member of the oneof automatically clears all other
+    members.
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        setup (google.ai.generativelanguage_v1alpha.types.BidiGenerateContentSetup):
+            Optional. Session configuration sent in the
+            first and only first client message.
+
+            This field is a member of `oneof`_ ``message_type``.
+        client_content (google.ai.generativelanguage_v1alpha.types.BidiGenerateContentClientContent):
+            Optional. Incremental update of the current
+            conversation delivered from the client.
+
+            This field is a member of `oneof`_ ``message_type``.
+        realtime_input (google.ai.generativelanguage_v1alpha.types.BidiGenerateContentRealtimeInput):
+            Optional. User input that is sent in real
+            time.
+
+            This field is a member of `oneof`_ ``message_type``.
+        tool_response (google.ai.generativelanguage_v1alpha.types.BidiGenerateContentToolResponse):
+            Optional. Response to a ``ToolCallMessage`` received from
+            the server.
+
+            This field is a member of `oneof`_ ``message_type``.
+    """
+
+    setup: "BidiGenerateContentSetup" = proto.Field(
+        proto.MESSAGE,
+        number=1,
+        oneof="message_type",
+        message="BidiGenerateContentSetup",
+    )
+    client_content: "BidiGenerateContentClientContent" = proto.Field(
+        proto.MESSAGE,
+        number=2,
+        oneof="message_type",
+        message="BidiGenerateContentClientContent",
+    )
+    realtime_input: "BidiGenerateContentRealtimeInput" = proto.Field(
+        proto.MESSAGE,
+        number=3,
+        oneof="message_type",
+        message="BidiGenerateContentRealtimeInput",
+    )
+    tool_response: "BidiGenerateContentToolResponse" = proto.Field(
+        proto.MESSAGE,
+        number=4,
+        oneof="message_type",
+        message="BidiGenerateContentToolResponse",
+    )
+
+
+class BidiGenerateContentSetupComplete(proto.Message):
+    r"""Sent in response to a ``BidiGenerateContentSetup`` message from the
+    client.
+
+    """
+
+
+class BidiGenerateContentServerContent(proto.Message):
+    r"""Incremental server update generated by the model in response
+    to client messages.
+
+    Content is generated as quickly as possible, and not in real
+    time. Clients may choose to buffer and play it out in real time.
+
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        model_turn (google.ai.generativelanguage_v1alpha.types.Content):
+            Output only. The content that the model has
+            generated as part of the current conversation
+            with the user.
+
+            This field is a member of `oneof`_ ``_model_turn``.
+        turn_complete (bool):
+            Output only. If true, indicates that the model is done
+            generating. Generation will only start in response to
+            additional client messages. Can be set alongside
+            ``content``, indicating that the ``content`` is the last in
+            the turn.
+        interrupted (bool):
+            Output only. If true, indicates that a client
+            message has interrupted current model
+            generation. If the client is playing out the
+            content in real time, this is a good signal to
+            stop and empty the current playback queue.
+        grounding_metadata (google.ai.generativelanguage_v1alpha.types.GroundingMetadata):
+            Output only. Grounding metadata for the
+            generated content.
+    """
+
+    model_turn: gag_content.Content = proto.Field(
+        proto.MESSAGE,
+        number=1,
+        optional=True,
+        message=gag_content.Content,
+    )
+    turn_complete: bool = proto.Field(
+        proto.BOOL,
+        number=2,
+    )
+    interrupted: bool = proto.Field(
+        proto.BOOL,
+        number=3,
+    )
+    grounding_metadata: "GroundingMetadata" = proto.Field(
+        proto.MESSAGE,
+        number=4,
+        message="GroundingMetadata",
+    )
+
+
+class BidiGenerateContentToolCall(proto.Message):
+    r"""Request for the client to execute the ``function_calls`` and return
+    the responses with the matching ``id``\ s.
+
+    Attributes:
+        function_calls (MutableSequence[google.ai.generativelanguage_v1alpha.types.FunctionCall]):
+            Output only. The function call to be
+            executed.
+    """
+
+    function_calls: MutableSequence[gag_content.FunctionCall] = proto.RepeatedField(
+        proto.MESSAGE,
+        number=2,
+        message=gag_content.FunctionCall,
+    )
+
+
+class BidiGenerateContentToolCallCancellation(proto.Message):
+    r"""Notification for the client that a previously issued
+    ``ToolCallMessage`` with the specified ``id``\ s should have been
+    not executed and should be cancelled. If there were side-effects to
+    those tool calls, clients may attempt to undo the tool calls. This
+    message occurs only in cases where the clients interrupt server
+    turns.
+
+    Attributes:
+        ids (MutableSequence[str]):
+            Output only. The ids of the tool calls to be
+            cancelled.
+    """
+
+    ids: MutableSequence[str] = proto.RepeatedField(
+        proto.STRING,
+        number=1,
+    )
+
+
+class BidiGenerateContentServerMessage(proto.Message):
+    r"""Response message for the BidiGenerateContent call.
+
+    This message has `oneof`_ fields (mutually exclusive fields).
+    For each oneof, at most one member field can be set at the same time.
+    Setting any member of the oneof automatically clears all other
+    members.
+
+    .. _oneof: https://proto-plus-python.readthedocs.io/en/stable/fields.html#oneofs-mutually-exclusive-fields
+
+    Attributes:
+        setup_complete (google.ai.generativelanguage_v1alpha.types.BidiGenerateContentSetupComplete):
+            Output only. Sent in response to a
+            ``BidiGenerateContentSetup`` message from the client when
+            setup is complete.
+
+            This field is a member of `oneof`_ ``message_type``.
+        server_content (google.ai.generativelanguage_v1alpha.types.BidiGenerateContentServerContent):
+            Output only. Content generated by the model
+            in response to client messages.
+
+            This field is a member of `oneof`_ ``message_type``.
+        tool_call (google.ai.generativelanguage_v1alpha.types.BidiGenerateContentToolCall):
+            Output only. Request for the client to execute the
+            ``function_calls`` and return the responses with the
+            matching ``id``\ s.
+
+            This field is a member of `oneof`_ ``message_type``.
+        tool_call_cancellation (google.ai.generativelanguage_v1alpha.types.BidiGenerateContentToolCallCancellation):
+            Output only. Notification for the client that a previously
+            issued ``ToolCallMessage`` with the specified ``id``\ s
+            should be cancelled.
+
+            This field is a member of `oneof`_ ``message_type``.
+    """
+
+    setup_complete: "BidiGenerateContentSetupComplete" = proto.Field(
+        proto.MESSAGE,
+        number=2,
+        oneof="message_type",
+        message="BidiGenerateContentSetupComplete",
+    )
+    server_content: "BidiGenerateContentServerContent" = proto.Field(
+        proto.MESSAGE,
+        number=3,
+        oneof="message_type",
+        message="BidiGenerateContentServerContent",
+    )
+    tool_call: "BidiGenerateContentToolCall" = proto.Field(
+        proto.MESSAGE,
+        number=4,
+        oneof="message_type",
+        message="BidiGenerateContentToolCall",
+    )
+    tool_call_cancellation: "BidiGenerateContentToolCallCancellation" = proto.Field(
+        proto.MESSAGE,
+        number=5,
+        oneof="message_type",
+        message="BidiGenerateContentToolCallCancellation",
     )
 
 

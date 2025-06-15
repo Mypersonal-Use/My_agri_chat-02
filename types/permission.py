@@ -20,7 +20,7 @@ from typing import MutableMapping, MutableSequence
 import proto  # type: ignore
 
 __protobuf__ = proto.module(
-    package="google.ai.generativelanguage.v1beta",
+    package="google.ai.generativelanguage.v1alpha",
     manifest={
         "Permission",
     },
@@ -56,7 +56,7 @@ class Permission(proto.Message):
             will be generated on create. Examples:
             tunedModels/{tuned_model}/permissions/{permission}
             corpora/{corpus}/permissions/{permission} Output only.
-        grantee_type (google.ai.generativelanguage_v1beta.types.Permission.GranteeType):
+        grantee_type (google.ai.generativelanguage_v1alpha.types.Permission.GranteeType):
             Optional. Immutable. The type of the grantee.
 
             This field is a member of `oneof`_ ``_grantee_type``.
@@ -67,7 +67,7 @@ class Permission(proto.Message):
             is EVERYONE.
 
             This field is a member of `oneof`_ ``_email_address``.
-        role (google.ai.generativelanguage_v1beta.types.Permission.Role):
+        role (google.ai.generativelanguage_v1alpha.types.Permission.Role):
             Required. The role granted by this
             permission.
 

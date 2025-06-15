@@ -20,12 +20,12 @@ from typing import MutableMapping, MutableSequence
 from google.protobuf import field_mask_pb2  # type: ignore
 import proto  # type: ignore
 
-from google.ai.generativelanguage_v1beta.types import (
+from google.ai.generativelanguage_v1alpha.types import (
     cached_content as gag_cached_content,
 )
 
 __protobuf__ = proto.module(
-    package="google.ai.generativelanguage.v1beta",
+    package="google.ai.generativelanguage.v1alpha",
     manifest={
         "ListCachedContentsRequest",
         "ListCachedContentsResponse",
@@ -72,7 +72,7 @@ class ListCachedContentsResponse(proto.Message):
     r"""Response with CachedContents list.
 
     Attributes:
-        cached_contents (MutableSequence[google.ai.generativelanguage_v1beta.types.CachedContent]):
+        cached_contents (MutableSequence[google.ai.generativelanguage_v1alpha.types.CachedContent]):
             List of cached contents.
         next_page_token (str):
             A token, which can be sent as ``page_token`` to retrieve the
@@ -101,7 +101,7 @@ class CreateCachedContentRequest(proto.Message):
     r"""Request to create CachedContent.
 
     Attributes:
-        cached_content (google.ai.generativelanguage_v1beta.types.CachedContent):
+        cached_content (google.ai.generativelanguage_v1alpha.types.CachedContent):
             Required. The cached content to create.
     """
 
@@ -131,7 +131,7 @@ class UpdateCachedContentRequest(proto.Message):
     r"""Request to update CachedContent.
 
     Attributes:
-        cached_content (google.ai.generativelanguage_v1beta.types.CachedContent):
+        cached_content (google.ai.generativelanguage_v1alpha.types.CachedContent):
             Required. The content cache entry to update
         update_mask (google.protobuf.field_mask_pb2.FieldMask):
             The list of fields to update.

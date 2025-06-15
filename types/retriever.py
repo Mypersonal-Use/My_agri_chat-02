@@ -21,7 +21,7 @@ from google.protobuf import timestamp_pb2  # type: ignore
 import proto  # type: ignore
 
 __protobuf__ = proto.module(
-    package="google.ai.generativelanguage.v1beta",
+    package="google.ai.generativelanguage.v1alpha",
     manifest={
         "Corpus",
         "Document",
@@ -100,7 +100,7 @@ class Document(proto.Message):
             ``Document``. The display name must be no more than 512
             characters in length, including spaces. Example: "Semantic
             Retriever Documentation".
-        custom_metadata (MutableSequence[google.ai.generativelanguage_v1beta.types.CustomMetadata]):
+        custom_metadata (MutableSequence[google.ai.generativelanguage_v1alpha.types.CustomMetadata]):
             Optional. User provided custom metadata stored as key-value
             pairs used for querying. A ``Document`` can have a maximum
             of 20 ``CustomMetadata``.
@@ -167,7 +167,7 @@ class CustomMetadata(proto.Message):
             The string value of the metadata to store.
 
             This field is a member of `oneof`_ ``value``.
-        string_list_value (google.ai.generativelanguage_v1beta.types.StringList):
+        string_list_value (google.ai.generativelanguage_v1alpha.types.StringList):
             The StringList value of the metadata to
             store.
 
@@ -213,7 +213,7 @@ class MetadataFilter(proto.Message):
         key (str):
             Required. The key of the metadata to filter
             on.
-        conditions (MutableSequence[google.ai.generativelanguage_v1beta.types.Condition]):
+        conditions (MutableSequence[google.ai.generativelanguage_v1alpha.types.Condition]):
             Required. The ``Condition``\ s for the given key that will
             trigger this filter. Multiple ``Condition``\ s are joined by
             logical ORs.
@@ -249,7 +249,7 @@ class Condition(proto.Message):
             The numeric value to filter the metadata on.
 
             This field is a member of `oneof`_ ``value``.
-        operation (google.ai.generativelanguage_v1beta.types.Condition.Operator):
+        operation (google.ai.generativelanguage_v1alpha.types.Condition.Operator):
             Required. Operator applied to the given
             key-value pair to trigger the condition.
     """
@@ -315,16 +315,16 @@ class Chunk(proto.Message):
     Attributes:
         name (str):
             Immutable. Identifier. The ``Chunk`` resource name. The ID
-            (name excluding the `corpora/*/documents/*/chunks/` prefix)
+            (name excluding the "corpora/*/documents/*/chunks/" prefix)
             can contain up to 40 characters that are lowercase
             alphanumeric or dashes (-). The ID cannot start or end with
             a dash. If the name is empty on create, a random
             12-character unique ID will be generated. Example:
             ``corpora/{corpus_id}/documents/{document_id}/chunks/123a456b789c``
-        data (google.ai.generativelanguage_v1beta.types.ChunkData):
+        data (google.ai.generativelanguage_v1alpha.types.ChunkData):
             Required. The content for the ``Chunk``, such as the text
             string. The maximum number of tokens per chunk is 2043.
-        custom_metadata (MutableSequence[google.ai.generativelanguage_v1beta.types.CustomMetadata]):
+        custom_metadata (MutableSequence[google.ai.generativelanguage_v1alpha.types.CustomMetadata]):
             Optional. User provided custom metadata stored as key-value
             pairs. The maximum number of ``CustomMetadata`` per chunk is
             20.
@@ -334,7 +334,7 @@ class Chunk(proto.Message):
         update_time (google.protobuf.timestamp_pb2.Timestamp):
             Output only. The Timestamp of when the ``Chunk`` was last
             updated.
-        state (google.ai.generativelanguage_v1beta.types.Chunk.State):
+        state (google.ai.generativelanguage_v1alpha.types.Chunk.State):
             Output only. Current state of the ``Chunk``.
     """
 
